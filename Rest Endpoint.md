@@ -10,7 +10,9 @@ http(s)://uri(:port)/endpoint?param1=value1&param2=value2
 ## Headers (Key: value)
 
 Content-type: application/json
+
 Accept: application/json
+
 Authorization: Bearer token
 
 ## Body
