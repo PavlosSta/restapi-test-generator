@@ -4,8 +4,8 @@ public class Method {
 
     String type;    // GET, POST, PUT, PATCH, DELETE
 
-    RequestSpec req;
-    ResponseSpec res;
+    RequestSpec req;    // request spec
+    ResponseSpec res;   // response spec
 
 }
 
