@@ -4,11 +4,20 @@ import java.util.Set;
 
 public interface Endpoint {
 
-    String getPath();    // eg. "prices"
-    String getLabel();   // eg. "endpoint for prices"
+    String getPath();
+    
+    void setPath(String path);
+    
+    String getLabel();   
 
-    Set<String> getDocs();    // notes for using this endpoint
+    void setLabel(String label);
 
-    Set<Method> getMethods(); // endpoint 1-N methods
+    Set<String> getDocs();    
+
+    void setDocs(Set<String> docs);
+
+    Set<Method> getMethods(); 
+
+    void setMethods(Set<Method> methods);
 
 }
