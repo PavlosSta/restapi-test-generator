@@ -10,6 +10,14 @@ public class QueryParamImpl implements QueryParam {
     Object defaultBody;
     Boolean mandatory;
 
+    public QueryParamImpl(String name, String type, Object body, Object defaultBody, Boolean mandatory) {
+        this.name = name;
+        this.type = type;
+        this.body = body;
+        this.defaultBody = defaultBody;
+        this.mandatory = mandatory;
+    }
+
     public String getName() {
         return name;
     }

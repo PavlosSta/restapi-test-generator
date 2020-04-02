@@ -6,9 +6,15 @@ import interfaces.ResponseSpec;
 
 public class MethodImpl implements Method {
 
-    String type;
-    RequestSpec req;
-    ResponseSpec res;
+    String type;        // GET, POST, PUT, PATCH, DELETE
+    RequestSpec req;    // request spec
+    ResponseSpec res;   // response spec
+
+    public MethodImpl(String type, RequestSpec req, ResponseSpec res) {
+        this.type = type;
+        this.req = req;
+        this.res = res;
+    }
 
     public String getType() {
         return null;

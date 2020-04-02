@@ -13,6 +13,12 @@ public class EndpointImpl implements Endpoint {
     Set<String> docs;       // notes for using this endpoint
     Set<Method> methods;    // endpoint 1-N methods
 
+    public EndpointImpl(String path, String label, Set<String> docs, Set<Method> methods) {
+        this.path = path;
+        this.label = label;
+        this.docs = docs;
+        this.methods = methods;
+    }
 
 	public String getPath() {
 		return this.path;
@@ -30,7 +36,6 @@ public class EndpointImpl implements Endpoint {
         this.label = label;		
     }
     
-
 	public Set<String> getDocs() {
         return this.docs;
     }
@@ -39,7 +44,6 @@ public class EndpointImpl implements Endpoint {
         this.docs = docs;
     }
     
-   
 	public Set<Method> getMethods() {
 		return this.methods;
 	}

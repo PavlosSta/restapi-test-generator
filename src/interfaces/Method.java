@@ -2,15 +2,15 @@ package interfaces;
 
 public interface Method {
 
-    String getType();    // GET, POST, PUT, PATCH, DELETE
+    String getType();
 
     void setType(String type);
 
-    RequestSpec getReq();    // request spec
+    RequestSpec getReq();
 
     void setReq(RequestSpec req);
 
-    ResponseSpec getRes();   // response spec
+    ResponseSpec getRes();
 
     void setRes(ResponseSpec ses);
 

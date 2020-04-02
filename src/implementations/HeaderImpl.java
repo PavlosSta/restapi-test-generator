@@ -2,13 +2,19 @@ package implementations;
 
 import interfaces.Header;
 
-public class HeaderImpl implements Header
-{
+public class HeaderImpl implements Header {
 
     String name;
     String body;
-    boolean mandatory;
     String defaultBody;
+    Boolean mandatory;
+
+    public HeaderImpl(String name, String body, String defaultBody, Boolean mandatory) {
+        this.name = name;
+        this.body = body;
+        this.defaultBody = defaultBody;
+        this.mandatory = mandatory;
+    }
 
     public String getName() {
         return this.name;
