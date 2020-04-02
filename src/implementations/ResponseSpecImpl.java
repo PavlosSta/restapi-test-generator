@@ -11,6 +11,11 @@ public class ResponseSpecImpl implements ResponseSpec {
     Set<Header> headers;
     Set<Status> statuses;
 
+    public ResponseSpecImpl(Set<Header> headers, Set<Status> statuses) {
+        this.headers = headers;
+        this.statuses = statuses;
+    }
+
     public Set<Header> getHeaders() {
         return headers;
     }
