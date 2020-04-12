@@ -1,8 +1,7 @@
-package builders;
+package implementations;
 
 import java.util.Set;
 
-import implementations.EndpointImpl;
 import interfaces.Endpoint;
 import interfaces.Method;
 

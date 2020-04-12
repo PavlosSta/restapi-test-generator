@@ -23,33 +23,18 @@ public class EndpointImpl implements Endpoint {
 	public String getPath() {
 		return this.path;
     }
-    
-	public void setPath(String path) {
-		this.path = path;
-    }
-    
+
 	public String getLabel() {
 		return this.label;
     }
-    
-	public void setLabel(String label) {
-        this.label = label;		
-    }
-    
+
 	public Set<String> getDocs() {
         return this.docs;
     }
-    
-	public void setDocs(Set<String> docs) {
-        this.docs = docs;
-    }
-    
+
 	public Set<Method> getMethods() {
 		return this.methods;
 	}
 
-    public void setMethods(Set<Method> methods) {
-        this.methods = methods;
-	}
 
 }

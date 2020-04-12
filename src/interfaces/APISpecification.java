@@ -6,15 +6,7 @@ import java.util.Set;
 public interface APISpecification {
 
     String getBaseUrl();
-
-    void setBaseUrl(String baseUrl);
-
     String getLabel();
-
-    void setLabel(String label);
-
     Set<Endpoint> getEndpoints();
-
-    void setEndpoints(Set<Endpoint> endpoints);
 
 }

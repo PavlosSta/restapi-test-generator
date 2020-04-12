@@ -1,6 +1,5 @@
-package builders;
+package implementations;
 
-import implementations.HeaderImpl;
 import interfaces.Header;
 
 public class HeaderBuilder {

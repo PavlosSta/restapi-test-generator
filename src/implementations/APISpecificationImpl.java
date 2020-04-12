@@ -13,7 +13,7 @@ public class APISpecificationImpl implements APISpecification {
 
 	Set<Endpoint> endpoints;
 
-	public APISpecificationImpl(String baseUrl, String label, Set<Endpoint> endpoints) {
+	APISpecificationImpl(String baseUrl, String label, Set<Endpoint> endpoints) {
 		this.baseUrl = baseUrl;
 		this.label = label;
 		this.endpoints = endpoints;
@@ -29,18 +29,6 @@ public class APISpecificationImpl implements APISpecification {
 
 	public Set<Endpoint> getEndpoints() {
 		return this.endpoints;
-	}
-
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public void setEndpoints(Set<Endpoint> endpoints) {
-		this.endpoints = endpoints;
 	}
 
 }
