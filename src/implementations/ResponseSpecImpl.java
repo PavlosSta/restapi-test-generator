@@ -20,16 +20,8 @@ public class ResponseSpecImpl implements ResponseSpec {
         return headers;
     }
 
-    public void setHeaders(Set<Header> headers) {
-        this.headers = headers;
-    }
-
     public Set<Status> getStatuses() {
         return statuses;
-    }
-
-    public void setStatuses(Set<Status> statuses) {
-        this.statuses = statuses;
     }
 
 }

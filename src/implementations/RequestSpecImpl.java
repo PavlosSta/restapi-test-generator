@@ -22,24 +22,12 @@ public class RequestSpecImpl implements RequestSpec {
         return headers;
     }
 
-    public void setHeaders(Set<Header> headers) {
-        this.headers = headers;
-    }
-
     public Set<QueryParam> getQueryParams() {
         return queryParams;
     }
 
-    public void setQueryParams(Set<QueryParam> queryParams) {
-        this.queryParams = queryParams;
-    }
-
     public String getJwt() {
         return jwt;
-    }
-
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
     }
 
 }

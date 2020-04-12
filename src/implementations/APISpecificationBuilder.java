@@ -1,10 +1,9 @@
-package builders;
+package implementations;
 
 import java.util.Set;
 
 import interfaces.APISpecification;
 import interfaces.Endpoint;
-import implementations.APISpecificationImpl;
 
 public class APISpecificationBuilder {
 

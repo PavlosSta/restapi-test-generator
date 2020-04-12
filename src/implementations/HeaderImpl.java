@@ -20,32 +20,16 @@ public class HeaderImpl implements Header {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getBody() {
         return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public Boolean getMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(Boolean mandatory) {
-        this.mandatory = mandatory;
-    }
-
     public String getDefaultBody() {
         return defaultBody;
-    }
-
-    public void setDefaultBody(String defaultBody) {
-        this.defaultBody = defaultBody;
     }
     
 }
