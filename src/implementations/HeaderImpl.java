@@ -9,7 +9,7 @@ public class HeaderImpl implements Header {
     String defaultBody;
     Boolean mandatory;
 
-    public HeaderImpl(String name, String body, String defaultBody, Boolean mandatory) {
+    HeaderImpl(String name, String body, String defaultBody, Boolean mandatory) {
         this.name = name;
         this.body = body;
         this.defaultBody = defaultBody;
