@@ -10,7 +10,7 @@ public class MethodImpl implements Method {
     RequestSpec req;    // request spec
     ResponseSpec res;   // response spec
 
-    public MethodImpl(String type, RequestSpec req, ResponseSpec res) {
+    MethodImpl(String type, RequestSpec req, ResponseSpec res) {
         this.type = type;
         this.req = req;
         this.res = res;

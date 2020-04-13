@@ -10,7 +10,7 @@ public class StatusImpl implements Status {
     String body;
     Predicate<String> conditionBody;
 
-    public StatusImpl(String label, String body, Predicate<String> conditionBody) {
+    StatusImpl(String label, String body, Predicate<String> conditionBody) {
         this.label = label;
         this.body = body;
         this.conditionBody = conditionBody;
