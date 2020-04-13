@@ -2,25 +2,25 @@ package implementations;
 
 import java.util.Set;
 
-import interfaces.Header;
+import interfaces.HeaderSpec;
 import interfaces.ResponseSpec;
-import interfaces.Status;
+import interfaces.StatusSpec;
 
 public class ResponseSpecImpl implements ResponseSpec {
 
-    Set<Header> headers;
-    Set<Status> statuses;
+    private final Set<HeaderSpec> headers;
+    private final Set<StatusSpec> statuses;
 
-    ResponseSpecImpl(Set<Header> headers, Set<Status> statuses) {
+    ResponseSpecImpl(Set<HeaderSpec> headers, Set<StatusSpec> statuses) {
         this.headers = headers;
         this.statuses = statuses;
     }
 
-    public Set<Header> getHeaders() {
+    public Set<HeaderSpec> getHeaders() {
         return headers;
     }
 
-    public Set<Status> getStatuses() {
+    public Set<StatusSpec> getStatuses() {
         return statuses;
     }
 

@@ -2,27 +2,27 @@ package implementations;
 
 import java.util.Set;
 
-import interfaces.Header;
-import interfaces.QueryParam;
+import interfaces.HeaderSpec;
+import interfaces.QueryParamSpec;
 import interfaces.RequestSpec;
 
 public class RequestSpecImpl implements RequestSpec {
 
-    Set<Header> headers;
-    Set<QueryParam> queryParams;
-    String jwt;
+    private final Set<HeaderSpec> headers;
+    private final Set<QueryParamSpec> queryParams;
+    private final String jwt;
 
-    RequestSpecImpl(Set<Header> headers, Set<QueryParam> queryParams, String jwt) {
+    RequestSpecImpl(Set<HeaderSpec> headers, Set<QueryParamSpec> queryParams, String jwt) {
         this.headers = headers;
         this.queryParams = queryParams;
         this.jwt = jwt;
     }
 
-    public Set<Header> getHeaders() {
+    public Set<HeaderSpec> getHeaders() {
         return headers;
     }
 
-    public Set<QueryParam> getQueryParams() {
+    public Set<QueryParamSpec> getQueryParams() {
         return queryParams;
     }
 

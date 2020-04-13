@@ -4,8 +4,8 @@ import java.util.Set;
 
 public interface ResponseSpec {
 
-    Set<Header> getHeaders();
-    Set<Status> getStatuses();
+    Set<HeaderSpec> getHeaders();
+    Set<StatusSpec> getStatuses();
 
 }
 

@@ -4,8 +4,8 @@ import java.util.Set;
 
 public interface RequestSpec {
 
-    Set<Header> getHeaders();
-    Set<QueryParam>  getQueryParams();
+    Set<HeaderSpec> getHeaders();
+    Set<QueryParamSpec>  getQueryParams();
     String getJwt();
 
 }
