@@ -10,17 +10,17 @@ public class StatusBuilder {
     private String body;
     private Predicate<String> conditionBody;
 
-    public StatusBuilder label(String label) {
+    public StatusBuilder setLabel(String label) {
         this.label = label;
         return this;
     }
 
-    public StatusBuilder body(String body) {
+    public StatusBuilder setBody(String body) {
         this.body = body;
         return this;
     }
 
-    public StatusBuilder conditionBody(Predicate<String> conditionBody) {
+    public StatusBuilder setConditionBody(Predicate<String> conditionBody) {
         this.conditionBody = conditionBody;
         return this;
     }

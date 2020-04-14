@@ -10,27 +10,27 @@ public class QueryParamSpecBuilder {
     private Object defaultBody;
     private Boolean mandatory;
 
-    public QueryParamSpecBuilder name(String name) {
+    public QueryParamSpecBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public QueryParamSpecBuilder type(String type) {
+    public QueryParamSpecBuilder setType(String type) {
         this.type = type;
         return this;
     }
 
-    public QueryParamSpecBuilder body(Object body) {
+    public QueryParamSpecBuilder setBody(Object body) {
         this.body = body;
         return this;
     }
 
-    public QueryParamSpecBuilder defaultBody(Object defaultBody) {
+    public QueryParamSpecBuilder setDefaultBody(Object defaultBody) {
         this.defaultBody = defaultBody;
         return this;
     }
 
-    public QueryParamSpecBuilder mandatory(Boolean mandatory) {
+    public QueryParamSpecBuilder setMandatory(Boolean mandatory) {
         this.mandatory = mandatory;
         return this;
     }

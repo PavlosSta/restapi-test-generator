@@ -12,17 +12,37 @@ public class RequestSpecBuilder {
     private Set<QueryParamSpec> queryParams;
     private String jwt;
 
-    public RequestSpecBuilder headers(Set<HeaderSpec> headers) {
+    public RequestSpecBuilder setHeaders(Set<HeaderSpec> headers) {
         this.headers = headers;
         return this;
     }
 
-    public RequestSpecBuilder queryParams(Set<QueryParamSpec> queryParams) {
+    public RequestSpecBuilder addHeaders(Set<HeaderSpec> headers) {
+        this.headers.addAll(headers);
+        return this;
+    }
+
+    public RequestSpecBuilder addHeaders(HeaderSpec header) {
+        this.headers.add(header);
+        return this;
+    }
+
+    public RequestSpecBuilder setQueryParams(Set<QueryParamSpec> queryParams) {
         this.queryParams = queryParams;
         return this;
     }
 
-    public RequestSpecBuilder jwt(String jwt) {
+    public RequestSpecBuilder addQueryParams(Set<QueryParamSpec> queryParams) {
+        this.queryParams.addAll(queryParams);
+        return this;
+    }
+
+    public RequestSpecBuilder addQueryParams(QueryParamSpec queryParam) {
+        this.queryParams.add(queryParam);
+        return this;
+    }
+
+    public RequestSpecBuilder setJwt(String jwt) {
         this.jwt = jwt;
         return this;
     }
