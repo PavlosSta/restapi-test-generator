@@ -9,22 +9,22 @@ public class HeaderSpecBuilder {
     private String defaultBody;
     private Boolean mandatory;
 
-    public HeaderSpecBuilder name(String name) {
+    public HeaderSpecBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public HeaderSpecBuilder body(String body) {
+    public HeaderSpecBuilder setBody(String body) {
         this.body = body;
         return this;
     }
 
-    public HeaderSpecBuilder defaultBody(String defaultBody) {
+    public HeaderSpecBuilder setDefaultBody(String defaultBody) {
         this.defaultBody = defaultBody;
         return this;
     }
 
-    public HeaderSpecBuilder mandatory(Boolean mandatory) {
+    public HeaderSpecBuilder setMandatory(Boolean mandatory) {
         this.mandatory = mandatory;
         return this;
     }
