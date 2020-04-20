@@ -15,3 +15,6 @@
 * Spock
 * Rest-assured
 
+## Gradle
+
+* Java Plugin: https://docs.gradle.org/current/userguide/java_plugin.html
