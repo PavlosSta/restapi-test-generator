@@ -6,8 +6,8 @@ public class QueryParamSpecBuilder {
 
     private String name;
     private String type;
-    private Object body;
-    private Object defaultBody;
+    private String body;
+    private String defaultBody;
     private Boolean mandatory;
 
     public QueryParamSpecBuilder setName(String name) {
@@ -20,12 +20,12 @@ public class QueryParamSpecBuilder {
         return this;
     }
 
-    public QueryParamSpecBuilder setBody(Object body) {
+    public QueryParamSpecBuilder setBody(String body) {
         this.body = body;
         return this;
     }
 
-    public QueryParamSpecBuilder setDefaultBody(Object defaultBody) {
+    public QueryParamSpecBuilder setDefaultBody(String defaultBody) {
         this.defaultBody = defaultBody;
         return this;
     }

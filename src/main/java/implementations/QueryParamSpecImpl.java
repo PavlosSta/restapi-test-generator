@@ -6,11 +6,11 @@ public class QueryParamSpecImpl implements QueryParamSpec {
 
     private final String name;
     private final String type;
-    private final Object body;
-    private final Object defaultBody;
+    private final String body;
+    private final String defaultBody;
     private final Boolean mandatory;
 
-    QueryParamSpecImpl(String name, String type, Object body, Object defaultBody, Boolean mandatory) {
+    QueryParamSpecImpl(String name, String type, String body, String defaultBody, Boolean mandatory) {
         this.name = name;
         this.type = type;
         this.body = body;
@@ -26,11 +26,11 @@ public class QueryParamSpecImpl implements QueryParamSpec {
         return type;
     }
 
-    public Object getBody() {
+    public String getBody() {
         return body;
     }
 
-    public Object getDefaultBody() {
+    public String getDefaultBody() {
         return defaultBody;
     }
 

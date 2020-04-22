@@ -4,6 +4,8 @@ import interfaces.MethodSpec;
 import interfaces.RequestSpec;
 import interfaces.ResponseSpec;
 
+import java.util.List;
+
 public class MethodSpecBuilder {
 
     private String type;        // GET, POST, PUT, PATCH, DELETE
@@ -26,7 +28,11 @@ public class MethodSpecBuilder {
     }
 
     public MethodSpec build() {
-        return new MethodSpecImpl(type, req, res);
+
+        List<RequestSpec>  ReqList = List.of(req);
+        List<ResponseSpec> ResList = List.of(res);
+
+        return new MethodSpecImpl(type, ReqList, ResList);
     }
 
 }
