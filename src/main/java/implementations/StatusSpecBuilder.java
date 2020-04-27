@@ -4,23 +4,23 @@ import interfaces.StatusSpec;
 
 import java.util.function.Predicate;
 
-public class StatusBuilder {
+public class StatusSpecBuilder {
 
     private String label;
     private String body;
     private Predicate<String> conditionBody;
 
-    public StatusBuilder setLabel(String label) {
+    public StatusSpecBuilder setLabel(String label) {
         this.label = label;
         return this;
     }
 
-    public StatusBuilder setBody(String body) {
+    public StatusSpecBuilder setBody(String body) {
         this.body = body;
         return this;
     }
 
-    public StatusBuilder setConditionBody(Predicate<String> conditionBody) {
+    public StatusSpecBuilder setConditionBody(Predicate<String> conditionBody) {
         this.conditionBody = conditionBody;
         return this;
     }

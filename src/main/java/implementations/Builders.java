@@ -30,8 +30,8 @@ public class Builders {
         return new ResponseSpecBuilder();
     }
 
-    public static StatusBuilder newStatus() {
-        return new StatusBuilder();
+    public static StatusSpecBuilder newStatus() {
+        return new StatusSpecBuilder();
     }
 
 }
