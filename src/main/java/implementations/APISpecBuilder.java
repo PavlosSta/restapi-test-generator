@@ -12,41 +12,29 @@ public class APISpecBuilder {
     private Set<EndpointSpec> endpoints;
 
     public APISpecBuilder setBaseUrl(String baseUrl) {
-        
-        // validate baseUrl
         this.baseUrl = baseUrl;
         return this;
     }
 
     public APISpecBuilder setLabel(String label) {
-        
-        // validate label
         this.label = label;
         return this;
     }
 
-    public APISpecBuilder setEndpoints(Set<EndpointSpec> endpoints) {
-
-        // validate endpoints
-        this.endpoints = endpoints;
-        return this;
-    }
-
     public APISpecBuilder addEndpoints(Set<EndpointSpec> endpoints) {
-        
-        // validate endpoints
         this.endpoints.addAll(endpoints);
         return this;
     }
 
-    public APISpecBuilder addEndpoints(EndpointSpec endpoint) {
-
-        // validate endpoints
+    public APISpecBuilder addEndpoint(EndpointSpec endpoint) {
         this.endpoints.add(endpoint);
         return this;
     }
 
     public APISpec build() {
+
+        //TODO validate
+
         return new APISpecImpl(baseUrl, label, endpoints);
     }
 

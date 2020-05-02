@@ -60,13 +60,13 @@ public class Main
 		EndpointSpec newEndpoint = newEndpointBuilder
 				.setPath("/test")
 				.setLabel("test endpoint")
-				.addMethods(newMethod)
+				.addMethod(newMethod)
 				.build();
 
 		APISpec newAPI = newApiBuilder
 				.setLabel("")
 				.setBaseUrl("/api")
-				.addEndpoints(newEndpoint)
+				.addEndpoint(newEndpoint)
 				.build();
 	}
 }

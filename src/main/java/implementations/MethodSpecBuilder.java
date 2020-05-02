@@ -9,30 +9,29 @@ import java.util.List;
 public class MethodSpecBuilder {
 
     private String type;        // GET, POST, PUT, PATCH, DELETE
-    private RequestSpec req;    // request spec
-    private ResponseSpec res;   // response spec
+    private RequestSpec request;    // request spec
+    private ResponseSpec response;   // response spec
 
     public MethodSpecBuilder setType(String type) {
         this.type = type;
         return this;
     }
 
-    public MethodSpecBuilder setRequest(RequestSpec req) {
-        this.req = req;
+    public MethodSpecBuilder setRequest(RequestSpec request) {
+        this.request = request;
         return this;
     }
 
-    public MethodSpecBuilder setResponse(ResponseSpec res) {
-        this.res = res;
+    public MethodSpecBuilder setResponse(ResponseSpec response) {
+        this.response = response;
         return this;
     }
 
     public MethodSpec build() {
 
-        List<RequestSpec>  ReqList = List.of(req);
-        List<ResponseSpec> ResList = List.of(res);
+        //TODO validate
 
-        return new MethodSpecImpl(type, ReqList, ResList);
+        return new MethodSpecImpl(type, request, response);
     }
 
 }

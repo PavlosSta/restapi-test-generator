@@ -36,6 +36,9 @@ public class QueryParamSpecBuilder {
     }
 
     public QueryParamSpec build() {
+
+        //TODO validate
+
         return new QueryParamSpecImpl(name, type, body, defaultBody, mandatory);
     }
 }

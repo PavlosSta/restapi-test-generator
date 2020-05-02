@@ -26,6 +26,9 @@ public class StatusSpecBuilder {
     }
 
     public StatusSpec build() {
+
+        //TODO validate
+
         return new StatusSpecImpl(label, body, conditionBody);
     }
 }

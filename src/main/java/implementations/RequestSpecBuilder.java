@@ -12,11 +12,6 @@ public class RequestSpecBuilder {
     private Set<QueryParamSpec> queryParams;
     private String jwt;
 
-    public RequestSpecBuilder setHeaders(Set<HeaderSpec> headers) {
-        this.headers = headers;
-        return this;
-    }
-
     public RequestSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
         return this;
@@ -24,11 +19,6 @@ public class RequestSpecBuilder {
 
     public RequestSpecBuilder addHeaders(HeaderSpec header) {
         this.headers.add(header);
-        return this;
-    }
-
-    public RequestSpecBuilder setQueryParams(Set<QueryParamSpec> queryParams) {
-        this.queryParams = queryParams;
         return this;
     }
 
@@ -48,6 +38,9 @@ public class RequestSpecBuilder {
     }
 
     public RequestSpec build() {
+
+        //TODO validate
+
         return new RequestSpecImpl(headers, queryParams, jwt);
     }
 
