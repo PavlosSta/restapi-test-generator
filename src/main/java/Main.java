@@ -68,5 +68,12 @@ public class Main
 				.setBaseUrl("/api")
 				.addEndpoint(newEndpoint)
 				.build();
+
+		System.out.println(newAPI.getBaseUrl());
+	}
+
+	public boolean test()
+	{
+		return true;
 	}
 }
