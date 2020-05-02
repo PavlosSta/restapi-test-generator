@@ -30,6 +30,9 @@ public class HeaderSpecBuilder {
     }
 
     public HeaderSpec build() {
+
+        //TODO validate
+
         return new HeaderSpecImpl(name, body, defaultBody, mandatory);
     }
 

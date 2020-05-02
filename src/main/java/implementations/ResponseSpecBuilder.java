@@ -11,11 +11,6 @@ public class ResponseSpecBuilder {
     private Set<HeaderSpec> headers;
     private Set<StatusSpec> statuses;
 
-    public ResponseSpecBuilder setHeaders(Set<HeaderSpec> headers) {
-        this.headers = headers;
-        return this;
-    }
-
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
         return this;
@@ -23,11 +18,6 @@ public class ResponseSpecBuilder {
 
     public ResponseSpecBuilder addHeaders(HeaderSpec header) {
         this.headers.add(header);
-        return this;
-    }
-
-    public ResponseSpecBuilder setStatuses(Set<StatusSpec> statuses) {
-        this.statuses = statuses;
         return this;
     }
 
@@ -42,6 +32,9 @@ public class ResponseSpecBuilder {
     }
 
     public ResponseSpec build() {
+
+        //TODO validate
+
         return new ResponseSpecImpl(headers, statuses);
     }
 
