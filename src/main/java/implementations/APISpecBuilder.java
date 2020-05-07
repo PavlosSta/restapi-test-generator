@@ -1,5 +1,6 @@
 package implementations;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import java.util.Set;
 
 import interfaces.APISpec;
@@ -31,11 +32,33 @@ public class APISpecBuilder {
         return this;
     }
 
+    public Boolean validateUrl(String baseUrl) {
+
+        UrlValidator urlValidator = new UrlValidator();
+
+        if (urlValidator.isValid(baseUrl))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public APISpec build() {
 
-        //TODO validate
+        if (validateUrl(baseUrl)) {
 
-        return new APISpecImpl(baseUrl, label, endpoints);
+            return new APISpecImpl(baseUrl, label, endpoints);
+
+        }
+        else
+        {
+            throw new RuntimeException();
+        }
+
     }
 
 }
