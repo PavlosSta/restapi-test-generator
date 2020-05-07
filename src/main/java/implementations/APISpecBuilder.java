@@ -1,6 +1,8 @@
 package implementations;
 
 import org.apache.commons.validator.routines.UrlValidator;
+
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import interfaces.APISpec;
@@ -10,7 +12,7 @@ public class APISpecBuilder {
 
     private String baseUrl; // eg. "https://www.myapi.com/api/"
     private String label;   // eg. "API name"
-    private Set<EndpointSpec> endpoints;
+    private Set<EndpointSpec> endpoints = new LinkedHashSet<>();
 
     public APISpecBuilder setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;

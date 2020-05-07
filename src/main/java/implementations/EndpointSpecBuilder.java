@@ -1,5 +1,6 @@
 package implementations;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import interfaces.EndpointSpec;
@@ -10,8 +11,8 @@ public class EndpointSpecBuilder {
     private String path;            // eg. "prices"
     private String label;           // eg. "endpoint for prices"
 
-    private Set<String> docs;       // notes for using this endpoint
-    private Set<MethodSpec> methods;    // endpoint 1-N methods
+    private Set<String> docs = new LinkedHashSet<>();       // notes for using this endpoint
+    private Set<MethodSpec> methods = new LinkedHashSet<>();     // endpoint 1-N methods
 
     public EndpointSpecBuilder setPath(String path) {
         this.path = path;
