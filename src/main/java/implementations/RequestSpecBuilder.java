@@ -4,12 +4,13 @@ import interfaces.HeaderSpec;
 import interfaces.QueryParamSpec;
 import interfaces.RequestSpec;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RequestSpecBuilder {
 
-    private Set<HeaderSpec> headers;
-    private Set<QueryParamSpec> queryParams;
+    private Set<HeaderSpec> headers = new LinkedHashSet<>(); ;
+    private Set<QueryParamSpec> queryParams = new LinkedHashSet<>(); ;
     private String jwt;
 
     public RequestSpecBuilder addHeaders(Set<HeaderSpec> headers) {

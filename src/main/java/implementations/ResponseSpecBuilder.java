@@ -4,12 +4,13 @@ import interfaces.HeaderSpec;
 import interfaces.ResponseSpec;
 import interfaces.StatusSpec;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ResponseSpecBuilder {
 
-    private Set<HeaderSpec> headers;
-    private Set<StatusSpec> statuses;
+    private Set<HeaderSpec> headers = new LinkedHashSet<>(); ;
+    private Set<StatusSpec> statuses = new LinkedHashSet<>(); ;
 
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
