@@ -41,14 +41,14 @@ public class Main
 				.build();
 
 		RequestSpec newRequest = newRequestBuilder.
-				addHeaders(newHeader).
-				addQueryParams(newQueryParam).
+				addHeader(newHeader).
+				addQueryParam(newQueryParam).
 				setJwt("jwt").
 				build();
 
 		ResponseSpec newResponse = newResponseBuilder
-				.addHeaders(newHeader)
-				.addStatuses(newStatus)
+				.addHeader(newHeader)
+				.addStatus(newStatus)
 				.build();
 
 		MethodSpec newMethod = newMethodBuilder
@@ -70,10 +70,5 @@ public class Main
 				.build();
 
 		System.out.println(newAPI.getBaseUrl());
-	}
-
-	public boolean test()
-	{
-		return true;
 	}
 }

@@ -9,15 +9,15 @@ import java.util.Set;
 
 public class ResponseSpecBuilder {
 
-    private Set<HeaderSpec> headers = new LinkedHashSet<>(); ;
-    private Set<StatusSpec> statuses = new LinkedHashSet<>(); ;
+    private Set<HeaderSpec> headers = new LinkedHashSet<>();
+    private Set<StatusSpec> statuses = new LinkedHashSet<>();
 
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
         return this;
     }
 
-    public ResponseSpecBuilder addHeaders(HeaderSpec header) {
+    public ResponseSpecBuilder addHeader(HeaderSpec header) {
         this.headers.add(header);
         return this;
     }
@@ -27,16 +27,19 @@ public class ResponseSpecBuilder {
         return this;
     }
 
-    public ResponseSpecBuilder addStatuses(StatusSpec status) {
+    public ResponseSpecBuilder addStatus(StatusSpec status) {
         this.statuses.add(status);
         return this;
     }
 
     public ResponseSpec build() {
 
-        //TODO validate
-
-        return new ResponseSpecImpl(headers, statuses);
+        if (headers.isEmpty() || statuses.isEmpty()) {
+            throw new RuntimeException();
+        }
+        else {
+            return new ResponseSpecImpl(headers, statuses);
+        }
     }
 
 }

@@ -4,7 +4,7 @@ import interfaces.MethodSpec;
 import interfaces.RequestSpec;
 import interfaces.ResponseSpec;
 
-import java.util.List;
+import java.util.Objects;
 
 public class MethodSpecBuilder {
 
@@ -29,9 +29,12 @@ public class MethodSpecBuilder {
 
     public MethodSpec build() {
 
-        //TODO validate
-
-        return new MethodSpecImpl(type, request, response);
+        if (type.isEmpty() || Objects.isNull(request) || Objects.isNull(response)) {
+            throw new RuntimeException();
+        }
+        else {
+            return new MethodSpecImpl(type, request, response);
+        }
     }
 
 }

@@ -8,7 +8,7 @@ import spock.lang.Specification
 class MainTest extends Specification {
 
     def "baseUrl validation works"() {
-        def API = new APISpecBuilder();
+        def API = new APISpecBuilder()
 
         when:
         Boolean resultNotValid = API.validateUrl("localhosttest")

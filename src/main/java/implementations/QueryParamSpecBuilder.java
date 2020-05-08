@@ -37,8 +37,12 @@ public class QueryParamSpecBuilder {
 
     public QueryParamSpec build() {
 
-        //TODO validate
+        if (name.isEmpty() || type.isEmpty() || body.isEmpty() || (mandatory && defaultBody.isEmpty())) {
+            throw new RuntimeException();
+        }
+        else {
+            return new QueryParamSpecImpl(name, type, body, defaultBody, mandatory);
+        }
 
-        return new QueryParamSpecImpl(name, type, body, defaultBody, mandatory);
     }
 }

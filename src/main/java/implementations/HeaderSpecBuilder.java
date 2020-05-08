@@ -31,9 +31,13 @@ public class HeaderSpecBuilder {
 
     public HeaderSpec build() {
 
-        //TODO validate
+        if (name.isEmpty() || body.isEmpty() || (mandatory && defaultBody.isEmpty())) {
+            throw new RuntimeException();
+        }
+        else {
+            return new HeaderSpecImpl(name, body, defaultBody, mandatory);
+        }
 
-        return new HeaderSpecImpl(name, body, defaultBody, mandatory);
     }
 
 }
