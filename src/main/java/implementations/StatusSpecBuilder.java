@@ -2,6 +2,7 @@ package implementations;
 
 import interfaces.StatusSpec;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class StatusSpecBuilder {
@@ -27,8 +28,11 @@ public class StatusSpecBuilder {
 
     public StatusSpec build() {
 
-        //TODO validate
-
-        return new StatusSpecImpl(label, body, conditionBody);
+        if (label.isEmpty() || body.isEmpty() == Objects.isNull(conditionBody)) {
+            throw new RuntimeException();
+        }
+        else {
+            return new StatusSpecImpl(label, body, conditionBody);
+        }
     }
 }

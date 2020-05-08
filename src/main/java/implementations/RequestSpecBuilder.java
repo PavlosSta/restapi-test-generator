@@ -9,8 +9,8 @@ import java.util.Set;
 
 public class RequestSpecBuilder {
 
-    private Set<HeaderSpec> headers = new LinkedHashSet<>(); ;
-    private Set<QueryParamSpec> queryParams = new LinkedHashSet<>(); ;
+    private Set<HeaderSpec> headers = new LinkedHashSet<>();
+    private Set<QueryParamSpec> queryParams = new LinkedHashSet<>();
     private String jwt;
 
     public RequestSpecBuilder addHeaders(Set<HeaderSpec> headers) {
@@ -18,7 +18,7 @@ public class RequestSpecBuilder {
         return this;
     }
 
-    public RequestSpecBuilder addHeaders(HeaderSpec header) {
+    public RequestSpecBuilder addHeader(HeaderSpec header) {
         this.headers.add(header);
         return this;
     }
@@ -28,7 +28,7 @@ public class RequestSpecBuilder {
         return this;
     }
 
-    public RequestSpecBuilder addQueryParams(QueryParamSpec queryParam) {
+    public RequestSpecBuilder addQueryParam(QueryParamSpec queryParam) {
         this.queryParams.add(queryParam);
         return this;
     }
@@ -40,9 +40,13 @@ public class RequestSpecBuilder {
 
     public RequestSpec build() {
 
-        //TODO validate
-
-        return new RequestSpecImpl(headers, queryParams, jwt);
+        // can headers or params be empty?
+        if (headers.isEmpty() || queryParams.isEmpty()) {
+            throw new RuntimeException();
+        }
+        else {
+            return new RequestSpecImpl(headers, queryParams, jwt);
+        }
     }
 
 }

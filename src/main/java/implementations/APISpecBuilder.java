@@ -38,27 +38,17 @@ public class APISpecBuilder {
 
         UrlValidator urlValidator = new UrlValidator();
 
-        if (urlValidator.isValid(baseUrl))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return urlValidator.isValid(baseUrl);
 
     }
 
     public APISpec build() {
 
-        if (validateUrl(baseUrl)) {
-
-            return new APISpecImpl(baseUrl, label, endpoints);
-
-        }
-        else
-        {
+        if (!validateUrl(baseUrl) || endpoints.isEmpty()) {
             throw new RuntimeException();
+        }
+        else {
+            return new APISpecImpl(baseUrl, label, endpoints);
         }
 
     }

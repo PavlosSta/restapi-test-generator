@@ -46,9 +46,13 @@ public class EndpointSpecBuilder {
 
     public EndpointSpec build() {
 
-        //TODO validate
+        if (path.isEmpty() || methods.isEmpty()) {
+            throw new RuntimeException();
+        }
+        else {
+            return new EndpointSpecImpl(path, label, docs, methods);
+        }
 
-        return new EndpointSpecImpl(path, label, docs, methods);
     }
 
 
