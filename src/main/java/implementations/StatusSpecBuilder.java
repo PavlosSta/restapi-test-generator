@@ -28,7 +28,7 @@ public class StatusSpecBuilder {
 
     public StatusSpec build() {
 
-        if (label.isEmpty() || body.isEmpty() == Objects.isNull(conditionBody)) {
+        if (label.isEmpty() || (body.isEmpty() == Objects.isNull(conditionBody))) {
             throw new RuntimeException();
         }
         else {
