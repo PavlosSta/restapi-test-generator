@@ -3,7 +3,11 @@
  */
 
 import implementations.APISpecBuilder
+import implementations.StatusSpecBuilder
+import interfaces.StatusSpec
 import spock.lang.Specification
+
+import java.util.function.Predicate
 
 class MainTest extends Specification {
 
@@ -18,6 +22,20 @@ class MainTest extends Specification {
         !resultNotValid
         resultValid
     }
+
+    def "status builder works for body"() {
+        def newStatusBuilder1 = new StatusSpecBuilder()
+
+        when:
+        StatusSpec newStatus = newStatusBuilder1.setLabel("statusLabel").setBody("statusBody").build()
+
+        then:
+        newStatus.getBody().equals("statusBody")
+        newStatus.getLabel().equals("statusLabel")
+
+
+    }
+
 
 
 }
