@@ -1,12 +1,12 @@
 package interfaces;
 
-import java.util.function.Predicate;
+import java.util.Hashtable;
 
 public interface StatusSpec {
 
     String getLabel();
     String getBody();
-    Predicate<String> getConditionBody();
+    Hashtable getConditionBody();
 
 }
 
