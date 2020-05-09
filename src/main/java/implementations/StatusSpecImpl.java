@@ -1,5 +1,6 @@
 package implementations;
 
+import java.util.Hashtable;
 import java.util.function.Predicate;
 
 import interfaces.StatusSpec;
@@ -8,9 +9,9 @@ public class StatusSpecImpl implements StatusSpec {
 
     private final String label;
     private final String body;
-    private final Predicate<String> conditionBody;
+    private final Hashtable<String, Integer> conditionBody;
 
-    StatusSpecImpl(String label, String body, Predicate<String> conditionBody) {
+    StatusSpecImpl(String label, String body, Hashtable conditionBody) {
         this.label = label;
         this.body = body;
         this.conditionBody = conditionBody;
@@ -24,7 +25,7 @@ public class StatusSpecImpl implements StatusSpec {
         return body;
     }
 
-    public Predicate<String> getConditionBody() {
+    public Hashtable getConditionBody() {
         return conditionBody;
     }
 

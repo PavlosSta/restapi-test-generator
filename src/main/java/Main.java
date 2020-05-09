@@ -17,12 +17,9 @@ public class Main
 		ResponseSpecBuilder newResponseBuilder		= new ResponseSpecBuilder();
 		StatusSpecBuilder newStatusBuilder			= new StatusSpecBuilder();
 
-		Predicate<String> statusCode = st -> (st.equals(200));
-
 		StatusSpec newStatus = newStatusBuilder
 				.setLabel("statusLabel")
 				.setBody("statusBody")
-				.setConditionBody(statusCode)
 				.build();
 
 		HeaderSpec newHeader = newHeaderBuilder
