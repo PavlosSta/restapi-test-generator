@@ -53,4 +53,14 @@ class StatusTest extends Specification{
         thrown RuntimeException
 
     }
+
+    def "status builder doesn't build without label"() {
+        def newStatusBuilder = new StatusSpecBuilder()
+
+        when:
+        newStatusBuilder.setBody("statusBody").build()
+
+        then:
+        thrown RuntimeException
+    }
 }

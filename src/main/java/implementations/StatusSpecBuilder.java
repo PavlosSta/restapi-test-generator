@@ -29,7 +29,7 @@ public class StatusSpecBuilder {
 
     public StatusSpec build() {
 
-        if (label.isEmpty() || ((body == null) == (conditionBody == null))) {
+        if (label == null || ((body == null) == (conditionBody == null))) {
             throw new RuntimeException();
         }
         else {
