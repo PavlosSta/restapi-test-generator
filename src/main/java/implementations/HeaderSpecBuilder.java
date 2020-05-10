@@ -31,7 +31,7 @@ public class HeaderSpecBuilder {
 
     public HeaderSpec build() {
 
-        if (name.isEmpty() || body.isEmpty() || (mandatory && defaultBody.isEmpty())) {
+        if (name == null || body == null || (mandatory && defaultBody.isEmpty())) {
             throw new RuntimeException();
         }
         else {
