@@ -37,7 +37,7 @@ public class QueryParamSpecBuilder {
 
     public QueryParamSpec build() {
 
-        if (name.isEmpty() || type.isEmpty() || body.isEmpty() || (mandatory && defaultBody.isEmpty())) {
+        if (name == null || type == null || body == null || (mandatory && defaultBody == null)) {
             throw new RuntimeException();
         }
         else {

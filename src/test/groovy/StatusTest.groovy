@@ -30,7 +30,7 @@ class StatusTest extends Specification{
 
     }
 
-    def "status builder doesn't build without body nor conditionBody"() {
+    def "status builder raises exception when missing both body and conditionBody"() {
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
@@ -41,7 +41,7 @@ class StatusTest extends Specification{
 
     }
 
-    def "status builder doesn't build with body and conditionBody"() {
+    def "status builder raises exception when having both body and conditionBody"() {
         def newStatusBuilder = new StatusSpecBuilder()
         def conditionBody = new Hashtable()
         conditionBody.put("request.headers.foo == null", 200)
@@ -54,7 +54,7 @@ class StatusTest extends Specification{
 
     }
 
-    def "status builder doesn't build without label"() {
+    def "status builder raises exception when missing label"() {
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
