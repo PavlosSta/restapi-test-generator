@@ -49,4 +49,14 @@ class HeaderTest extends Specification{
         then:
         thrown RuntimeException
     }
+
+    def "header builder raises exception when mandatory and missing default body"() {
+        def newHeaderBuilder = new HeaderSpecBuilder()
+
+        when:
+        newHeaderBuilder.setName("headerName").setBody("headerBody").setMandatory(true).build()
+
+        then:
+        thrown RuntimeException
+    }
 }
