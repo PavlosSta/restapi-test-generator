@@ -61,7 +61,7 @@ public class Main
 				.build();
 
 		APISpec newAPI = newApiBuilder
-				.setLabel("")
+				.setLabel("api")
 				.setBaseUrl("/api")
 				.addEndpoint(newEndpoint)
 				.build();
