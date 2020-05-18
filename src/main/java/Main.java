@@ -1,8 +1,6 @@
 import implementations.*;
 import interfaces.*;
 
-import java.util.function.Predicate;
-
 public class Main
 {
 	public static void main(String[] args)
@@ -24,23 +22,22 @@ public class Main
 
 		HeaderSpec newHeader = newHeaderBuilder
 				.setName("headerName")
-				.setBody("headerBody")
-				.setDefaultBody("headerDefBody")
+				.setValue("headerBody")
+				.setDefaultValue("headerDefBody")
 				.setMandatory(true)
 				.build();
 
 		QueryParamSpec newQueryParam = newQueryParamBuilder
 				.setName("queryName")
 				.setType("queryType")
-				.setBody("queryBody")
-				.setDefaultBody("queryDefBody")
+				.setValue("queryBody")
+				.setDefaultValue("queryDefBody")
 				.setMandatory(true)
 				.build();
 
 		RequestSpec newRequest = newRequestBuilder.
 				addHeader(newHeader).
 				addQueryParam(newQueryParam).
-				setJwt("jwt").
 				build();
 
 		ResponseSpec newResponse = newResponseBuilder

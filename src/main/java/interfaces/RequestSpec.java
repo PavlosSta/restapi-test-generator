@@ -6,7 +6,6 @@ public interface RequestSpec {
 
     Set<HeaderSpec> getHeaders();
     Set<QueryParamSpec>  getQueryParams();
-    String getJwt();
 
 }
 

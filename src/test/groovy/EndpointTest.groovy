@@ -28,40 +28,39 @@ class EndpointTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setBody("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
-        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setBody("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
         MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
 
-        EndpointSpec newEndpoint = newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDoc("endpointDoc").addMethod(newMethod).build()
+        EndpointSpec newEndpoint = newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDescription("endpointDoc").addMethod(newMethod).build()
 
         then:
 
         newEndpoint.getLabel() == "endpointLabel"
         newEndpoint.getPath() == "/test"
-        newEndpoint.getDocs()[0] == "endpointDoc"
+        newEndpoint.getDescription() == "endpointDoc"
 
         newEndpoint.getMethods()[0]
 
         newEndpoint.getMethods()[0].getType() == "methodType"
 
-        newEndpoint.getMethods()[0].getRequest().getJwt() == "jwt"
         newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getName() == "headerRequestName"
-        newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getBody() == "headerRequestBody"
-        !newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getMandatory()
+        newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getValue() == "headerRequestBody"
+        !newEndpoint.getMethods()[0].getRequest().getHeaders()[0].isMandatory()
         newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getName() == "queryName"
         newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getType() == "queryType"
-        newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getBody() == "queryBody"
-        !newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getMandatory()
+        newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getValue() == "queryBody"
+        !newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].isMandatory()
 
         newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getName() == "headerResponseName"
-        newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getBody() == "headerResponseBody"
-        !newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getMandatory()
+        newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getValue() == "headerResponseBody"
+        !newEndpoint.getMethods()[0].getResponse().getHeaders()[0].isMandatory()
         newEndpoint.getMethods()[0].getResponse().getStatuses()[0].getLabel() == "statusLabel"
         newEndpoint.getMethods()[0].getResponse().getStatuses()[0].getBody() == "statusBody"
 
@@ -79,17 +78,17 @@ class EndpointTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setBody("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setBody("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
         MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
 
-        newEndpointBuilder.setLabel("endpointLabel").addDoc("endpointDoc").addMethod(newMethod).build()
+        newEndpointBuilder.setLabel("endpointLabel").addDescription("endpointDoc").addMethod(newMethod).build()
 
         then:
         thrown RuntimeException
@@ -102,7 +101,7 @@ class EndpointTest extends Specification {
 
         when:
 
-        newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDoc("endpointDoc").build()
+        newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDescription("endpointDoc").build()
 
         then:
         thrown RuntimeException

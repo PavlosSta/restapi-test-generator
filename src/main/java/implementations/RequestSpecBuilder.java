@@ -4,6 +4,7 @@ import interfaces.HeaderSpec;
 import interfaces.QueryParamSpec;
 import interfaces.RequestSpec;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ public class RequestSpecBuilder {
 
     private Set<HeaderSpec> headers = new LinkedHashSet<>();
     private Set<QueryParamSpec> queryParams = new LinkedHashSet<>();
-    private String jwt;
 
     public RequestSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
@@ -33,20 +33,15 @@ public class RequestSpecBuilder {
         return this;
     }
 
-    public RequestSpecBuilder setJwt(String jwt) {
-        this.jwt = jwt;
-        return this;
-    }
-
     public RequestSpec build() {
 
         // can headers or params be empty?
         if (headers.isEmpty() || queryParams.isEmpty()) {
             throw new RuntimeException();
         }
-        else {
-            return new RequestSpecImpl(headers, queryParams, jwt);
-        }
+
+        return new RequestSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(queryParams));
+
     }
 
 }

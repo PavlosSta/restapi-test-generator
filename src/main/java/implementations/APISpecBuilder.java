@@ -2,6 +2,7 @@ package implementations;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -47,9 +48,8 @@ public class APISpecBuilder {
         if (!validateUrl(baseUrl) || endpoints.isEmpty()) {
             throw new RuntimeException();
         }
-        else {
-            return new APISpecImpl(baseUrl, label, endpoints);
-        }
+
+        return new APISpecImpl(baseUrl, label, Collections.unmodifiableSet(endpoints));
 
     }
 

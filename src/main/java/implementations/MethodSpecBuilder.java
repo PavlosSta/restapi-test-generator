@@ -32,9 +32,9 @@ public class MethodSpecBuilder {
         if (type.isEmpty() || Objects.isNull(request) || Objects.isNull(response)) {
             throw new RuntimeException();
         }
-        else {
-            return new MethodSpecImpl(type, request, response);
-        }
+
+        return new MethodSpecImpl(type, request, response);
+
     }
 
 }

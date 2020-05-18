@@ -5,14 +5,14 @@ import interfaces.HeaderSpec;
 public class HeaderSpecImpl implements HeaderSpec {
 
     private final String name;
-    private final String body;
-    private final String defaultBody;
-    private final Boolean mandatory;
+    private final String value;
+    private final String defaultValue;
+    private final boolean mandatory;
 
-    HeaderSpecImpl(String name, String body, String defaultBody, Boolean mandatory) {
+    HeaderSpecImpl(String name, String value, String defaultValue, boolean mandatory) {
         this.name = name;
-        this.body = body;
-        this.defaultBody = defaultBody;
+        this.value = value;
+        this.defaultValue = defaultValue;
         this.mandatory = mandatory;
     }
 
@@ -20,16 +20,16 @@ public class HeaderSpecImpl implements HeaderSpec {
         return this.name;
     }
 
-    public String getBody() {
-        return body;
+    public String getValue() {
+        return this.value;
     }
 
-    public Boolean getMandatory() {
-        return mandatory;
+    public boolean isMandatory() {
+        return this.mandatory;
     }
 
-    public String getDefaultBody() {
-        return defaultBody;
+    public String getDefaultValue() {
+        return this.defaultValue;
     }
     
 }

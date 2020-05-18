@@ -6,7 +6,7 @@ public interface EndpointSpec {
 
     String getPath();
     String getLabel();
-    Set<String> getDocs();
+    String getDescription();
     Set<MethodSpec> getMethods();
 
 }

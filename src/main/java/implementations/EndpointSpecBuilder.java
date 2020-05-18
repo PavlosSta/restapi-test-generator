@@ -1,5 +1,6 @@
 package implementations;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -10,8 +11,7 @@ public class EndpointSpecBuilder {
 
     private String path;            // eg. "prices"
     private String label;           // eg. "endpoint for prices"
-
-    private Set<String> docs = new LinkedHashSet<>();       // notes for using this endpoint
+    private String description;       // notes for using this endpoint
     private Set<MethodSpec> methods = new LinkedHashSet<>();     // endpoint 1-N methods
 
     public EndpointSpecBuilder setPath(String path) {
@@ -24,13 +24,8 @@ public class EndpointSpecBuilder {
         return this;
     }
 
-    public EndpointSpecBuilder addDocs(Set<String> docs) {
-        this.docs.addAll(docs);
-        return this;
-    }
-
-    public EndpointSpecBuilder addDoc(String doc) {
-        this.docs.add(doc);
+    public EndpointSpecBuilder addDescription(String description) {
+        this.description = description;
         return this;
     }
 
@@ -49,9 +44,8 @@ public class EndpointSpecBuilder {
         if (path.isEmpty() || methods.isEmpty()) {
             throw new RuntimeException();
         }
-        else {
-            return new EndpointSpecImpl(path, label, docs, methods);
-        }
+
+        return new EndpointSpecImpl(path, label, description, Collections.unmodifiableSet(methods));
 
     }
 

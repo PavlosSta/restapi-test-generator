@@ -5,38 +5,37 @@ import interfaces.HeaderSpec;
 public class HeaderSpecBuilder {
 
     private String name;
-    private String body;
-    private String defaultBody;
-    private Boolean mandatory;
+    private String value;
+    private String defaultValue;
+    private boolean mandatory;
 
     public HeaderSpecBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public HeaderSpecBuilder setBody(String body) {
-        this.body = body;
+    public HeaderSpecBuilder setValue(String value) {
+        this.value = value;
         return this;
     }
 
-    public HeaderSpecBuilder setDefaultBody(String defaultBody) {
-        this.defaultBody = defaultBody;
+    public HeaderSpecBuilder setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
         return this;
     }
 
-    public HeaderSpecBuilder setMandatory(Boolean mandatory) {
+    public HeaderSpecBuilder setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
         return this;
     }
 
     public HeaderSpec build() {
 
-        if (name == null || body == null || (mandatory && defaultBody.isEmpty())) {
+        if (name == null || value == null || (mandatory && (defaultValue == null))) {
             throw new RuntimeException();
         }
-        else {
-            return new HeaderSpecImpl(name, body, defaultBody, mandatory);
-        }
+
+        return new HeaderSpecImpl(name, value, defaultValue, mandatory);
 
     }
 

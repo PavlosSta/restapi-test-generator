@@ -3,8 +3,8 @@ package interfaces;
 public interface HeaderSpec {
 
     String getName();
-    String getBody();
-    Boolean getMandatory();
-    String getDefaultBody();
+    String getValue();
+    String getDefaultValue();
+    boolean isMandatory();
 }
 

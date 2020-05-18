@@ -10,24 +10,18 @@ public class RequestSpecImpl implements RequestSpec {
 
     private final Set<HeaderSpec> headers;
     private final Set<QueryParamSpec> queryParams;
-    private final String jwt;
 
-    RequestSpecImpl(Set<HeaderSpec> headers, Set<QueryParamSpec> queryParams, String jwt) {
+    RequestSpecImpl(Set<HeaderSpec> headers, Set<QueryParamSpec> queryParams) {
         this.headers = headers;
         this.queryParams = queryParams;
-        this.jwt = jwt;
     }
 
     public Set<HeaderSpec> getHeaders() {
-        return headers;
+        return this.headers;
     }
 
     public Set<QueryParamSpec> getQueryParams() {
-        return queryParams;
-    }
-
-    public String getJwt() {
-        return jwt;
+        return this.queryParams;
     }
 
 }

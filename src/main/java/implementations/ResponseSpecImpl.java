@@ -17,11 +17,11 @@ public class ResponseSpecImpl implements ResponseSpec {
     }
 
     public Set<HeaderSpec> getHeaders() {
-        return headers;
+        return this.headers;
     }
 
     public Set<StatusSpec> getStatuses() {
-        return statuses;
+        return this.statuses;
     }
 
 }
