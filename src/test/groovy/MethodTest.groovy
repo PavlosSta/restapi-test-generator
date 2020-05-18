@@ -25,11 +25,11 @@ class MethodTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setBody("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
-        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setBody("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -39,18 +39,17 @@ class MethodTest extends Specification {
 
         newMethod.getType() == "methodType"
 
-        newMethod.getRequest().getJwt() == "jwt"
         newMethod.getRequest().getHeaders()[0].getName() == "headerRequestName"
-        newMethod.getRequest().getHeaders()[0].getBody() == "headerRequestBody"
-        !newMethod.getRequest().getHeaders()[0].getMandatory()
+        newMethod.getRequest().getHeaders()[0].getValue() == "headerRequestBody"
+        !newMethod.getRequest().getHeaders()[0].isMandatory()
         newMethod.getRequest().getQueryParams()[0].getName() == "queryName"
         newMethod.getRequest().getQueryParams()[0].getType() == "queryType"
-        newMethod.getRequest().getQueryParams()[0].getBody() == "queryBody"
-        !newMethod.getRequest().getQueryParams()[0].getMandatory()
+        newMethod.getRequest().getQueryParams()[0].getValue() == "queryBody"
+        !newMethod.getRequest().getQueryParams()[0].isMandatory()
 
         newMethod.getResponse().getHeaders()[0].getName() == "headerResponseName"
-        newMethod.getResponse().getHeaders()[0].getBody() == "headerResponseBody"
-        !newMethod.getResponse().getHeaders()[0].getMandatory()
+        newMethod.getResponse().getHeaders()[0].getValue() == "headerResponseBody"
+        !newMethod.getResponse().getHeaders()[0].isMandatory()
         newMethod.getResponse().getStatuses()[0].getLabel() == "statusLabel"
         newMethod.getResponse().getStatuses()[0].getBody() == "statusBody"
 
@@ -67,11 +66,11 @@ class MethodTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setBody("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
-        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setBody("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -91,7 +90,7 @@ class MethodTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setBody("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -111,8 +110,8 @@ class MethodTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setBody("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
 
         newMethodBuilder.setType("methodType").setRequest(newRequest).build()

@@ -17,15 +17,15 @@ public class MethodSpecImpl implements MethodSpec {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public RequestSpec getRequest() {
-        return request;
+        return this.request;
     }
 
     public ResponseSpec getResponse() {
-        return response;
+        return this.response;
     }
 
 

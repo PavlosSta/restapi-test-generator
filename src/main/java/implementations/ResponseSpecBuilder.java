@@ -4,6 +4,7 @@ import interfaces.HeaderSpec;
 import interfaces.ResponseSpec;
 import interfaces.StatusSpec;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -37,9 +38,9 @@ public class ResponseSpecBuilder {
         if (headers.isEmpty() || statuses.isEmpty()) {
             throw new RuntimeException();
         }
-        else {
-            return new ResponseSpecImpl(headers, statuses);
-        }
+
+        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(statuses));
+
     }
 
 }

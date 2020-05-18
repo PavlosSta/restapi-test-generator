@@ -8,14 +8,14 @@ class QueryParamTest extends Specification {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setDefaultBody("defaultQueryBody").setMandatory(true).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setDefaultValue("defaultQueryBody").setMandatory(true).build()
 
         then:
         newQueryParam.getName() == "queryName"
         newQueryParam.getType() == "queryType"
-        newQueryParam.getBody() == "queryBody"
-        newQueryParam.getDefaultBody() == "defaultQueryBody"
-        newQueryParam.getMandatory()
+        newQueryParam.getValue() == "queryBody"
+        newQueryParam.getDefaultValue() == "defaultQueryBody"
+        newQueryParam.isMandatory()
 
     }
 
@@ -23,12 +23,12 @@ class QueryParamTest extends Specification {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
 
         then:
         newQueryParam.getName() == "queryName"
         newQueryParam.getType() == "queryType"
-        newQueryParam.getBody() == "queryBody"
+        newQueryParam.getValue() == "queryBody"
 
     }
 
@@ -36,13 +36,13 @@ class QueryParamTest extends Specification {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
-        newQueryParamBuilder.setBody("queryBody").setType("queryType").setMandatory(false).build()
+        newQueryParamBuilder.setValue("queryBody").setType("queryType").setMandatory(false).build()
 
         then:
         thrown RuntimeException
     }
 
-    def "queryParam builder raises exception for missing body"() {
+    def "queryParam builder raises exception for missing value"() {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
@@ -56,7 +56,7 @@ class QueryParamTest extends Specification {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
-        newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(true).build()
+        newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(true).build()
 
         then:
         thrown RuntimeException
@@ -66,7 +66,7 @@ class QueryParamTest extends Specification {
         def newQueryParamBuilder = new QueryParamSpecBuilder()
 
         when:
-        newQueryParamBuilder.setName("queryName").setBody("queryBody").setMandatory(false).build()
+        newQueryParamBuilder.setName("queryName").setValue("queryBody").setMandatory(false).build()
 
         then:
         thrown RuntimeException

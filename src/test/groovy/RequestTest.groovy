@@ -15,18 +15,17 @@ class RequestTest extends Specification {
         def newRequestBuilder = new RequestSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setBody("headerBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
-        RequestSpec newRequest = newRequestBuilder.addHeader(newHeader).addQueryParam(newQueryParam).setJwt("jwt").build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        RequestSpec newRequest = newRequestBuilder.addHeader(newHeader).addQueryParam(newQueryParam).build()
 
         then:
         newRequest.getHeaders()[0].getName() == "headerName"
-        newRequest.getHeaders()[0].getBody() == "headerBody"
+        newRequest.getHeaders()[0].getValue() == "headerBody"
         newRequest.getQueryParams()[0].getName() == "queryName"
         newRequest.getQueryParams()[0].getType() == "queryType"
-        newRequest.getQueryParams()[0].getBody() == "queryBody"
-        !newRequest.getQueryParams()[0].getMandatory()
-        newRequest.getJwt() == "jwt"
+        newRequest.getQueryParams()[0].getValue() == "queryBody"
+        !newRequest.getQueryParams()[0].isMandatory()
 
     }
 
@@ -36,7 +35,7 @@ class RequestTest extends Specification {
         def newRequestBuilder = new RequestSpecBuilder()
 
         when:
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setBody("queryBody").setMandatory(false).build()
+        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
         newRequestBuilder.addQueryParam(newQueryParam).build()
 
         then:
@@ -50,7 +49,7 @@ class RequestTest extends Specification {
         def newRequestBuilder = new RequestSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setBody("headerBody").setMandatory(false).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
         newRequestBuilder.addHeader(newHeader).build()
 
         then:

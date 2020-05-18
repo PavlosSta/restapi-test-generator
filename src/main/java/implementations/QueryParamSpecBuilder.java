@@ -6,9 +6,9 @@ public class QueryParamSpecBuilder {
 
     private String name;
     private String type;
-    private String body;
-    private String defaultBody;
-    private Boolean mandatory;
+    private String value;
+    private String defaultValue;
+    private boolean mandatory;
 
     public QueryParamSpecBuilder setName(String name) {
         this.name = name;
@@ -20,29 +20,29 @@ public class QueryParamSpecBuilder {
         return this;
     }
 
-    public QueryParamSpecBuilder setBody(String body) {
-        this.body = body;
+    public QueryParamSpecBuilder setValue(String value) {
+        this.value = value;
         return this;
     }
 
-    public QueryParamSpecBuilder setDefaultBody(String defaultBody) {
-        this.defaultBody = defaultBody;
+    public QueryParamSpecBuilder setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
         return this;
     }
 
-    public QueryParamSpecBuilder setMandatory(Boolean mandatory) {
+    public QueryParamSpecBuilder setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
         return this;
     }
 
     public QueryParamSpec build() {
 
-        if (name == null || type == null || body == null || (mandatory && defaultBody == null)) {
+        if (name == null || type == null || (!mandatory && value == null) || (mandatory && defaultValue == null)) {
             throw new RuntimeException();
         }
-        else {
-            return new QueryParamSpecImpl(name, type, body, defaultBody, mandatory);
-        }
+
+        return new QueryParamSpecImpl(name, type, value, defaultValue, mandatory);
+
 
     }
 }

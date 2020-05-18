@@ -6,36 +6,36 @@ public class QueryParamSpecImpl implements QueryParamSpec {
 
     private final String name;
     private final String type;
-    private final String body;
-    private final String defaultBody;
-    private final Boolean mandatory;
+    private final String value;
+    private final String defaultValue;
+    private final boolean mandatory;
 
-    QueryParamSpecImpl(String name, String type, String body, String defaultBody, Boolean mandatory) {
+    QueryParamSpecImpl(String name, String type, String value, String defaultValue, boolean mandatory) {
         this.name = name;
         this.type = type;
-        this.body = body;
-        this.defaultBody = defaultBody;
+        this.value = value;
+        this.defaultValue = defaultValue;
         this.mandatory = mandatory;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
-    public String getBody() {
-        return body;
+    public String getValue() {
+        return this.value;
     }
 
-    public String getDefaultBody() {
-        return defaultBody;
+    public String getDefaultValue() {
+        return this.defaultValue;
     }
 
-    public Boolean getMandatory() {
-        return mandatory;
+    public boolean isMandatory() {
+        return this.mandatory;
     }
 
 }
