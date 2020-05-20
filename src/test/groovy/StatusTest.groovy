@@ -8,11 +8,11 @@ class StatusTest extends Specification{
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
 
         then:
         newStatus.getBody() == "statusBody"
-        newStatus.getLabel() == "statusLabel"
+        newStatus.getCode() == "statusCode"
 
     }
 
@@ -22,11 +22,11 @@ class StatusTest extends Specification{
         conditionBody.put("request.headers.foo == null", 200)
 
         when:
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setConditionBody(conditionBody).build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setConditionBody(conditionBody).build()
 
         then:
         newStatus.getConditionBody() == conditionBody
-        newStatus.getLabel() == "statusLabel"
+        newStatus.getCode() == "statusCode"
 
     }
 
@@ -34,7 +34,7 @@ class StatusTest extends Specification{
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
-        newStatusBuilder.setLabel("statusLabel").build()
+        newStatusBuilder.setCode("statusCode").build()
 
         then:
         thrown RuntimeException
@@ -47,7 +47,7 @@ class StatusTest extends Specification{
         conditionBody.put("request.headers.foo == null", 200)
 
         when:
-        newStatusBuilder.setLabel("statusLabel").setBody("statusBody").setConditionBody(conditionBody).build()
+        newStatusBuilder.setCode("statusCode").setBody("statusBody").setConditionBody(conditionBody).build()
 
         then:
         thrown RuntimeException

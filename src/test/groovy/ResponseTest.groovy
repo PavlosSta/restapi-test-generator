@@ -16,14 +16,14 @@ class ResponseTest extends Specification {
 
         when:
         HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeader).addStatus(newStatus).build()
 
         then:
         newResponse.getHeaders()[0].getName() == "headerName"
         newResponse.getHeaders()[0].getValue() == "headerBody"
         newResponse.getStatuses()[0].getBody() == "statusBody"
-        newResponse.getStatuses()[0].getLabel() == "statusLabel"
+        newResponse.getStatuses()[0].getCode() == "statusCode"
 
     }
 
@@ -33,7 +33,7 @@ class ResponseTest extends Specification {
         def newResponseBuilder = new ResponseSpecBuilder()
 
         when:
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         newResponseBuilder.addStatus(newStatus).build()
 
         then:
