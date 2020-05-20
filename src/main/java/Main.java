@@ -6,6 +6,8 @@ public class Main
 	public static void main(String[] args)
 	{
 
+		//TODO java template engines!
+
 		APISpecBuilder newApiBuilder 				= new APISpecBuilder();
 		EndpointSpecBuilder newEndpointBuilder		= new EndpointSpecBuilder();
 		HeaderSpecBuilder newHeaderBuilder 			= new HeaderSpecBuilder();
@@ -16,7 +18,7 @@ public class Main
 		StatusSpecBuilder newStatusBuilder			= new StatusSpecBuilder();
 
 		StatusSpec newStatus = newStatusBuilder
-				.setLabel("statusLabel")
+				.setCode("statusLabel")
 				.setBody("statusBody")
 				.build();
 

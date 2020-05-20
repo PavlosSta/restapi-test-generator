@@ -2,15 +2,24 @@ package interfaces;
 
 import java.util.Set;
 
-// this is an API specification
+/**
+ * This is an API specification.
+ */
 public interface APISpec {
 
-    //TODO javadoc
-
-    //TODO java template engines!
-
+    /**
+     * @return the base URL of the API
+     */
     String getBaseUrl();
+
+    /**
+     * @return the label of the API
+     */
     String getLabel();
+
+    /**
+     * @return a set with the Endpoint Specifications of the API
+     */
     Set<EndpointSpec> getEndpoints();
 
 }

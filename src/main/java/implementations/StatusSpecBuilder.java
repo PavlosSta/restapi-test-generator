@@ -6,12 +6,12 @@ import java.util.Hashtable;
 
 public class StatusSpecBuilder {
 
-    private String label;
+    private String code;
     private String body;
     private Hashtable<String, Integer> conditionBody;
 
-    public StatusSpecBuilder setLabel(String label) {
-        this.label = label;
+    public StatusSpecBuilder setCode(String code) {
+        this.code = code;
         return this;
     }
 
@@ -27,11 +27,11 @@ public class StatusSpecBuilder {
 
     public StatusSpec build() {
 
-        if (label == null || ((body == null) == (conditionBody == null))) {
+        if (code == null || ((body == null) == (conditionBody == null))) {
             throw new RuntimeException();
         }
-        else {
-            return new StatusSpecImpl(label, body, conditionBody);
-        }
+
+        return new StatusSpecImpl(code, body, conditionBody);
+
     }
 }

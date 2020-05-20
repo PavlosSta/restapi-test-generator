@@ -30,7 +30,7 @@ class MethodTest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
         MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
@@ -50,7 +50,7 @@ class MethodTest extends Specification {
         newMethod.getResponse().getHeaders()[0].getName() == "headerResponseName"
         newMethod.getResponse().getHeaders()[0].getValue() == "headerResponseBody"
         !newMethod.getResponse().getHeaders()[0].isMandatory()
-        newMethod.getResponse().getStatuses()[0].getLabel() == "statusLabel"
+        newMethod.getResponse().getStatuses()[0].getCode() == "statusCode"
         newMethod.getResponse().getStatuses()[0].getBody() == "statusBody"
 
     }
@@ -71,7 +71,7 @@ class MethodTest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
         newMethodBuilder.setRequest(newRequest).setResponse(newResponse).build()
@@ -91,7 +91,7 @@ class MethodTest extends Specification {
         when:
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
-        StatusSpec newStatus = newStatusBuilder.setLabel("statusLabel").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
         newMethodBuilder.setType("methodType").setResponse(newResponse).build()

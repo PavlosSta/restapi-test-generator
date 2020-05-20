@@ -6,26 +6,26 @@ import interfaces.StatusSpec;
 
 public class StatusSpecImpl implements StatusSpec {
 
-    private final String label;
+    private final String code;
     private final String body;
     private final Hashtable<String, Integer> conditionBody;
 
-    StatusSpecImpl(String label, String body, Hashtable<String, Integer> conditionBody) {
-        this.label = label;
+    StatusSpecImpl(String code, String body, Hashtable<String, Integer> conditionBody) {
+        this.code = code;
         this.body = body;
         this.conditionBody = conditionBody;
     }
 
-    public String getLabel() {
-        return label;
+    public String getCode() {
+        return this.code;
     }
 
     public String getBody() {
-        return body;
+        return this.body;
     }
 
     public Hashtable<String, Integer> getConditionBody() {
-        return conditionBody;
+        return this.conditionBody;
     }
 
 }
