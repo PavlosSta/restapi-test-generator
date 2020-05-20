@@ -6,7 +6,7 @@ public interface StatusSpec {
 
     String getLabel();
     String getBody();
-    Hashtable getConditionBody();
+    Hashtable<String, Integer> getConditionBody();
 
 }
 

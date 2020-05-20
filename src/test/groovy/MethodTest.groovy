@@ -112,7 +112,7 @@ class MethodTest extends Specification {
 
         HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
         QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
-        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).setJwt("jwt").build()
+        RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         newMethodBuilder.setType("methodType").setRequest(newRequest).build()
 

@@ -3,8 +3,6 @@ package implementations;
 import interfaces.StatusSpec;
 
 import java.util.Hashtable;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 public class StatusSpecBuilder {
 
@@ -22,7 +20,7 @@ public class StatusSpecBuilder {
         return this;
     }
 
-    public StatusSpecBuilder setConditionBody(Hashtable conditionBody) {
+    public StatusSpecBuilder setConditionBody(Hashtable<String, Integer> conditionBody) {
         this.conditionBody = conditionBody;
         return this;
     }
