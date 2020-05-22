@@ -16,21 +16,8 @@ class StatusTest extends Specification{
 
     }
 
-    def "status builder works for conditionBody"() {
-        def newStatusBuilder = new StatusSpecBuilder()
-        def conditionBody = new Hashtable()
-        conditionBody.put("request.headers.foo == null", 200)
 
-        when:
-        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setConditionBody(conditionBody).build()
-
-        then:
-        newStatus.getConditionBody() == conditionBody
-        newStatus.getCode() == "statusCode"
-
-    }
-
-    def "status builder raises exception when missing both body and conditionBody"() {
+    def "status builder raises exception when missing body"() {
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
@@ -41,20 +28,8 @@ class StatusTest extends Specification{
 
     }
 
-    def "status builder raises exception when having both body and conditionBody"() {
-        def newStatusBuilder = new StatusSpecBuilder()
-        def conditionBody = new Hashtable()
-        conditionBody.put("request.headers.foo == null", 200)
 
-        when:
-        newStatusBuilder.setCode("statusCode").setBody("statusBody").setConditionBody(conditionBody).build()
-
-        then:
-        thrown RuntimeException
-
-    }
-
-    def "status builder raises exception when missing label"() {
+    def "status builder raises exception when missing code"() {
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:

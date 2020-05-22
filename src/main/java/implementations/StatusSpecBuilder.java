@@ -8,7 +8,6 @@ public class StatusSpecBuilder {
 
     private String code;
     private String body;
-    private Hashtable<String, Integer> conditionBody;
 
     public StatusSpecBuilder setCode(String code) {
         this.code = code;
@@ -21,17 +20,16 @@ public class StatusSpecBuilder {
     }
 
     public StatusSpecBuilder setConditionBody(Hashtable<String, Integer> conditionBody) {
-        this.conditionBody = conditionBody;
         return this;
     }
 
     public StatusSpec build() {
 
-        if (code == null || ((body == null) == (conditionBody == null))) {
+        if (code == null || body == null) {
             throw new RuntimeException();
         }
 
-        return new StatusSpecImpl(code, body, conditionBody);
+        return new StatusSpecImpl(code, body);
 
     }
 }
