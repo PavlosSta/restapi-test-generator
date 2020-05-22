@@ -18,7 +18,7 @@ public interface HeaderSpec {
     /**
      * @return the default value of the Header (if mandatory)
      */
-    String getDefaultValue();
+    String defaultValueIfOptionalAndMissing();
 
     /**
      * @return true if Header is mandatory

@@ -8,12 +8,12 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setDefaultValue("defaultHeaderBody").setMandatory(true).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setDefaultValueIfOptionalAndMissing("defaultHeaderBody").setMandatory(true).build()
 
         then:
         newHeader.getName() == "headerName"
         newHeader.getValue() == "headerBody"
-        newHeader.getDefaultValue() == "defaultHeaderBody"
+        newHeader.defaultValueIfOptionalAndMissing() == "defaultHeaderBody"
         newHeader.isMandatory()
 
     }
