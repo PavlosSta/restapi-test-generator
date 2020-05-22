@@ -8,12 +8,10 @@ public class StatusSpecImpl implements StatusSpec {
 
     private final String code;
     private final String body;
-    private final Hashtable<String, Integer> conditionBody;
 
-    StatusSpecImpl(String code, String body, Hashtable<String, Integer> conditionBody) {
+    StatusSpecImpl(String code, String body) {
         this.code = code;
         this.body = body;
-        this.conditionBody = conditionBody;
     }
 
     public String getCode() {
@@ -22,10 +20,6 @@ public class StatusSpecImpl implements StatusSpec {
 
     public String getBody() {
         return this.body;
-    }
-
-    public Hashtable<String, Integer> getConditionBody() {
-        return this.conditionBody;
     }
 
 }

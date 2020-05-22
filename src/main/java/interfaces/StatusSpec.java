@@ -17,10 +17,5 @@ public interface StatusSpec {
      */
     String getBody();
 
-    /**
-     * @return a hashtable with the possible status codes and the corresponding conditions
-     */
-    Hashtable<String, Integer> getConditionBody();
-
 }
 
