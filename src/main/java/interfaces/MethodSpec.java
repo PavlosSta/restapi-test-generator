@@ -5,10 +5,19 @@ package interfaces;
  */
 public interface MethodSpec {
 
+    enum MethodType {
+        GET,
+        PUT,
+        POST,
+        DELETE,
+        PATCH,
+        HEAD
+    }
+
     /**
      * @return the type of the Method (GET, PUT, POST, PATCH, DELETE)
      */
-    String getType();
+    MethodType getType();
 
     /**
      * @return the Request Specification of the Method

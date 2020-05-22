@@ -48,7 +48,7 @@ public class Main
 				.build();
 
 		MethodSpec newMethod = newMethodBuilder
-				.setType("")
+				.setType("GET")
 				.setRequest(newRequest)
 				.setResponse(newResponse)
 				.build();

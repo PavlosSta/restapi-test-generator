@@ -33,11 +33,11 @@ class MethodTest extends Specification {
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
-        MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
+        MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
         then:
 
-        newMethod.getType() == "methodType"
+        newMethod.getType().name() == "GET"
 
         newMethod.getRequest().getHeaders()[0].getName() == "headerRequestName"
         newMethod.getRequest().getHeaders()[0].getValue() == "headerRequestBody"
@@ -94,7 +94,7 @@ class MethodTest extends Specification {
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
-        newMethodBuilder.setType("methodType").setResponse(newResponse).build()
+        newMethodBuilder.setType("GET").setResponse(newResponse).build()
 
         then:
         thrown RuntimeException
@@ -114,7 +114,7 @@ class MethodTest extends Specification {
         QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        newMethodBuilder.setType("methodType").setRequest(newRequest).build()
+        newMethodBuilder.setType("GET").setRequest(newRequest).build()
 
         then:
         thrown RuntimeException
