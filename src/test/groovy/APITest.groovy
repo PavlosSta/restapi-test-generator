@@ -51,7 +51,7 @@ class APITest extends Specification {
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
-        MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
+        MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
         EndpointSpec newEndpoint = newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDescription("endpointDoc").addMethod(newMethod).build()
 
@@ -68,7 +68,7 @@ class APITest extends Specification {
 
         newAPI.getEndpoints()[0].getMethods()[0]
 
-        newAPI.getEndpoints()[0].getMethods()[0].getType() == "methodType"
+        newAPI.getEndpoints()[0].getMethods()[0].getType().name() == "GET"
 
         newAPI.getEndpoints()[0].getMethods()[0].getRequest().getHeaders()[0].getName() == "headerRequestName"
         newAPI.getEndpoints()[0].getMethods()[0].getRequest().getHeaders()[0].getValue() == "headerRequestBody"

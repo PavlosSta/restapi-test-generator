@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class MethodSpecBuilder {
 
-    private String type;        // GET, POST, PUT, PATCH, DELETE
+    private MethodSpec.MethodType type;        // GET, POST, PUT, PATCH, DELETE
     private RequestSpec request;    // request spec
     private ResponseSpec response;   // response spec
 
-    public MethodSpecBuilder setType(String type) {
-        this.type = type;
+    public MethodSpecBuilder setType(String typeString) {
+        this.type = MethodSpec.MethodType.valueOf(typeString);
         return this;
     }
 
@@ -29,7 +29,7 @@ public class MethodSpecBuilder {
 
     public MethodSpec build() {
 
-        if (type.isEmpty() || Objects.isNull(request) || Objects.isNull(response)) {
+        if (type == null || Objects.isNull(request) || Objects.isNull(response)) {
             throw new RuntimeException();
         }
 

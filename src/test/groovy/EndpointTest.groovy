@@ -36,7 +36,7 @@ class EndpointTest extends Specification {
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
-        MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
+        MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
         EndpointSpec newEndpoint = newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDescription("endpointDoc").addMethod(newMethod).build()
 
@@ -48,7 +48,7 @@ class EndpointTest extends Specification {
 
         newEndpoint.getMethods()[0]
 
-        newEndpoint.getMethods()[0].getType() == "methodType"
+        newEndpoint.getMethods()[0].getType().name() == "GET"
 
         newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getName() == "headerRequestName"
         newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getValue() == "headerRequestBody"
@@ -86,7 +86,7 @@ class EndpointTest extends Specification {
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
-        MethodSpec newMethod = newMethodBuilder.setType("methodType").setRequest(newRequest).setResponse(newResponse).build()
+        MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
         newEndpointBuilder.setLabel("endpointLabel").addDescription("endpointDoc").addMethod(newMethod).build()
 
