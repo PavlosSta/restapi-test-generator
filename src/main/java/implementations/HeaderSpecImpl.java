@@ -28,7 +28,7 @@ public class HeaderSpecImpl implements HeaderSpec {
         return this.mandatory;
     }
 
-    public String getDefaultValue() {
+    public String defaultValueIfOptionalAndMissing() {
         return this.defaultValue;
     }
     

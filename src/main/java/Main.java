@@ -25,7 +25,7 @@ public class Main
 		HeaderSpec newHeader = newHeaderBuilder
 				.setName("headerName")
 				.setValue("headerBody")
-				.setDefaultValue("headerDefBody")
+				.setDefaultValueIfOptionalAndMissing("headerDefBody")
 				.setMandatory(true)
 				.build();
 

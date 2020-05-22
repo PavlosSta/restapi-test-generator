@@ -19,7 +19,7 @@ public class HeaderSpecBuilder {
         return this;
     }
 
-    public HeaderSpecBuilder setDefaultValue(String defaultValue) {
+    public HeaderSpecBuilder setDefaultValueIfOptionalAndMissing(String defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
