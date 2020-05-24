@@ -12,11 +12,16 @@ plugins {
 
     // Apply the groovy plugin to also add support for Groovy (needed for Spock)
     id 'groovy'
+
+    id 'application'
+
 }
 
+mainClassName = "Main"
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -38,6 +43,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'commons-validator:commons-validator:1.6'
 
+    // google
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // FreeMarker Java Template Engine
+    implementation 'org.freemarker:freemarker:2.3.30'
+ 
 }
 
 test {
@@ -47,3 +58,10 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+task generateClient {
+    doLast{
+        println "test last"
+    }
+}
+
