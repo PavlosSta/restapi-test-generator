@@ -74,6 +74,17 @@ public class RestAPI {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Methods for each Endpoint:
+
+    <#list api.endpoints as endpoint>
+    // ${endpoint.path}: ${endpoint.label}
+    <#list endpoint.methods as method>
+    // ${method.type}
+    </#list>
+    </#list>
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
 
         return newRequest("POST", url, contentType, bodyPublisher);
