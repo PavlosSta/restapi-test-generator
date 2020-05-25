@@ -1,7 +1,5 @@
 package implementations;
 
-import java.util.Hashtable;
-
 import interfaces.StatusSpec;
 
 public class StatusSpecImpl implements StatusSpec {

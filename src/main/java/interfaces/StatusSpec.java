@@ -1,7 +1,5 @@
 package interfaces;
 
-import java.util.Hashtable;
-
 /**
  * This is a Status specification.
  */
