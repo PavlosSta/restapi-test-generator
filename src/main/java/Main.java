@@ -2,10 +2,9 @@ import freemarker.template.*;
 import implementations.*;
 import interfaces.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main
 {
@@ -69,15 +68,14 @@ public class Main
 				.addEndpoint(newEndpoint)
 				.build();
 
-		System.out.println(newAPI.getBaseUrl());
-
-
 		// Creates a Configuration instance
 		Configuration cfg = new Configuration(Configuration.VERSION_2_3_30);
 
+		cfg.setClassForTemplateLoading(Main.class, "templates");
+
 		// Specifies the source where the template files come from.
 		try {
-			cfg.setDirectoryForTemplateLoading(new File("src/main/java/client"));
+			cfg.setDirectoryForTemplateLoading(new File("src/main/java/client/templates"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,31 +93,28 @@ public class Main
 		// Do not fall back to higher scopes when reading a null loop variable:
 		cfg.setFallbackOnNullLoopVariable(false);
 
+		/* Create a data-model */
+		Map<String, APISpec> root = new HashMap<>();
+		root.put("api", newAPI);
+
 		// Gets the template
 		try {
-			System.out.println("Working Directory = " + System.getProperty("user.dir"));
+			Template temp = cfg.getTemplate("restapi.ftl");
 
-			Template temp = cfg.getTemplate("restapi.ftlh");
-
-			// Prints to console
-			Writer out = new OutputStreamWriter(System.out);
-			temp.process(newAPI, out);
+			// Writes to console
+			Writer fileWriter = new FileWriter(new File("src/main/java/client/RestAPI.java"));
+			try {
+				temp.process(root, fileWriter);
+			} finally {
+				fileWriter.close();
+			}
 
 		} catch (IOException | TemplateException e) {
 			e.printStackTrace();
 		}
 
-		try {
-			File myObj = new File("filename.txt");
-			if (myObj.createNewFile()) {
-				System.out.println("File created: " + myObj.getName());
-			} else {
-				System.out.println("File already exists.");
-			}
-		} catch (IOException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
+
+
 
 	}
 }
