@@ -76,8 +76,64 @@ public class RestAPI {
 
     // Methods for each Endpoint:
 
-    // /test: test endpoint
+    // /test: test
+
     // GET
+    public String testGET() {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest("/test"),
+                ClientHelper::parseJsonObject
+        );
+    }
+
+    // POST
+    public String testPOST(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest("/test", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+
+    // PUT
+    public String testPUT(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPutRequest("/test", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+
+    // PATCH
+    public String testPATCH(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPatchRequest("/test", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+
+    // DELETE
+    public String testDELETE(String input) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newDeleteRequest("/test"),
+                ClientHelper::parseJsonObject
+        );
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -94,6 +150,11 @@ public class RestAPI {
     private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
 
         return newRequest("PUT", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PATCH", url, contentType, bodyPublisher);
     }
 
     private HttpRequest newDeleteRequest(String url) {

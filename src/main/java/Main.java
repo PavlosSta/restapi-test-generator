@@ -50,16 +50,44 @@ public class Main
 				.addStatus(newStatus)
 				.build();
 
-		MethodSpec newMethod = newMethodBuilder
+		MethodSpec newMethodGET = newMethodBuilder
 				.setType("GET")
+				.setRequest(newRequest)
+				.setResponse(newResponse)
+				.build();
+
+		MethodSpec newMethodPOST = newMethodBuilder
+				.setType("POST")
+				.setRequest(newRequest)
+				.setResponse(newResponse)
+				.build();
+
+		MethodSpec newMethodPUT = newMethodBuilder
+				.setType("PUT")
+				.setRequest(newRequest)
+				.setResponse(newResponse)
+				.build();
+
+		MethodSpec newMethodPATCH = newMethodBuilder
+				.setType("PATCH")
+				.setRequest(newRequest)
+				.setResponse(newResponse)
+				.build();
+
+		MethodSpec newMethodDELETE = newMethodBuilder
+				.setType("DELETE")
 				.setRequest(newRequest)
 				.setResponse(newResponse)
 				.build();
 
 		EndpointSpec newEndpoint = newEndpointBuilder
 				.setPath("/test")
-				.setLabel("test endpoint")
-				.addMethod(newMethod)
+				.setLabel("test")
+				.addMethod(newMethodGET)
+				.addMethod(newMethodPOST)
+				.addMethod(newMethodPUT)
+				.addMethod(newMethodPATCH)
+				.addMethod(newMethodDELETE)
 				.build();
 
 		APISpec newAPI = newApiBuilder

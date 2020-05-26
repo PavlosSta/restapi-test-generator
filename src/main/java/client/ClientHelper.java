@@ -44,6 +44,11 @@ public class ClientHelper {
         return parseJsonAndGetValueOfField(reader, "token");
     }
 
+    static String parseJsonObject(Reader reader) {
+
+        return parseJsonAndGetValueOfField(reader, "json");
+    }
+
     /*
     static User parseJsonUser(Reader reader) {
 
