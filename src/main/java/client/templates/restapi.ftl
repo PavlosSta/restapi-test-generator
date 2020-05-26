@@ -79,7 +79,65 @@ public class RestAPI {
     <#list api.endpoints as endpoint>
     // ${endpoint.path}: ${endpoint.label}
     <#list endpoint.methods as method>
+
     // ${method.type}
+    <#if method.type == "GET">
+    public String ${endpoint.label}GET() {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest("${endpoint.path}"),
+                ClientHelper::parseJsonObject
+        );
+    }
+    </#if>
+    <#if method.type == "POST">
+    public String ${endpoint.label}POST(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    </#if>
+    <#if method.type == "PUT">
+    public String ${endpoint.label}PUT(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPutRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    </#if>
+    <#if method.type == "PATCH">
+    public String ${endpoint.label}PATCH(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPatchRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    </#if>
+    <#if method.type == "DELETE">
+    public String ${endpoint.label}DELETE(String input) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newDeleteRequest("${endpoint.path}"),
+                ClientHelper::parseJsonObject
+        );
+    }
+    </#if>
     </#list>
     </#list>
 
@@ -98,6 +156,11 @@ public class RestAPI {
     private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
 
         return newRequest("PUT", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PATCH", url, contentType, bodyPublisher);
     }
 
     private HttpRequest newDeleteRequest(String url) {
