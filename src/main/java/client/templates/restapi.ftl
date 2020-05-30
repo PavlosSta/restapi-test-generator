@@ -82,7 +82,7 @@ public class RestAPI {
 
     // ${method.type}
     <#if method.type == "GET">
-    public String ${endpoint.label}GET() {
+    public Map<String, Object> ${endpoint.label}GET() {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest("${endpoint.path}"),
@@ -91,7 +91,7 @@ public class RestAPI {
     }
     </#if>
     <#if method.type == "POST">
-    public String ${endpoint.label}POST(String input) {
+    public Map<String, Object> ${endpoint.label}POST(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -104,7 +104,7 @@ public class RestAPI {
     }
     </#if>
     <#if method.type == "PUT">
-    public String ${endpoint.label}PUT(String input) {
+    public Map<String, Object> ${endpoint.label}PUT(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -117,7 +117,7 @@ public class RestAPI {
     }
     </#if>
     <#if method.type == "PATCH">
-    public String ${endpoint.label}PATCH(String input) {
+    public Map<String, Object> ${endpoint.label}PATCH(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -130,7 +130,7 @@ public class RestAPI {
     }
     </#if>
     <#if method.type == "DELETE">
-    public String ${endpoint.label}DELETE(String input) {
+    public Map<String, Object> ${endpoint.label}DELETE(String input) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newDeleteRequest("${endpoint.path}"),
