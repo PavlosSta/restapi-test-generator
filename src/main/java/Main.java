@@ -1,3 +1,4 @@
+import client.generator.FreeMarkerJavaCodeGenerator;
 import freemarker.template.*;
 import implementations.*;
 import interfaces.*;
@@ -96,53 +97,10 @@ public class Main
 				.addEndpoint(newEndpoint)
 				.build();
 
-		// Creates a Configuration instance
-		Configuration cfg = new Configuration(Configuration.VERSION_2_3_30);
+		// Template engine / Code generation
+		FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
 
-		cfg.setClassForTemplateLoading(Main.class, "templates");
-
-		// Specifies the source where the template files come from.
-		try {
-			cfg.setDirectoryForTemplateLoading(new File("src/main/java/client/templates"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		cfg.setDefaultEncoding("UTF-8");
-
-		// Sets how errors will appear.
-		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-		cfg.setLogTemplateExceptions(false);
-
-		// Wrap unchecked exceptions thrown during template processing into TemplateException-s:
-		cfg.setWrapUncheckedExceptions(true);
-
-		// Do not fall back to higher scopes when reading a null loop variable:
-		cfg.setFallbackOnNullLoopVariable(false);
-
-		/* Create a data-model */
-		Map<String, APISpec> root = new HashMap<>();
-		root.put("api", newAPI);
-
-		// Gets the template
-		try {
-			Template temp = cfg.getTemplate("restapi.ftl");
-
-			// Writes to console
-			Writer fileWriter = new FileWriter(new File("src/main/java/client/RestAPI.java"));
-			try {
-				temp.process(root, fileWriter);
-			} finally {
-				fileWriter.close();
-			}
-
-		} catch (IOException | TemplateException e) {
-			e.printStackTrace();
-		}
-
-
-
+		javaGenerator.generate(new File("src/main/java/client/RestAPI.java"), new File("src/main/java/client/tests/TestClient.groovy"));
 
 	}
 }

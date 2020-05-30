@@ -79,7 +79,7 @@ public class RestAPI {
     // /test: test
 
     // GET
-    public String testGET() {
+    public Map<String, Object> testGET() {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest("/test"),
@@ -88,7 +88,7 @@ public class RestAPI {
     }
 
     // POST
-    public String testPOST(String input) {
+    public Map<String, Object> testPOST(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -101,7 +101,7 @@ public class RestAPI {
     }
 
     // PUT
-    public String testPUT(String input) {
+    public Map<String, Object> testPUT(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -114,7 +114,7 @@ public class RestAPI {
     }
 
     // PATCH
-    public String testPATCH(String input) {
+    public Map<String, Object> testPATCH(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -127,7 +127,7 @@ public class RestAPI {
     }
 
     // DELETE
-    public String testDELETE(String input) {
+    public Map<String, Object> testDELETE(String input) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newDeleteRequest("/test"),

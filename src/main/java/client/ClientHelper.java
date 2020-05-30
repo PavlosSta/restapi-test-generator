@@ -1,12 +1,10 @@
 package client;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -44,9 +42,12 @@ public class ClientHelper {
         return parseJsonAndGetValueOfField(reader, "token");
     }
 
-    static String parseJsonObject(Reader reader) {
+    static Map parseJsonObject(Reader reader) {
 
-        return parseJsonAndGetValueOfField(reader, "json");
+        Gson gson = new Gson();
+        Map map = gson.fromJson(reader, Map.class);
+
+        return map;
     }
 
     /*
