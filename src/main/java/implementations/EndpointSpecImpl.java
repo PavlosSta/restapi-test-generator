@@ -7,15 +7,17 @@ import interfaces.MethodSpec;
 
 public class EndpointSpecImpl implements EndpointSpec {
 
-    private final String path;            // eg. "prices"
-    private final String label;           // eg. "endpoint for prices"
-    private final String description;       // notes for using this endpoint
-    private final Set<MethodSpec> methods;    // endpoint 1-N methods
+    private final String path;
+    private final String label;
+    private final String description;
+    private final String attribute;
+    private final Set<MethodSpec> methods;
 
-    EndpointSpecImpl(String path, String label, String description, Set<MethodSpec> methods) {
+    EndpointSpecImpl(String path, String label, String description, String attribute, Set<MethodSpec> methods) {
         this.path = path;
         this.label = label;
         this.description = description;
+        this.attribute = attribute;
         this.methods = methods;
     }
 
@@ -31,7 +33,11 @@ public class EndpointSpecImpl implements EndpointSpec {
         return this.description;
     }
 
-	public Set<MethodSpec> getMethods() {
+    public String getAttribute() {
+        return this.attribute;
+    }
+
+    public Set<MethodSpec> getMethods() {
 		return this.methods;
 	}
 
