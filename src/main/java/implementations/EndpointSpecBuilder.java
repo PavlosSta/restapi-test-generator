@@ -58,8 +58,6 @@ public class EndpointSpecBuilder {
 
     private boolean validateMethodsWithAttribute(String attribute, Set<MethodSpec> methods) {
 
-        System.out.println(attribute);
-
         if (attribute == null) {
             for (MethodSpec method: methods) {
                 if (method.getType().name() == "PUT" || method.getType().name() == "PATCH" || method.getType().name() == "DELETE") {

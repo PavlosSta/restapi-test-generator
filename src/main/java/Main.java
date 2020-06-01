@@ -93,8 +93,8 @@ public class Main
 
 		newEndpointBuilder = new EndpointSpecBuilder();
 		EndpointSpec newEndpointWithAttribute = newEndpointBuilder
-				.setPath("/test")
-				.setLabel("test")
+				.setPath("/products")
+				.setLabel("endpoint for products with attribute")
 				.addAttribute("id")
 				.addMethod(newMethodGET)
 				.addMethod(newMethodPUT)
@@ -104,8 +104,8 @@ public class Main
 
 		newEndpointBuilder = new EndpointSpecBuilder();
 		EndpointSpec newEndpointWithoutAttribute = newEndpointBuilder
-				.setPath("/test")
-				.setLabel("test")
+				.setPath("/products")
+				.setLabel("endpoint for products without attribute")
 				.addMethod(newMethodGET)
 				.addMethod(newMethodPOST)
 				.build();
@@ -119,9 +119,9 @@ public class Main
 				.build();
 
 		// Template engine / Code generation
-	//	FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
+		FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
 
-	//	javaGenerator.generate(new File("src/main/java/client/RestAPI.java"), new File("src/main/java/client/tests/TestClient.groovy"));
+		javaGenerator.generate(new File("src/main/java/client/RestAPI.java"), new File("src/main/java/client/tests/TestClient.groovy"));
 
 	}
 }

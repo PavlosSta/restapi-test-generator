@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public class RestAPI {
 
-    public static final String BASE_URL = "${api.baseUrl}";
+    public static final String BASE_URL = "https://www.myapi.gr";
     public static final String CUSTOM_HEADER = "X-CONTROL-CENTER-AUTH";
 
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
@@ -76,81 +76,76 @@ public class RestAPI {
 
     // Methods for each Endpoint:
 
-    <#list api.endpoints as endpoint>
-    // ${endpoint.path}: ${endpoint.label}
-    <#list endpoint.methods as method>
+    // /products: endpoint for products with attribute
 
-    // ${method.type}
-    <#if method.type == "GET">
-    <#if endpoint.attribute??>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String ${endpoint.attribute}) {
+    // GET
+    public Map<String, Object> get_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("${endpoint.path}"),
+                () -> newGetRequest("/products"),
                 ClientHelper::parseJsonObject
         );
     }
-    <#else>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}() {
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("${endpoint.path}"),
-                ClientHelper::parseJsonObject
-        );
-    }
-    </#if>
 
-    </#if>
-    <#if method.type == "POST">
-    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}(String input) {
+    // PUT
+    public Map<String, Object> put_to_products_by_id(String input, String id) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
     }
-    </#if>
-    <#if method.type == "PUT">
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String input, String ${endpoint.attribute}) {
+
+    // PATCH
+    public Map<String, Object> patch_to_products_by_id(String input, String id) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
     }
-    </#if>
-    <#if method.type == "PATCH">
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String input, String ${endpoint.attribute}) {
+
+    // DELETE
+    public Map<String, Object> delete_from_products_by_id(String id) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newDeleteRequest("/products"),
+                ClientHelper::parseJsonObject
+        );
+    }
+    // /products: endpoint for products without attribute
+
+    // GET
+    public Map<String, Object> get_products() {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest("/products"),
+                ClientHelper::parseJsonObject
+        );
+    }
+
+
+    // POST
+    public Map<String, Object> post_to_products(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
     }
-    </#if>
-    <#if method.type == "DELETE">
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String ${endpoint.attribute}) {
-
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest("${endpoint.path}"),
-                ClientHelper::parseJsonObject
-        );
-    }
-    </#if>
-    </#list>
-    </#list>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
