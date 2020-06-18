@@ -36,7 +36,7 @@ public class ResponseSpecBuilder {
     public ResponseSpec build() {
 
         if (headers.isEmpty() || statuses.isEmpty()) {
-            throw new RuntimeException();
+            throw new RuntimeException("Response bad input");
         }
 
         return new ResponseSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(statuses));

@@ -37,7 +37,7 @@ public class RequestSpecBuilder {
 
         // can headers or params be empty?
         if (headers.isEmpty() || queryParams.isEmpty()) {
-            throw new RuntimeException();
+            throw new RuntimeException("Request Parameter bad input");
         }
 
         return new RequestSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(queryParams));

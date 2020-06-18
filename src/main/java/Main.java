@@ -1,11 +1,8 @@
 import client.generator.FreeMarkerJavaCodeGenerator;
-import freemarker.template.*;
 import implementations.*;
 import interfaces.*;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main
 {
@@ -121,7 +118,13 @@ public class Main
 		// Template engine / Code generation
 		FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
 
-		javaGenerator.generate(new File("src/main/java/client/RestAPI.java"), new File("src/main/java/client/tests/TestClient.groovy"));
+		//src/test
+		//RestAPIclient
+		javaGenerator.generate(new File("src/main/java/client/RestAPIClient.java"), new File("src/main/java/client/tests/TestClient.groovy"));
+
+		// public static class Server...
+
+		// buildSrc
 
 	}
 }

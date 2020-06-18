@@ -10,14 +10,14 @@ public class EndpointSpecImpl implements EndpointSpec {
     private final String path;
     private final String label;
     private final String description;
-    private final String attribute;
+    private final Set<String> attributes;
     private final Set<MethodSpec> methods;
 
-    EndpointSpecImpl(String path, String label, String description, String attribute, Set<MethodSpec> methods) {
+    EndpointSpecImpl(String path, String label, String description, Set<String> attributes, Set<MethodSpec> methods) {
         this.path = path;
         this.label = label;
         this.description = description;
-        this.attribute = attribute;
+        this.attributes = attributes;
         this.methods = methods;
     }
 
@@ -33,8 +33,8 @@ public class EndpointSpecImpl implements EndpointSpec {
         return this.description;
     }
 
-    public String getAttribute() {
-        return this.attribute;
+    public Set<String> getAttributes() {
+        return this.attributes;
     }
 
     public Set<MethodSpec> getMethods() {

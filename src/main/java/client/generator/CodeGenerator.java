@@ -12,14 +12,14 @@ abstract class CodeGenerator {
         this.apiSpec = apiSpec;
     }
 
-    protected abstract void validateForTargetLanguage();
+    protected abstract void validateForTargetLanguage(APISpec apiSpec);
 
     protected abstract void generateClientCode(File dest);
 
     protected abstract void generateTestClientCode(File dest);
 
     public void generate(File clientDest, File testDest) {
-        validateForTargetLanguage();
+        validateForTargetLanguage(apiSpec);
         generateClientCode(clientDest);
         generateTestClientCode(testDest);
     }
