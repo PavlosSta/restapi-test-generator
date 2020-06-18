@@ -38,7 +38,7 @@ public class QueryParamSpecBuilder {
     public QueryParamSpec build() {
 
         if (name == null || type == null || (!mandatory && value == null) || (mandatory && defaultValue == null)) {
-            throw new RuntimeException();
+            throw new RuntimeException("Query Parameter bad input");
         }
 
         return new QueryParamSpecImpl(name, type, value, defaultValue, mandatory);

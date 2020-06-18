@@ -46,7 +46,7 @@ public class APISpecBuilder {
     public APISpec build() {
 
         if (!validateUrl(baseUrl) || endpoints.isEmpty()) {
-            throw new RuntimeException();
+            throw new RuntimeException("API bad input");
         }
 
         return new APISpecImpl(baseUrl, label, Collections.unmodifiableSet(endpoints));

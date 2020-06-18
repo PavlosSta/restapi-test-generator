@@ -29,8 +29,8 @@ public class MethodSpecBuilder {
 
     public MethodSpec build() {
 
-        if (type == null || Objects.isNull(request) || Objects.isNull(response)) {
-            throw new RuntimeException();
+        if (type == null || request == null || response == null) {
+            throw new RuntimeException("Method bad input");
         }
 
         return new MethodSpecImpl(type, request, response);

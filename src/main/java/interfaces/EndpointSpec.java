@@ -22,11 +22,12 @@ public interface EndpointSpec {
      */
     String getDescription();
 
+
     /**
      *
-     * @return the attribute of the Endpoint if it exists, eg. {id} from products/{id}
+     * @return a set with the attributes of the Endpoint if they exist, eg. {id} from products/{id}
      */
-    String getAttribute();
+    Set<String> getAttributes();
 
     /**
      * @return a set with the Method Specifications of the Endpoint

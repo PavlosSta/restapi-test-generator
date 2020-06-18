@@ -5,6 +5,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import interfaces.APISpec;
+import interfaces.EndpointSpec;
+import interfaces.HeaderSpec;
+import interfaces.MethodSpec;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,6 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
@@ -45,10 +49,30 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Do not fall back to higher scopes when reading a null loop variable:
         cfg.setFallbackOnNullLoopVariable(false);
+
     }
 
-    @Override
-    protected void validateForTargetLanguage() {
+    protected void validateForTargetLanguage(APISpec newAPI) {
+        
+        // validate Endpoints with Attributes
+
+        for (EndpointSpec endpoint: newAPI.getEndpoints()) {
+
+            if (endpoint.getAttributes() == null || endpoint.getAttributes().isEmpty()) {
+                for (MethodSpec method: endpoint.getMethods()) {
+                    if (method.getType().name() == "PUT" || method.getType().name() == "PATCH" || method.getType().name() == "DELETE") {
+                        throw new RuntimeException("Endpoint bad input: incompatible methods with attributes");
+                    }
+                }
+            }
+            else {
+                for (MethodSpec method: endpoint.getMethods()) {
+                    if (method.getType().name() == "POST") {
+                        throw new RuntimeException("Endpoint bad input: incompatible methods with attributes");
+                    }
+                }
+            }
+        }
 
     }
 
@@ -61,7 +85,7 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("restapi.ftl");
+            Template temp = cfg.getTemplate("restapi-client.ftl");
 
             // Writes to console
             Writer fileWriter = new FileWriter(dest);

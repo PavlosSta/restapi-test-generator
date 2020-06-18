@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 
-public class RestAPI {
+public class RestAPIClient {
 
     public static final String BASE_URL = "${api.baseUrl}";
     public static final String CUSTOM_HEADER = "X-CONTROL-CENTER-AUTH";
@@ -46,15 +46,15 @@ public class RestAPI {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public RestAPI() throws RuntimeException {
+    public RestAPIClient() throws RuntimeException {
         this(null);
     }
 
-    public RestAPI(String token) throws RuntimeException {
+    public RestAPIClient(String token) throws RuntimeException {
         this("localhost", 9000, token);
     }
 
-    public RestAPI(String host, int port, String token) throws RuntimeException {
+    public RestAPIClient(String host, int port, String token) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
@@ -82,11 +82,11 @@ public class RestAPI {
 
     // ${method.type}
     <#if method.type == "GET">
-    <#if endpoint.attribute??>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String ${endpoint.attribute}) {
+    <#if endpoint.attributes?first??>
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("${endpoint.path}"),
+                () -> newGetRequest("${endpoint.path}/${endpoint.attributes?first}"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -115,36 +115,36 @@ public class RestAPI {
     }
     </#if>
     <#if method.type == "PUT">
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String input, String ${endpoint.attribute}) {
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest("${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
     }
     </#if>
     <#if method.type == "PATCH">
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String input, String ${endpoint.attribute}) {
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest("${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
     }
     </#if>
     <#if method.type == "DELETE">
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attribute}(String ${endpoint.attribute}) {
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest("${endpoint.path}"),
+                () -> newDeleteRequest("${endpoint.path}/${endpoint.attributes?first}"),
                 ClientHelper::parseJsonObject
         );
     }

@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 
-public class RestAPI {
+public class RestAPIClient {
 
     public static final String BASE_URL = "https://www.myapi.gr";
     public static final String CUSTOM_HEADER = "X-CONTROL-CENTER-AUTH";
@@ -46,15 +46,15 @@ public class RestAPI {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public RestAPI() throws RuntimeException {
+    public RestAPIClient() throws RuntimeException {
         this(null);
     }
 
-    public RestAPI(String token) throws RuntimeException {
+    public RestAPIClient(String token) throws RuntimeException {
         this("localhost", 9000, token);
     }
 
-    public RestAPI(String host, int port, String token) throws RuntimeException {
+    public RestAPIClient(String host, int port, String token) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
@@ -82,7 +82,7 @@ public class RestAPI {
     public Map<String, Object> get_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("/products"),
+                () -> newGetRequest("/products/id"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -95,7 +95,7 @@ public class RestAPI {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest("/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -108,7 +108,7 @@ public class RestAPI {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest("/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -118,7 +118,7 @@ public class RestAPI {
     public Map<String, Object> delete_from_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest("/products"),
+                () -> newDeleteRequest("/products/id"),
                 ClientHelper::parseJsonObject
         );
     }

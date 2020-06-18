@@ -26,7 +26,7 @@ public class StatusSpecBuilder {
     public StatusSpec build() {
 
         if (code == null || body == null) {
-            throw new RuntimeException();
+            throw new RuntimeException("Status bad input");
         }
 
         return new StatusSpecImpl(code, body);

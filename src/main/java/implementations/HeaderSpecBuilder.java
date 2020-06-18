@@ -32,7 +32,7 @@ public class HeaderSpecBuilder {
     public HeaderSpec build() {
 
         if (name == null || value == null || (mandatory && (defaultValue == null))) {
-            throw new RuntimeException();
+            throw new RuntimeException("Header bad input");
         }
 
         return new HeaderSpecImpl(name, value, defaultValue, mandatory);
