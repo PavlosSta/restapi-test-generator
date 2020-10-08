@@ -110,7 +110,7 @@ public class Main
 		newApiBuilder = new APISpecBuilder();
 		APISpec newAPI = newApiBuilder
 				.setLabel("api")
-				.setBaseUrl("https://www.myapi.gr")
+				.setBaseUrl("/rest/api")
 				.addEndpoint(newEndpointWithAttribute)
 				.addEndpoint(newEndpointWithoutAttribute)
 				.build();

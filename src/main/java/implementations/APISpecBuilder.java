@@ -39,7 +39,7 @@ public class APISpecBuilder {
 
         UrlValidator urlValidator = new UrlValidator();
 
-        return urlValidator.isValid(baseUrl);
+        return urlValidator.isValid("https://myapi.com" + baseUrl);
 
     }
 
