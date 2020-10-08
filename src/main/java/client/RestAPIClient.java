@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public class RestAPIClient {
 
-    public static final String BASE_URL = "https://www.myapi.gr";
+    public static final String BASE_URL = "/rest/api";
     public static final String CUSTOM_HEADER = "X-CONTROL-CENTER-AUTH";
 
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
@@ -42,19 +42,9 @@ public class RestAPIClient {
     private final String urlPrefix;
     private final HttpClient client;
 
-    private String token = null; // User is not logged in.
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public RestAPIClient() throws RuntimeException {
-        this(null);
-    }
-
-    public RestAPIClient(String token) throws RuntimeException {
-        this("localhost", 9000, token);
-    }
-
-    public RestAPIClient(String host, int port, String token) throws RuntimeException {
+    public RestAPIClient(String host, int port) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
@@ -64,13 +54,8 @@ public class RestAPIClient {
         }
 
         this.urlPrefix = "https://" + host + ":" + port + BASE_URL;
-        this.token = token;
     }
 
-    public boolean isLoggedIn() {
-
-        return token != null;
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,7 +67,7 @@ public class RestAPIClient {
     public Map<String, Object> get_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("/products/id"),
+                () -> newGetRequest(urlPrefix + "/products/id"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -95,7 +80,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest("/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -108,7 +93,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest("/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -118,7 +103,7 @@ public class RestAPIClient {
     public Map<String, Object> delete_from_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest("/products/id"),
+                () -> newDeleteRequest(urlPrefix + "/products/id"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -128,7 +113,7 @@ public class RestAPIClient {
     public Map<String, Object> get_products() {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("/products"),
+                () -> newGetRequest(urlPrefix + "/products"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -141,7 +126,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest("/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -178,10 +163,6 @@ public class RestAPIClient {
                                    HttpRequest.BodyPublisher bodyPublisher) {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder();
-
-        if (token != null) {
-            builder.header(CUSTOM_HEADER, token);
-        }
 
         return builder
                 .method(method, bodyPublisher)

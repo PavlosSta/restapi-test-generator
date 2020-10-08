@@ -42,19 +42,9 @@ public class RestAPIClient {
     private final String urlPrefix;
     private final HttpClient client;
 
-    private String token = null; // User is not logged in.
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public RestAPIClient() throws RuntimeException {
-        this(null);
-    }
-
-    public RestAPIClient(String token) throws RuntimeException {
-        this("localhost", 9000, token);
-    }
-
-    public RestAPIClient(String host, int port, String token) throws RuntimeException {
+    public RestAPIClient(String host, int port) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
@@ -64,13 +54,8 @@ public class RestAPIClient {
         }
 
         this.urlPrefix = "https://" + host + ":" + port + BASE_URL;
-        this.token = token;
     }
 
-    public boolean isLoggedIn() {
-
-        return token != null;
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,7 +71,7 @@ public class RestAPIClient {
     public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("${endpoint.path}/${endpoint.attributes?first}"),
+                () -> newGetRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -94,7 +79,7 @@ public class RestAPIClient {
     public Map<String, Object> get_${endpoint.path?keep_after("/")}() {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest("${endpoint.path}"),
+                () -> newGetRequest(urlPrefix + "${endpoint.path}"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -108,7 +93,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest("${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -121,7 +106,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest("${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -134,7 +119,7 @@ public class RestAPIClient {
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest("${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData)),
                 ClientHelper::parseJsonObject
         );
 
@@ -144,7 +129,7 @@ public class RestAPIClient {
     public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest("${endpoint.path}/${endpoint.attributes?first}"),
+                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}"),
                 ClientHelper::parseJsonObject
         );
     }
@@ -183,10 +168,6 @@ public class RestAPIClient {
                                    HttpRequest.BodyPublisher bodyPublisher) {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder();
-
-        if (token != null) {
-            builder.header(CUSTOM_HEADER, token);
-        }
 
         return builder
                 .method(method, bodyPublisher)

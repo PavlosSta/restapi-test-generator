@@ -22,8 +22,8 @@ class APITest extends Specification {
         def API = new APISpecBuilder()
 
         when:
-        Boolean resultNotValid = API.validateUrl("localhosttest")
-        Boolean resultValid = API.validateUrl("https://www.test.com/api")
+        Boolean resultNotValid = API.validateUrl("https://rest.api")
+        Boolean resultValid = API.validateUrl("/rest/api")
 
         then:
         !resultNotValid
@@ -55,12 +55,12 @@ class APITest extends Specification {
 
         EndpointSpec newEndpoint = newEndpointBuilder.setLabel("endpointLabel").setPath("/test").addDescription("endpointDoc").addMethod(newMethod).build()
 
-        APISpec newAPI = newAPIBuilder.setLabel("api").setBaseUrl("https://www.myapi.com/api/").addEndpoint(newEndpoint).build()
+        APISpec newAPI = newAPIBuilder.setLabel("api").setBaseUrl("/api").addEndpoint(newEndpoint).build()
 
         then:
 
         newAPI.getLabel() == "api"
-        newAPI.getBaseUrl() == "https://www.myapi.com/api/"
+        newAPI.getBaseUrl() == "/api"
 
         newAPI.getEndpoints()[0].getLabel() == "endpointLabel"
         newAPI.getEndpoints()[0].getPath() == "/test"

@@ -48,7 +48,10 @@ dependencies {
 
     // FreeMarker Java Template Engine
     implementation 'org.freemarker:freemarker:2.3.30'
- 
+
+    // WireMock Server
+    implementation "com.github.tomakehurst:wiremock-jre8:2.27.2"
+
 }
 
 test {
