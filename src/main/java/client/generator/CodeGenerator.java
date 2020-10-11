@@ -18,9 +18,15 @@ abstract class CodeGenerator {
 
     protected abstract void generateTestClientCode(File dest);
 
-    public void generate(File clientDest, File testDest) {
+    protected abstract void generateTestServerCode(File dest);
+
+    public void generateClient(File clientDest, File testClientDest) {
         validateForTargetLanguage(apiSpec);
         generateClientCode(clientDest);
-        generateTestClientCode(testDest);
+        generateTestClientCode(testClientDest);
+    }
+
+    public void generateServer(File testServerDest) {
+        generateTestServerCode(testServerDest);
     }
 }
