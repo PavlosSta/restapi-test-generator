@@ -110,7 +110,32 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("client-test.ftl");
+            Template temp = cfg.getTemplate("restapi-client-test.ftl");
+
+            // Writes to console
+            Writer fileWriter = new FileWriter(dest);
+            try {
+                temp.process(root, fileWriter);
+            } finally {
+                fileWriter.close();
+            }
+
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void generateTestServerCode(File dest) {
+
+        /* Create a data-model */
+        Map<String, APISpec> root = new HashMap<>();
+        root.put("api", apiSpec);
+
+        // Gets the template
+        try {
+            Template temp = cfg.getTemplate("restapi-server-test.ftl");
 
             // Writes to console
             Writer fileWriter = new FileWriter(dest);
