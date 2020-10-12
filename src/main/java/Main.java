@@ -130,10 +130,10 @@ public class Main
 		FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
 
 		//RestAPIClient
-		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File("src/test/groovy/restapi-client/TestClient.groovy"));
+		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File("src/test/groovy/restapiclient/TestClient.groovy"));
 
-		javaGenerator.generateServer(new File("src/test/groovy/restapi-server/TestServer.groovy"));
-		
+		javaGenerator.generateServer(new File("src/test/groovy/restapiserver/TestServer.groovy"));
+
 		// buildSrc
 
 	}

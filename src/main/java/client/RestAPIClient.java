@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-
 public class RestAPIClient {
 
     public static final String BASE_URL = "/rest/api";
