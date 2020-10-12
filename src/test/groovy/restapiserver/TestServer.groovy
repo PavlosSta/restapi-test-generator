@@ -28,14 +28,10 @@ class TestServer extends Specification {
         wms.stop()
     }
 
-    <#list api.endpoints as endpoint>
-    // ${endpoint.path}: ${endpoint.label}
-    <#list endpoint.methods as method>
+        // /products: endpoint for products with attribute
 
-    // ${method.type}
-    <#if method.type == "GET">
-    <#if endpoint.attributes?first??>
-    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
+    // GET
+    def "GET products by id"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -45,22 +41,30 @@ class TestServer extends Specification {
 
         wms.givenThat(
                 get(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
+                        urlEqualTo("/rest/api/products/id")
                 ).willReturn(
                         aResponse().withJsonBody(productJSON)
                 )
         )
 
         when:
-        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
+        Map product = caller.get_products_by_id("2")
 
         then:
         product.get("id") == '2'
         product.get("name") == "prod2"
 
     }
-    <#else>
-    def "GET ${endpoint.path?keep_after("/")}}"() {
+
+    // PUT
+
+    // PATCH
+
+    // DELETE
+    // /products: endpoint for products without attribute
+
+    // GET
+    def "GET products}"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -76,22 +80,20 @@ class TestServer extends Specification {
 
         wms.givenThat(
                 get(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}")
+                        urlEqualTo("/rest/api/products")
                 ).willReturn(
                         aResponse().withJsonBody(productJSON)
                 )
         )
 
         when:
-        Map products = caller.get_${endpoint.path?keep_after("/")}()
+        Map products = caller.get_products()
 
         then:
         products.get("products").toString() == "[[id:1, name:prod1], [id:2, name:prod2], [id:3, name:prod3], [id:4, name:prod4]]" ||
                 products.get("products").toString() == "[[name:prod1, id:1], [name:prod2, id:2], [name:prod3, id:3], [name:prod4, id:4]]"
 
     }
-    </#if>
-    </#if>
-    </#list>
-    </#list>
+
+    // POST
 }
