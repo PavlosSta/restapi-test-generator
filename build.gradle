@@ -39,6 +39,7 @@ dependencies {
     // Use the awesome Spock testing and specification framework even with Java
     testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    implementation 'org.slf4j:slf4j-nop:1.7.30'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'commons-validator:commons-validator:1.7'

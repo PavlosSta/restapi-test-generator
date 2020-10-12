@@ -1,6 +1,7 @@
 package restapiserver
 
 import client.RestAPIClient
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.tomakehurst.wiremock.WireMockServer
@@ -80,6 +81,94 @@ class RestAPIServerMockup extends Specification {
         then:
         product.get("id") == '2'
         product.get("name") == "prod2"
+
+    }
+
+    def "T03. Post Product"() {
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                post(
+                        urlEqualTo("/rest/api/products")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.post_to_products("test");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+
+    def "T04. Put Product"() {
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                put(
+                        urlEqualTo("/rest/api/products/id")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.put_to_products_by_id("test", "2");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+
+    def "T05. Patch Product"() {
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                patch(
+                        urlEqualTo("/rest/api/products/id")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.patch_to_products_by_id("test", "2");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+
+    def "T06. Delete Product"() {
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                delete(
+                        urlEqualTo("/rest/api/products/id")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.delete_from_products_by_id("2");
+
+        then:
+        products.get("value") == "ok"
 
     }
 
