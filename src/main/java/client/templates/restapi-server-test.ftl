@@ -1,6 +1,7 @@
 package restapiserver
 
 import client.RestAPIClient
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.tomakehurst.wiremock.WireMockServer
@@ -91,6 +92,101 @@ class TestServer extends Specification {
 
     }
     </#if>
+    </#if>
+    <#if method.type == "POST">
+    def "POST to ${endpoint.path?keep_after("/")}}"() {
+
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                post(
+                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}("test");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+    </#if>
+    <#if method.type == "PUT">
+    def "PUT to ${endpoint.path?keep_after("/")}"() {
+
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                put(
+                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+    </#if>
+    <#if method.type == "PATCH">
+    def "PATCH to ${endpoint.path?keep_after("/")}}"() {
+
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                patch(
+                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2");
+
+        then:
+        products.get("value") == "ok"
+
+    }
+    </#if>
+    <#if method.type == "DELETE">
+    def "DELETE from ${endpoint.path?keep_after("/")}}"() {
+
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+
+        wms.givenThat(
+                delete(
+                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
+                ).willReturn(
+                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                )
+        )
+
+        when:
+        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2");
+
+        then:
+        products.get("value") == "ok"
+    }
     </#if>
     </#list>
     </#list>
