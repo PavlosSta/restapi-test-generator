@@ -82,7 +82,7 @@ class TestServer extends Specification {
     }
 
     // PATCH
-    def "PATCH to products}"() {
+    def "PATCH to products"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
@@ -106,7 +106,7 @@ class TestServer extends Specification {
     }
 
     // DELETE
-    def "DELETE from products}"() {
+    def "DELETE from products"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
@@ -130,7 +130,7 @@ class TestServer extends Specification {
     // /products: endpoint for products without attribute
 
     // GET
-    def "GET products}"() {
+    def "GET products"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -162,7 +162,7 @@ class TestServer extends Specification {
     }
 
     // POST
-    def "POST to products}"() {
+    def "POST to products"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
