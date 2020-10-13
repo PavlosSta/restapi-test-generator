@@ -136,35 +136,6 @@ public class Main
 
 		javaGenerator.generateServer(new File("src/test/groovy/restapiserver/TestServer.groovy"));
 
-		WireMockServer wms = new WireMockServer(WireMockConfiguration.options().httpsPort(8766).notifier(new ConsoleNotifier(true)));
-		wms.start();
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}");
-
-		wms.givenThat(
-				post(
-						urlEqualTo("/rest/api/products")
-				).willReturn(
-						aResponse().withStatus(200).withJsonBody(jsonBody)
-				)
-		);
-
-		RestAPIClient caller = new RestAPIClient("localhost", 8766);
-
-		Map<String, Object> agencyMap = Map.of("id", '2', "name", "prod2");
-
-		String productJSON = objectMapper.writeValueAsString(agencyMap);
-
-		System.out.println(productJSON);
-
-		Map<String, Object> products = caller.post_to_products("test");
-
-		System.out.println(products.get("value"));
-
-		wms.stop();
-
 		// buildSrc
 
 	}

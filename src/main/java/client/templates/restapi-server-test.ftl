@@ -61,7 +61,7 @@ class TestServer extends Specification {
 
     }
     <#else>
-    def "GET ${endpoint.path?keep_after("/")}}"() {
+    def "GET ${endpoint.path?keep_after("/")}"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -94,7 +94,7 @@ class TestServer extends Specification {
     </#if>
     </#if>
     <#if method.type == "POST">
-    def "POST to ${endpoint.path?keep_after("/")}}"() {
+    def "POST to ${endpoint.path?keep_after("/")}"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
@@ -142,7 +142,7 @@ class TestServer extends Specification {
     }
     </#if>
     <#if method.type == "PATCH">
-    def "PATCH to ${endpoint.path?keep_after("/")}}"() {
+    def "PATCH to ${endpoint.path?keep_after("/")}"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
@@ -166,7 +166,7 @@ class TestServer extends Specification {
     }
     </#if>
     <#if method.type == "DELETE">
-    def "DELETE from ${endpoint.path?keep_after("/")}}"() {
+    def "DELETE from ${endpoint.path?keep_after("/")}"() {
 
         given:
         ObjectMapper objectMapper = new ObjectMapper()
