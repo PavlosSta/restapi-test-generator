@@ -18,3 +18,46 @@
 ## Gradle
 
 * Java Plugin: https://docs.gradle.org/current/userguide/java_plugin.html
+
+## Δομή API
+
+* Ένα APISpec έχει:
+    * Ένα Label (ίσως)
+    * Ένα BaseUrl
+    * Τουλάχιστον ένα Endpoints
+    
+* Ένα Endpoint έχει:
+    * Ένα Path
+    * Ένα Label (ίσως)
+    * Ένα Attribute (ίσως)
+    * Τουλάχιστον μία μέθοδο
+    
+* Μία Method έχει:
+    * Έναν Type
+    * Ένα Request
+    * Ένα Response
+    
+* Ένα Request έχει:
+    * Κάποιους Headers (ίσως)
+    * Κάποιες Query Parameters (ίσως)
+    
+* Ένα Response έχει:
+    * Κάποιους Headers (ίσως)
+    * Ένα status
+    
+* Ένας Header έχει:
+    * Ένα Name
+    * Μία Value
+    * Αν είναι υποχρεωτικός ή όχι
+    * Αν είναι υποχρεωτικός, τότε ένα *Default Value If Optional And Missing*
+
+* Μία Query Parameter έχει:
+    * Ένα Name
+    * Έναν Type (String, Integer etc.)
+    * Μία Value
+    * Μία Default Value
+    * Αν είναι υποχρεωτική ή όχι
+
+* Ένα Status έχει:
+    * Έναν Code
+    * Ένα Label (ίσως)
