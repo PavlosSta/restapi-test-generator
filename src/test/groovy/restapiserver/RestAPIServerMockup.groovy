@@ -3,13 +3,17 @@ package restapiserver
 import client.RestAPIClient
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import groovy.test.GroovyAssert
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
+
+import io.restassured.RestAssured
+import io.restassured.matcher.RestAssuredMatchers
+import org.hamcrest.Matchers
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
@@ -42,22 +46,43 @@ class RestAPIServerMockup extends Specification {
                         Map.of("id", '4', "name", "prod4"))
         )
 
+        JsonNode rootNode = objectMapper.createObjectNode();
+        JsonNode marksNode = objectMapper.createArrayNode();
+        ((ArrayNode)marksNode).add(100);
+        ((ArrayNode)marksNode).add(90);
+        ((ArrayNode)marksNode).add(85);
+        ((ObjectNode) rootNode).put("name", "Mahesh Kumar");
+        ((ObjectNode) rootNode).put("age", 21);
+        ((ObjectNode) rootNode).put("verified", false);
+        ((ObjectNode) rootNode).set("marks",marksNode);
+
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
-                get(
-                        urlEqualTo("/rest/api/products")
-                ).willReturn(
-                        aResponse().withJsonBody(productJSON)
+                get(urlEqualTo("/rest/api/products"))
+                .withHeader("headerName1", equalTo("headerValue1"))
+                .withHeader("headerName2", equalTo("headerValue2"))
+                .withQueryParam("queryName1", equalTo("queryValue1"))
+                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withJsonBody(productJSON)
                 )
         )
 
         when:
-        Map products = caller.get_products()
+        Map<String, String> headers = new HashMap<>();
+        headers.put("headername1", "headerValue1")
+        headers.put("headername2", "headerValue2")
+
+        Map products = caller.get_products(headers)
 
         then:
         products.get("products").toString() == "[[id:1, name:prod1], [id:2, name:prod2], [id:3, name:prod3], [id:4, name:prod4]]" ||
                 products.get("products").toString() == "[[name:prod1, id:1], [name:prod2, id:2], [name:prod3, id:3], [name:prod4, id:4]]"
+
+
     }
 
     def "T02. GET Products by id"() {
@@ -100,7 +125,7 @@ class RestAPIServerMockup extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.post_to_products("test");
+        Map<String, Object> products = caller.post_to_products("test")
 
         then:
         products.get("value") == "ok"
@@ -122,7 +147,7 @@ class RestAPIServerMockup extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.put_to_products_by_id("test", "2");
+        Map<String, Object> products = caller.put_to_products_by_id("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -144,7 +169,7 @@ class RestAPIServerMockup extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.patch_to_products_by_id("test", "2");
+        Map<String, Object> products = caller.patch_to_products_by_id("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -166,7 +191,7 @@ class RestAPIServerMockup extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.delete_from_products_by_id("2");
+        Map<String, Object> products = caller.delete_from_products_by_id("2")
 
         then:
         products.get("value") == "ok"

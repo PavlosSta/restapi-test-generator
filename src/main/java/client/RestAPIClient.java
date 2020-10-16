@@ -63,69 +63,69 @@ public class RestAPIClient {
     // /products: endpoint for products with attribute
 
     // GET
-    public Map<String, Object> get_products_by_id(String id) {
+    public Map<String, Object> get_products_by_id(String id, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "/products/id"),
+                () -> newGetRequest(urlPrefix + "/products/id", headers),
                 ClientHelper::parseJsonObject
         );
     }
 
 
     // PUT
-    public Map<String, Object> put_to_products_by_id(String input, String id) {
+    public Map<String, Object> put_to_products_by_id(String input, String id, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
 
     // PATCH
-    public Map<String, Object> patch_to_products_by_id(String input, String id) {
+    public Map<String, Object> patch_to_products_by_id(String input, String id, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
 
     // DELETE
-    public Map<String, Object> delete_from_products_by_id(String id) {
+    public Map<String, Object> delete_from_products_by_id(String id, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest(urlPrefix + "/products/id"),
+                () -> newDeleteRequest(urlPrefix + "/products/id", headers),
                 ClientHelper::parseJsonObject
         );
     }
     // /products: endpoint for products without attribute
 
     // GET
-    public Map<String, Object> get_products() {
+    public Map<String, Object> get_products(Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "/products"),
+                () -> newGetRequest(urlPrefix + "/products", headers),
                 ClientHelper::parseJsonObject
         );
     }
 
 
     // POST
-    public Map<String, Object> post_to_products(String input) {
+    public Map<String, Object> post_to_products(String input, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
@@ -133,39 +133,43 @@ public class RestAPIClient {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+    private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
 
-        return newRequest("POST", url, contentType, bodyPublisher);
+        return newRequest("POST", url, contentType, bodyPublisher, headers);
     }
 
-    private HttpRequest newGetRequest(String url) {
+    private HttpRequest newGetRequest(String url, Map<String, String> headers) {
 
-        return newRequest("GET", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+        return newRequest("GET", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody(), headers);
     }
 
-    private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+    private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
 
-        return newRequest("PUT", url, contentType, bodyPublisher);
+        return newRequest("PUT", url, contentType, bodyPublisher, headers);
     }
 
-    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
 
-        return newRequest("PATCH", url, contentType, bodyPublisher);
+        return newRequest("PATCH", url, contentType, bodyPublisher, headers);
     }
 
-    private HttpRequest newDeleteRequest(String url) {
+    private HttpRequest newDeleteRequest(String url, Map<String, String> headers) {
 
-        return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+        return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody(), headers);
     }
 
     private HttpRequest newRequest(String method, String url, String contentType,
-                                   HttpRequest.BodyPublisher bodyPublisher) {
+                                   HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder();
 
+        builder.method(method, bodyPublisher)
+                .header(CONTENT_TYPE_HEADER, contentType);
+
+        for (Map.Entry<String,String> entry : headers.entrySet())
+            builder.header(entry.getKey(), entry.getValue());
+
         return builder
-                .method(method, bodyPublisher)
-                .header(CONTENT_TYPE_HEADER, contentType)
                 .uri(URI.create(url))
                 .build();
     }

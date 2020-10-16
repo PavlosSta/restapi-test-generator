@@ -49,7 +49,7 @@ public class Main
 		QueryParamSpec newQueryParam = newQueryParamBuilder
 				.setName("queryName")
 				.setType("queryType")
-				.setValue("queryBody")
+				.setValue("queryValue")
 				.setDefaultValue("queryDefBody")
 				.setMandatory(true)
 				.build();
