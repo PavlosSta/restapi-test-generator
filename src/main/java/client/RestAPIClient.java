@@ -63,63 +63,229 @@ public class RestAPIClient {
     // /products: endpoint for products with attribute
 
     // GET
-    public Map<String, Object> get_products_by_id(String id, Map<String, String> headers) {
+    public Map<String, Object> get_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "/products/id", headers),
+                () -> newGetRequest(urlPrefix + "/products/" + id),
                 ClientHelper::parseJsonObject
         );
+    }
+    public Map<String, Object> get_products_by_id_with_headers(String id, Map<String, String> headers) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest(urlPrefix + "/products/" + id, headers),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> get_products_by_id_with_queryParams(String id, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products/" + id),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products/" + id + queryParamString.toString()),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> get_products_by_id_with_headers_and_queryParams(String id, Map<String, String> headers, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products/" + id, headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products/" + id + queryParamString.toString(), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
     }
 
 
     // PUT
-    public Map<String, Object> put_to_products_by_id(String input, String id, Map<String, String> headers) {
+    public Map<String, Object> put_to_products_by_id(String input, String id) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> put_to_products_by_id_with_headers(String input, String id, Map<String, String> headers) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
 
     // PATCH
-    public Map<String, Object> patch_to_products_by_id(String input, String id, Map<String, String> headers) {
+    public Map<String, Object> patch_to_products_by_id(String input, String id) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "/products/id", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> patch_to_products_by_id_with_headers(String input, String id, Map<String, String> headers) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
 
     // DELETE
-    public Map<String, Object> delete_from_products_by_id(String id, Map<String, String> headers) {
+    public Map<String, Object> delete_from_products_by_id(String id) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest(urlPrefix + "/products/id", headers),
+                () -> newDeleteRequest(urlPrefix + "/products/" + id),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> delete_from_products_by_id_with_headers(String id, Map<String, String> headers) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newDeleteRequest(urlPrefix + "/products/" + id, headers),
                 ClientHelper::parseJsonObject
         );
     }
     // /products: endpoint for products without attribute
 
     // GET
-    public Map<String, Object> get_products(Map<String, String> headers) {
+    public Map<String, Object> get_products() {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest(urlPrefix + "/products"),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> get_products_with_headers(Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "/products", headers),
                 ClientHelper::parseJsonObject
         );
     }
+    public Map<String, Object> get_products_with_queryParams(Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products"),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products" + queryParamString.toString()),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> get_products_with_headers_and_queryParams(Map<String, String> headers, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products", headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "/products" + queryParamString.toString(), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
 
 
     // POST
-    public Map<String, Object> post_to_products(String input, Map<String, String> headers) {
+    public Map<String, Object> post_to_products(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> post_to_products_with_headers(String input, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -156,6 +322,43 @@ public class RestAPIClient {
     private HttpRequest newDeleteRequest(String url, Map<String, String> headers) {
 
         return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody(), headers);
+    }
+
+    private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("POST", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newGetRequest(String url) {
+
+        return newRequest("GET", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+    }
+
+    private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PUT", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PATCH", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newDeleteRequest(String url) {
+
+        return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+    }
+
+    private HttpRequest newRequest(String method, String url, String contentType,
+                                   HttpRequest.BodyPublisher bodyPublisher) {
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder();
+
+        return builder
+                .method(method, bodyPublisher)
+                .header(CONTENT_TYPE_HEADER, contentType)
+                .uri(URI.create(url))
+                .build();
     }
 
     private HttpRequest newRequest(String method, String url, String contentType,

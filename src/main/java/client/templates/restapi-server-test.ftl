@@ -45,18 +45,31 @@ class TestServer extends Specification {
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
-                get(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
-                ).willReturn(
-                        aResponse().withJsonBody(productJSON)
-                )
+                get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
+                .withHeader("headerName1", equalTo("headerValue1"))
+                        .withHeader("headerName2", equalTo("headerValue2"))
+                        .withQueryParam("queryName1", equalTo("queryValue1"))
+                        .withQueryParam("queryName2", equalTo("queryValue2"))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader("responseHeaderName", "responseHeaderValue")
+                                .withJsonBody(productJSON)
+                        )
         )
 
         when:
-        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
+        Map<String, String> headers = new HashMap<>();
+        headers.put("headername1", "headerValue1")
+        headers.put("headername2", "headerValue2")
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryName1", "queryValue1")
+        queryParams.put("queryName2", "queryValue2")
+
+        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
 
         then:
-        product.get("id") == '2'
+        product.get("id") == "2"
         product.get("name") == "prod2"
 
     }
@@ -76,15 +89,28 @@ class TestServer extends Specification {
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
-                get(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}")
-                ).willReturn(
-                        aResponse().withJsonBody(productJSON)
+                get(urlPathEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}"))
+                .withHeader("headerName1", equalTo("headerValue1"))
+                .withHeader("headerName2", equalTo("headerValue2"))
+                .withQueryParam("queryName1", equalTo("queryValue1"))
+                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withJsonBody(productJSON)
                 )
         )
 
         when:
-        Map products = caller.get_${endpoint.path?keep_after("/")}()
+        Map<String, String> headers = new HashMap<>();
+        headers.put("headername1", "headerValue1")
+        headers.put("headername2", "headerValue2")
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryName1", "queryValue1")
+        queryParams.put("queryName2", "queryValue2")
+
+        Map products = caller.get_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(headers, queryParams)
 
         then:
         products.get("products").toString() == "[[id:1, name:prod1], [id:2, name:prod2], [id:3, name:prod3], [id:4, name:prod4]]" ||
@@ -102,10 +128,10 @@ class TestServer extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                post(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                post(urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withJsonBody(jsonBody)
                 )
         )
 
@@ -126,10 +152,10 @@ class TestServer extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                put(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                put(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withJsonBody(jsonBody)
                 )
         )
 
@@ -150,10 +176,10 @@ class TestServer extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                patch(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                patch(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withJsonBody(jsonBody)
                 )
         )
 
@@ -174,10 +200,10 @@ class TestServer extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                delete(
-                        urlEqualTo("${api.baseUrl}/${endpoint.path?keep_after("/")}/${endpoint.attributes?first}")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                delete(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withJsonBody(jsonBody)
                 )
         )
 

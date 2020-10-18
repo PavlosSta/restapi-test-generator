@@ -11,10 +11,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-import io.restassured.RestAssured
-import io.restassured.matcher.RestAssuredMatchers
-import org.hamcrest.Matchers
-
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 @Stepwise
@@ -46,20 +42,10 @@ class RestAPIServerMockup extends Specification {
                         Map.of("id", '4', "name", "prod4"))
         )
 
-        JsonNode rootNode = objectMapper.createObjectNode();
-        JsonNode marksNode = objectMapper.createArrayNode();
-        ((ArrayNode)marksNode).add(100);
-        ((ArrayNode)marksNode).add(90);
-        ((ArrayNode)marksNode).add(85);
-        ((ObjectNode) rootNode).put("name", "Mahesh Kumar");
-        ((ObjectNode) rootNode).put("age", 21);
-        ((ObjectNode) rootNode).put("verified", false);
-        ((ObjectNode) rootNode).set("marks",marksNode);
-
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
-                get(urlEqualTo("/rest/api/products"))
+                get(urlPathEqualTo("/rest/api/products"))
                 .withHeader("headerName1", equalTo("headerValue1"))
                 .withHeader("headerName2", equalTo("headerValue2"))
                 .withQueryParam("queryName1", equalTo("queryValue1"))
@@ -76,7 +62,11 @@ class RestAPIServerMockup extends Specification {
         headers.put("headername1", "headerValue1")
         headers.put("headername2", "headerValue2")
 
-        Map products = caller.get_products(headers)
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryName1", "queryValue1")
+        queryParams.put("queryName2", "queryValue2")
+
+        Map products = caller.get_products_with_headers_and_queryParams(headers, queryParams)
 
         then:
         products.get("products").toString() == "[[id:1, name:prod1], [id:2, name:prod2], [id:3, name:prod3], [id:4, name:prod4]]" ||
@@ -94,15 +84,28 @@ class RestAPIServerMockup extends Specification {
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
-                get(
-                        urlEqualTo("/rest/api/products/id")
-                ).willReturn(
-                        aResponse().withJsonBody(productJSON)
-                )
+                get(urlMatching("/rest/api/products/.*"))
+                        .withHeader("headerName1", equalTo("headerValue1"))
+                        .withHeader("headerName2", equalTo("headerValue2"))
+                        .withQueryParam("queryName1", equalTo("queryValue1"))
+                        .withQueryParam("queryName2", equalTo("queryValue2"))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader("responseHeaderName", "responseHeaderValue")
+                                .withJsonBody(productJSON)
+                        )
         )
 
         when:
-        Map product = caller.get_products_by_id("2")
+        Map<String, String> headers = new HashMap<>();
+        headers.put("headername1", "headerValue1")
+        headers.put("headername2", "headerValue2")
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryName1", "queryValue1")
+        queryParams.put("queryName2", "queryValue2")
+
+        Map product = caller.get_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
         then:
         product.get("id") == '2'
@@ -117,10 +120,9 @@ class RestAPIServerMockup extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                post(
-                        urlEqualTo("/rest/api/products")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                post(urlEqualTo("/rest/api/products"))
+                        .willReturn(aResponse()
+                                .withStatus(200).withJsonBody(jsonBody)
                 )
         )
 
@@ -139,10 +141,9 @@ class RestAPIServerMockup extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                put(
-                        urlEqualTo("/rest/api/products/id")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                put(urlMatching("/rest/api/products/.*"))
+                        .willReturn(aResponse()
+                                .withStatus(200).withJsonBody(jsonBody)
                 )
         )
 
@@ -161,10 +162,9 @@ class RestAPIServerMockup extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                patch(
-                        urlEqualTo("/rest/api/products/id")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                patch(urlMatching("/rest/api/products/.*"))
+                        .willReturn(aResponse()
+                                .withStatus(200).withJsonBody(jsonBody)
                 )
         )
 
@@ -183,10 +183,9 @@ class RestAPIServerMockup extends Specification {
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
-                delete(
-                        urlEqualTo("/rest/api/products/id")
-                ).willReturn(
-                        aResponse().withStatus(200).withJsonBody(jsonBody)
+                delete(urlMatching("/rest/api/products/.*"))
+                        .willReturn(aResponse()
+                                .withStatus(200).withJsonBody(jsonBody)
                 )
         )
 

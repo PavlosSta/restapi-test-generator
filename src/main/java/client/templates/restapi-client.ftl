@@ -1,4 +1,4 @@
-package client.templates;
+package client;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -67,26 +67,163 @@ public class RestAPIClient {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", headers),
+                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
                 ClientHelper::parseJsonObject
         );
     }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString.toString()),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString.toString(), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
     <#else>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}(Map<String, String> headers) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}() {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newGetRequest(urlPrefix + "${endpoint.path}"),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_headers(Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "${endpoint.path}", headers),
                 ClientHelper::parseJsonObject
         );
     }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_queryParams(Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}"),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString.toString()),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}", headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+            StringBuilder queryParamString = new StringBuilder();
+
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                if (first) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                    first = false;
+                } else {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                }
+            }
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString.toString(), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
     </#if>
 
     </#if>
     <#if method.type == "POST">
-    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}(String input, Map<String, String> headers) {
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}(String input) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}_with_headers(String input, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -99,36 +236,65 @@ public class RestAPIClient {
     }
     </#if>
     <#if method.type == "PUT">
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
     </#if>
     <#if method.type == "PATCH">
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                ClientHelper::parseJsonObject
+        );
+
+    }
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
                 ClientHelper::parseJsonObject
         );
 
     }
     </#if>
     <#if method.type == "DELETE">
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/${endpoint.attributes?first}", headers),
+                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
+                ClientHelper::parseJsonObject
+        );
+    }
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
                 ClientHelper::parseJsonObject
         );
     }
@@ -161,6 +327,43 @@ public class RestAPIClient {
     private HttpRequest newDeleteRequest(String url, Map<String, String> headers) {
 
         return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody(), headers);
+    }
+
+    private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("POST", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newGetRequest(String url) {
+
+        return newRequest("GET", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+    }
+
+    private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PUT", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+
+        return newRequest("PATCH", url, contentType, bodyPublisher);
+    }
+
+    private HttpRequest newDeleteRequest(String url) {
+
+        return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
+    }
+
+    private HttpRequest newRequest(String method, String url, String contentType,
+                                   HttpRequest.BodyPublisher bodyPublisher) {
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder();
+
+        return builder
+                .method(method, bodyPublisher)
+                .header(CONTENT_TYPE_HEADER, contentType)
+                .uri(URI.create(url))
+                .build();
     }
 
     private HttpRequest newRequest(String method, String url, String contentType,
