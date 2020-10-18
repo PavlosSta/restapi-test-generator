@@ -29,6 +29,7 @@ class TestServer extends Specification {
         wms.stop()
     }
 
+    <#-- @ftlvariable name="api" type="interfaces.APISpec" -->
     <#list api.endpoints as endpoint>
     // ${endpoint.path}: ${endpoint.label}
     <#list endpoint.methods as method>
@@ -36,7 +37,48 @@ class TestServer extends Specification {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
+    <#if method.request.headers??>
+    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers"() {
+        given:
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        Map<String, Object> agencyMap = Map.of("id", '2', "name", "prod2")
+
+        ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
+
+        wms.givenThat(
+                get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
+                <#list method.request.headers as header>
+                .withHeader("${header.name}", equalTo("${header.value}"))
+                </#list>
+                .withQueryParam("queryName1", equalTo("queryValue1"))
+                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withJsonBody(productJSON)
+                )
+        )
+
+        when:
+        Map<String, String> headers = new HashMap<>();
+        <#list method.request.headers as header>
+        headers.put("${header.name}", "${header.value}")
+        </#list>
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryName1", "queryValue1")
+        queryParams.put("queryName2", "queryValue2")
+
+        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+
+        then:
+        product.get("id") == "2"
+        product.get("name") == "prod2"
+
+    }
+    <#else>
+    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} without headers"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -47,14 +89,14 @@ class TestServer extends Specification {
         wms.givenThat(
                 get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*"))
                 .withHeader("headerName1", equalTo("headerValue1"))
-                        .withHeader("headerName2", equalTo("headerValue2"))
-                        .withQueryParam("queryName1", equalTo("queryValue1"))
-                        .withQueryParam("queryName2", equalTo("queryValue2"))
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader("responseHeaderName", "responseHeaderValue")
-                                .withJsonBody(productJSON)
-                        )
+                .withHeader("headerName2", equalTo("headerValue2"))
+                .withQueryParam("queryName1", equalTo("queryValue1"))
+                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withJsonBody(productJSON)
+                )
         )
 
         when:
@@ -73,6 +115,7 @@ class TestServer extends Specification {
         product.get("name") == "prod2"
 
     }
+    </#if>
     <#else>
     def "GET ${endpoint.path?keep_after("/")}"() {
         given:
@@ -102,11 +145,11 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>()
         headers.put("headername1", "headerValue1")
         headers.put("headername2", "headerValue2")
 
-        Map<String, String> queryParams = new HashMap<>();
+        Map<String, String> queryParams = new HashMap<>()
         queryParams.put("queryName1", "queryValue1")
         queryParams.put("queryName2", "queryValue2")
 
@@ -136,7 +179,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}("test");
+        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}("test")
 
         then:
         products.get("value") == "ok"
@@ -160,7 +203,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2");
+        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -184,7 +227,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2");
+        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -208,7 +251,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2");
+        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
 
         then:
         products.get("value") == "ok"

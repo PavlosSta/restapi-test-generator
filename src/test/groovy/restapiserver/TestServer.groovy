@@ -32,7 +32,7 @@ class TestServer extends Specification {
         // /products: endpoint for products with attribute
 
     // GET
-    def "GET products by id"() {
+    def "GET products by id with headers"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
@@ -42,21 +42,19 @@ class TestServer extends Specification {
 
         wms.givenThat(
                 get(urlMatching("/rest/api/products/.*"))
-                .withHeader("headerName1", equalTo("headerValue1"))
-                        .withHeader("headerName2", equalTo("headerValue2"))
-                        .withQueryParam("queryName1", equalTo("queryValue1"))
-                        .withQueryParam("queryName2", equalTo("queryValue2"))
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader("responseHeaderName", "responseHeaderValue")
-                                .withJsonBody(productJSON)
-                        )
+                .withHeader("headerName", equalTo("headerBody"))
+                .withQueryParam("queryName1", equalTo("queryValue1"))
+                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withJsonBody(productJSON)
+                )
         )
 
         when:
         Map<String, String> headers = new HashMap<>();
-        headers.put("headername1", "headerValue1")
-        headers.put("headername2", "headerValue2")
+        headers.put("headerName", "headerBody")
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("queryName1", "queryValue1")
@@ -87,7 +85,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.put_to_products_by_id("test", "2");
+        Map<String, Object> products = caller.put_to_products_by_id("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -111,7 +109,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.put_to_products_by_id("test", "2");
+        Map<String, Object> products = caller.put_to_products_by_id("test", "2")
 
         then:
         products.get("value") == "ok"
@@ -135,7 +133,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.delete_from_products_by_id("2");
+        Map<String, Object> products = caller.delete_from_products_by_id("2")
 
         then:
         products.get("value") == "ok"
@@ -171,11 +169,11 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>()
         headers.put("headername1", "headerValue1")
         headers.put("headername2", "headerValue2")
 
-        Map<String, String> queryParams = new HashMap<>();
+        Map<String, String> queryParams = new HashMap<>()
         queryParams.put("queryName1", "queryValue1")
         queryParams.put("queryName2", "queryValue2")
 
@@ -204,7 +202,7 @@ class TestServer extends Specification {
         )
 
         when:
-        Map<String, Object> products = caller.post_to_products("test");
+        Map<String, Object> products = caller.post_to_products("test")
 
         then:
         products.get("value") == "ok"
