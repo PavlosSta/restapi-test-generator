@@ -18,8 +18,8 @@ import java.util.function.Supplier;
 
 public class RestAPIClient {
 
+    <#-- @ftlvariable name="api" type="interfaces.APISpec" -->
     public static final String BASE_URL = "${api.baseUrl}";
-    public static final String CUSTOM_HEADER = "X-CONTROL-CENTER-AUTH";
 
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String URL_ENCODED = "application/x-www-form-urlencoded";
@@ -67,21 +67,21 @@ public class RestAPIClient {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, String> queryParams) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, String> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -109,7 +109,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -138,21 +138,21 @@ public class RestAPIClient {
         }
     }
     <#else>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}() {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}() {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "${endpoint.path}"),
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_headers(Map<String, String> headers) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_with_headers(Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newGetRequest(urlPrefix + "${endpoint.path}", headers),
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_queryParams(Map<String, String> queryParams) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_with_queryParams(Map<String, String> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -180,7 +180,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> get_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<?,?> get_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, String> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -212,7 +212,7 @@ public class RestAPIClient {
 
     </#if>
     <#if method.type == "POST">
-    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}(String input) {
+    public Map<?,?> post_to_${endpoint.path?keep_after("/")}(String input) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -223,7 +223,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}_with_headers(String input, Map<String, String> headers) {
+    public Map<?,?> post_to_${endpoint.path?keep_after("/")}_with_headers(String input, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -236,7 +236,7 @@ public class RestAPIClient {
     }
     </#if>
     <#if method.type == "PUT">
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
+    public Map<?,?> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -247,7 +247,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<?,?> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -260,7 +260,7 @@ public class RestAPIClient {
     }
     </#if>
     <#if method.type == "PATCH">
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
+    public Map<?,?> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -271,7 +271,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<?,?> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String input, String ${endpoint.attributes?first}, Map<String, String> headers) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -284,14 +284,14 @@ public class RestAPIClient {
     }
     </#if>
     <#if method.type == "DELETE">
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
+    public Map<?,?> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
+    public Map<?,?> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
                 () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
