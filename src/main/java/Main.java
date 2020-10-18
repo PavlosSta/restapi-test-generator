@@ -34,7 +34,7 @@ public class Main
 		newQueryParamBuilder = new QueryParamSpecBuilder();
 		QueryParamSpec newQueryParam = newQueryParamBuilder
 				.setName("queryName")
-				.setType("queryType")
+				.setType("String")
 				.setValue("queryValue")
 				.setDefaultValue("queryDefBody")
 				.setMandatory(true)

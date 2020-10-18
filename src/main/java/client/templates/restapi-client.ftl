@@ -58,6 +58,24 @@ public class RestAPIClient {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private String queryParamsToString(Map<String, String> queryParams) {
+
+        StringBuilder queryParamString = new StringBuilder();
+
+        boolean first = true;
+
+        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+            if (first) {
+                queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                first = false;
+            } else {
+                queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+            }
+        }
+
+        return queryParamString.toString();
+    }
+
     // Methods for each Endpoint:
 
     <#list api.endpoints as endpoint>
@@ -90,21 +108,10 @@ public class RestAPIClient {
             );
         }
         else {
-            StringBuilder queryParamString = new StringBuilder();
-
-            boolean first = true;
-
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                if (first) {
-                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
-                    first = false;
-                } else {
-                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
-                }
-            }
+        String queryParamString = queryParamsToString(queryParams);
 
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString.toString()),
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString),
                     ClientHelper::parseJsonObject
             );
         }
@@ -118,21 +125,10 @@ public class RestAPIClient {
             );
         }
         else {
-            StringBuilder queryParamString = new StringBuilder();
-
-            boolean first = true;
-
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                if (first) {
-                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
-                    first = false;
-                } else {
-                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
-                }
-            }
+        String queryParamString = queryParamsToString(queryParams);
 
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString.toString(), headers),
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers),
                     ClientHelper::parseJsonObject
             );
         }
@@ -161,21 +157,10 @@ public class RestAPIClient {
             );
         }
         else {
-            StringBuilder queryParamString = new StringBuilder();
-
-            boolean first = true;
-
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                if (first) {
-                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
-                    first = false;
-                } else {
-                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
-                }
-            }
+        String queryParamString = queryParamsToString(queryParams);
 
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString.toString()),
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString),
                     ClientHelper::parseJsonObject
             );
         }
@@ -189,21 +174,10 @@ public class RestAPIClient {
             );
         }
         else {
-            StringBuilder queryParamString = new StringBuilder();
+        String queryParamString = queryParamsToString(queryParams);
 
-            boolean first = true;
-
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                if (first) {
-                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
-                    first = false;
-                } else {
-                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
-                }
-            }
-
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString.toString(), headers),
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString, headers),
                     ClientHelper::parseJsonObject
             );
         }
@@ -234,6 +208,47 @@ public class RestAPIClient {
         );
 
     }
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}_with_queryParams(String input, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+
     </#if>
     <#if method.type == "PUT">
     public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String input, String ${endpoint.attributes?first}) {
@@ -257,6 +272,46 @@ public class RestAPIClient {
                 ClientHelper::parseJsonObject
         );
 
+    }
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String input, String ${endpoint.attributes?first}, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String input, String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
     }
     </#if>
     <#if method.type == "PATCH">
@@ -282,6 +337,46 @@ public class RestAPIClient {
         );
 
     }
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String input, String ${endpoint.attributes?first}, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String input, String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
+
+        Map<String, Object> formData = new LinkedHashMap<>();
+        formData.put("input", input);
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
     </#if>
     <#if method.type == "DELETE">
     public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
@@ -297,6 +392,40 @@ public class RestAPIClient {
                 () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
                 ClientHelper::parseJsonObject
         );
+    }
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, String> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
     }
     </#if>
     </#list>
@@ -391,7 +520,7 @@ public class RestAPIClient {
             System.out.println("Sending " + request.method() + " to " + request.uri());
             HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             int statusCode = response.statusCode();
-            if (statusCode == 200) {
+            if (statusCode == 200 || statusCode == 201) {
                 try {
                     if (bodyProcessor != null) {
                         return bodyProcessor.apply(new InputStreamReader(response.body(), StandardCharsets.UTF_8));

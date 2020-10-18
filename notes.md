@@ -65,3 +65,5 @@
 ## Παραδοχές
 1. Όλα JSON
 2. Ένα Endpoint μπορεί να έχει είτε κανένα, είτε ένα attribute
+3. PUT, PATCH, DELETE οπωσδήποτε attribute
+4. POST χωρίς attribute
