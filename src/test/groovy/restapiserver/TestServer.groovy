@@ -32,33 +32,33 @@ class TestServer extends Specification {
         // /products: endpoint for products with attribute
 
     // GET
-    def "GET products by id with headers"() {
+    def "GET products by id with headers and queryParams"() {
+
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
-        Map<String, Object> agencyMap = Map.of("id", '2', "name", "prod2")
+        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
 
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
                 get(urlMatching("/rest/api/products/.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName1", equalTo("queryValue1"))
-                .withQueryParam("queryName2", equalTo("queryValue2"))
+                .withQueryParam("queryName", equalTo("queryValue"))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        .withHeader("headerName", "headerBody")
                         .withJsonBody(productJSON)
                 )
         )
 
         when:
+
         Map<String, String> headers = new HashMap<>();
         headers.put("headerName", "headerBody")
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("queryName1", "queryValue1")
-        queryParams.put("queryName2", "queryValue2")
+        queryParams.put("queryName", "queryValue")
 
         Map product = caller.get_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
