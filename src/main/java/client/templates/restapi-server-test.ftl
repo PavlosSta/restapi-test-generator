@@ -37,12 +37,20 @@ class TestServer extends Specification {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    <#if method.request.headers??>
+    <#if method.request.headers?? && method.request.queryParams??>
+    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers and queryParams"() {
+    <#elseif method.request.headers??>
     def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers"() {
+    <#elseif method.request.queryParams??>
+    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with queryParams"() {
+    <#else>
+    def "GET ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
+    </#if>
+
         given:
         ObjectMapper objectMapper = new ObjectMapper()
 
-        Map<String, Object> agencyMap = Map.of("id", '2', "name", "prod2")
+        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
 
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
@@ -51,26 +59,42 @@ class TestServer extends Specification {
                 <#list method.request.headers as header>
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
-                .withQueryParam("queryName1", equalTo("queryValue1"))
-                .withQueryParam("queryName2", equalTo("queryValue2"))
+                <#list method.request.queryParams as queryParam>
+                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                </#list>
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withHeader("responseHeaderName", "responseHeaderValue")
+                        <#list method.response.headers as responseHeader>
+                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        </#list>
                         .withJsonBody(productJSON)
                 )
         )
 
         when:
+
+        <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>();
         <#list method.request.headers as header>
         headers.put("${header.name}", "${header.value}")
         </#list>
+        </#if>
 
+        <#if method.request.queryParams??>
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("queryName1", "queryValue1")
-        queryParams.put("queryName2", "queryValue2")
+        <#list method.request.queryParams as queryParam>
+        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        </#list>
 
+        <#if method.request.headers?? && method.request.queryParams??>
         Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+        <#elseif method.request.headers??>
+        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("2", headers)
+        <#elseif method.request.queryParams??>
+        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("2", queryParams)
+        <#else>
+        Map product = caller.get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
+        </#if>
 
         then:
         product.get("id") == "2"

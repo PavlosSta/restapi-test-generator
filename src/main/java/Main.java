@@ -41,10 +41,10 @@ public class Main
 				.build();
 
 		newRequestBuilder = new RequestSpecBuilder();
-		RequestSpec newRequest = newRequestBuilder.
-				addHeader(newHeader).
-				addQueryParam(newQueryParam).
-				build();
+		RequestSpec newRequest = newRequestBuilder
+				.addHeader(newHeader)
+				.addQueryParam(newQueryParam)
+				.build();
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec newResponse = newResponseBuilder
