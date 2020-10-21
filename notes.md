@@ -67,3 +67,9 @@
 2. Ένα Endpoint μπορεί να έχει είτε κανένα, είτε ένα attribute
 3. PUT, PATCH, DELETE οπωσδήποτε attribute
 4. POST χωρίς attribute
+5. Ελέγχουμε μόνο 200 positive status, όχι error handling behaviour, μόνο success
+6. URL Encoded Request, 
+
+request body content types
+request body encoding του url encoded, www-form-urlencoded --> request body parameters
+

@@ -57,15 +57,17 @@ public class RestAPIClient {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private String queryParamsToString(Map<String, String> queryParams) {
+    private String queryParamsToString(Map<String, List<String>> queryParams) {
 
         StringBuilder queryParamString = new StringBuilder();
 
         boolean first = true;
 
-        for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
             if (first) {
-                queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue());
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    queryParamString.append("?").append(entry.getKey()).append("=").append(entry.getValue().get(i));
+                }
                 first = false;
             } else {
                 queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
@@ -94,7 +96,7 @@ public class RestAPIClient {
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_products_by_id_with_queryParams(String id, Map<String, String> queryParams) {
+    public Map<String, Object> get_products_by_id_with_queryParams(String id, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -111,7 +113,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> get_products_by_id_with_headers_and_queryParams(String id, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> get_products_by_id_with_headers_and_queryParams(String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -153,7 +155,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> put_to_products_by_id_with_queryParams(String input, String id, Map<String, String> queryParams) {
+    public Map<String, Object> put_to_products_by_id_with_queryParams(String input, String id, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -173,7 +175,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> put_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> put_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -217,7 +219,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> patch_to_products_by_id_with_queryParams(String input, String id, Map<String, String> queryParams) {
+    public Map<String, Object> patch_to_products_by_id_with_queryParams(String input, String id, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -237,7 +239,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> patch_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> patch_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -273,7 +275,7 @@ public class RestAPIClient {
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> delete_from_products_by_id_with_queryParams(String id, Map<String, String> queryParams) {
+    public Map<String, Object> delete_from_products_by_id_with_queryParams(String id, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -290,7 +292,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> delete_from_products_by_id_with_headers_and_queryParams(String id, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> delete_from_products_by_id_with_headers_and_queryParams(String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -324,7 +326,7 @@ public class RestAPIClient {
                 ClientHelper::parseJsonObject
         );
     }
-    public Map<String, Object> get_products_with_queryParams(Map<String, String> queryParams) {
+    public Map<String, Object> get_products_with_queryParams(Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -341,7 +343,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> get_products_with_headers_and_queryParams(Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> get_products_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -383,7 +385,7 @@ public class RestAPIClient {
         );
 
     }
-    public Map<String, Object> post_to_products_with_queryParams(String input, Map<String, String> queryParams) {
+    public Map<String, Object> post_to_products_with_queryParams(String input, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);
@@ -403,7 +405,7 @@ public class RestAPIClient {
             );
         }
     }
-    public Map<String, Object> post_to_products_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, String> queryParams) {
+    public Map<String, Object> post_to_products_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("input", input);

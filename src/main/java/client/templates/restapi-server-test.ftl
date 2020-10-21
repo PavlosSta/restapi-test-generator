@@ -47,6 +47,7 @@ class TestServer extends Specification {
     </#if>
 
         given:
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         <#if endpoint.attributes??>
@@ -69,7 +70,7 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -80,8 +81,6 @@ class TestServer extends Specification {
                 )
         )
 
-        when:
-
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
@@ -90,11 +89,13 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, String> queryParams = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
         </#list>
         </#if>
+
+        when:
 
         <#if method.request.headers?? && method.request.queryParams??>
         Map product = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
@@ -107,6 +108,7 @@ class TestServer extends Specification {
         </#if>
 
         then:
+
         <#if endpoint.attributes??>
         product.get("id") == "2"
         product.get("name") == "prod2"
@@ -129,6 +131,7 @@ class TestServer extends Specification {
     </#if>
 
         given:
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
@@ -139,7 +142,7 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(201)
@@ -150,7 +153,6 @@ class TestServer extends Specification {
                 )
         )
 
-        when:
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
@@ -159,11 +161,13 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, String> queryParams = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
         </#list>
         </#if>
+
+        when:
 
         <#if method.request.headers?? && method.request.queryParams??>
         Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams("test", headers, queryParams)
@@ -176,6 +180,7 @@ class TestServer extends Specification {
         </#if>
 
         then:
+
         products.get("value") == "ok"
 
     }
@@ -192,6 +197,7 @@ class TestServer extends Specification {
     </#if>
 
         given:
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
@@ -202,7 +208,7 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -213,7 +219,6 @@ class TestServer extends Specification {
                 )
         )
 
-        when:
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
@@ -222,11 +227,13 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, String> queryParams = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
         </#list>
         </#if>
+
+        when:
 
         <#if method.request.headers?? && method.request.queryParams??>
         Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
@@ -239,6 +246,7 @@ class TestServer extends Specification {
         </#if>
 
         then:
+            
         products.get("value") == "ok"
 
     }
@@ -265,7 +273,7 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -276,7 +284,6 @@ class TestServer extends Specification {
                 )
         )
 
-        when:
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
@@ -285,11 +292,13 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, String> queryParams = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
         </#list>
         </#if>
+
+        when:
 
         <#if method.request.headers?? && method.request.queryParams??>
         Map<String, Object> products = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
@@ -328,7 +337,7 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("${header.value}"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", equalTo("${queryParam.value}"))
+                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -348,9 +357,9 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, String> queryParams = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.put("${queryParam.name}", "${queryParam.value}")
+        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
         </#list>
         </#if>
 
