@@ -35,15 +35,26 @@ class TestServer extends Specification {
     def "GET products by id with headers and queryParams"() {
 
         given:
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
+        Map<String, String> headers = new HashMap<>()
+        headers.put("headerName", "headerBody")
+
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
+    
         wms.givenThat(
                 get(urlMatching("/rest/api/products/.*\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("headerName", "headerBody")
@@ -52,12 +63,6 @@ class TestServer extends Specification {
         )
 
         when:
-
-        Map<String, String> headers = new HashMap<>()
-        headers.put("headerName", "headerBody")
-
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
 
         Map product = caller.get_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
@@ -78,7 +83,9 @@ class TestServer extends Specification {
         wms.givenThat(
                 put(urlMatching("/rest/api/products/.*\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("headerName", "headerBody")
@@ -90,8 +97,10 @@ class TestServer extends Specification {
         Map<String, String> headers = new HashMap<>()
         headers.put("headerName", "headerBody")
 
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
 
         Map<String, Object> products = caller.put_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
 
@@ -111,7 +120,9 @@ class TestServer extends Specification {
         wms.givenThat(
                 patch(urlMatching("/rest/api/products/.*\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("headerName", "headerBody")
@@ -123,8 +134,10 @@ class TestServer extends Specification {
         Map<String, String> headers = new HashMap<>()
         headers.put("headerName", "headerBody")
 
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
 
         Map<String, Object> products = caller.patch_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
 
@@ -144,7 +157,9 @@ class TestServer extends Specification {
         wms.givenThat(
                 delete(urlMatching("/rest/api/products/.*\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("headerName", "headerBody")
@@ -156,8 +171,10 @@ class TestServer extends Specification {
         Map<String, String> headers = new HashMap<>()
         headers.put("headerName", "headerBody")
 
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
 
         Map<String, Object> products = caller.delete_from_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
@@ -171,15 +188,26 @@ class TestServer extends Specification {
     def "GET products with headers and queryParams"() {
 
         given:
+
         ObjectMapper objectMapper = new ObjectMapper()
 
         Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
 
+        Map<String, String> headers = new HashMap<>()
+        headers.put("headerName", "headerBody")
+
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
+    
         wms.givenThat(
                 get(urlMatching("/rest/api/products\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("headerName", "headerBody")
@@ -188,12 +216,6 @@ class TestServer extends Specification {
         )
 
         when:
-
-        Map<String, String> headers = new HashMap<>()
-        headers.put("headerName", "headerBody")
-
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
 
         Map product = caller.get_products_with_headers_and_queryParams(headers, queryParams)
 
@@ -214,7 +236,9 @@ class TestServer extends Specification {
         wms.givenThat(
                 post(urlMatching("/rest/api/products\\\\?.*"))
                 .withHeader("headerName", equalTo("headerBody"))
-                .withQueryParam("queryName", equalTo("queryValue"))
+                .withQueryParam("QueryA", containing("3"))
+                .withQueryParam("QueryA", containing("5"))
+                .withQueryParam("QueryA", containing("2"))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("headerName", "headerBody")
@@ -226,8 +250,10 @@ class TestServer extends Specification {
         Map<String, String> headers = new HashMap<>()
         headers.put("headerName", "headerBody")
 
-        Map<String, String> queryParams = new HashMap<>()
-        queryParams.put("queryName", "queryValue")
+        Map<String, List<String>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("3")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("5")
+        queryParams.computeIfAbsent("QueryA", k -> new ArrayList<>()).add("2")
 
         Map<String, Object> products = caller.post_to_products_with_headers_and_queryParams("test", headers, queryParams)
 
