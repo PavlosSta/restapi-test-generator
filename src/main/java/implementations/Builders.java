@@ -18,12 +18,12 @@ public class Builders {
         return new MethodSpecBuilder();
     }
 
-    public static QueryParamSpecBuilder newQueryParam() {
-        return new QueryParamSpecBuilder();
+    public static ParamSpecBuilder newQueryParam() {
+        return new ParamSpecBuilder();
     }
 
-    public static RequestSpecBuilder newRequest() {
-        return new RequestSpecBuilder();
+    public static RequestGenericSpecBuilder newRequest() {
+        return new RequestGenericSpecBuilder();
     }
 
     public static ResponseSpecBuilder newResponse() {

@@ -10,8 +10,9 @@ import java.util.Set;
 
 public class ResponseSpecBuilder {
 
-    private Set<HeaderSpec> headers = new LinkedHashSet<>();
-    private Set<StatusSpec> statuses = new LinkedHashSet<>();
+    private final Set<HeaderSpec> headers = new LinkedHashSet<>();
+    private StatusSpec status;
+    private String responseBody;
 
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
@@ -23,23 +24,23 @@ public class ResponseSpecBuilder {
         return this;
     }
 
-    public ResponseSpecBuilder addStatuses(Set<StatusSpec> statuses) {
-        this.statuses.addAll(statuses);
+    public ResponseSpecBuilder addStatus(StatusSpec status) {
+        this.status = status;
         return this;
     }
 
-    public ResponseSpecBuilder addStatus(StatusSpec status) {
-        this.statuses.add(status);
+    public ResponseSpecBuilder addResponseBodySchema(String responseBody) {
+        this.responseBody = responseBody;
         return this;
     }
 
     public ResponseSpec build() {
 
-        if (headers.isEmpty() || statuses.isEmpty()) {
+        if (status == null) {
             throw new RuntimeException("Response bad input");
         }
 
-        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(statuses));
+        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), status, responseBody);
 
     }
 

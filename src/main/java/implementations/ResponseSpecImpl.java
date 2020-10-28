@@ -9,19 +9,25 @@ import interfaces.StatusSpec;
 public class ResponseSpecImpl implements ResponseSpec {
 
     private final Set<HeaderSpec> headers;
-    private final Set<StatusSpec> statuses;
+    private final StatusSpec status;
+    private final String responseBodySchema;
 
-    ResponseSpecImpl(Set<HeaderSpec> headers, Set<StatusSpec> statuses) {
+    ResponseSpecImpl(Set<HeaderSpec> headers, StatusSpec status, String responseBodySchema) {
         this.headers = headers;
-        this.statuses = statuses;
+        this.status = status;
+        this.responseBodySchema = responseBodySchema;
+    }
+
+    public String getResponseBodySchema() {
+        return this.responseBodySchema;
     }
 
     public Set<HeaderSpec> getHeaders() {
         return this.headers;
     }
 
-    public Set<StatusSpec> getStatuses() {
-        return this.statuses;
+    public StatusSpec getStatus() {
+        return this.status;
     }
 
 }

@@ -2,8 +2,6 @@ package implementations;
 
 import interfaces.StatusSpec;
 
-import java.util.Hashtable;
-
 public class StatusSpecBuilder {
 
     private String code;
@@ -16,10 +14,6 @@ public class StatusSpecBuilder {
 
     public StatusSpecBuilder setBody(String body) {
         this.body = body;
-        return this;
-    }
-
-    public StatusSpecBuilder setConditionBody(Hashtable<String, Integer> conditionBody) {
         return this;
     }
 

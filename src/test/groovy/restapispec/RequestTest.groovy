@@ -1,8 +1,8 @@
 import implementations.HeaderSpecBuilder
-import implementations.QueryParamSpecBuilder
-import implementations.RequestSpecBuilder
+import implementations.ParamSpecBuilder
+import implementations.RequestGenericSpecBuilder
 import interfaces.HeaderSpec
-import interfaces.QueryParamSpec
+import interfaces.ParameterSpec
 import interfaces.RequestSpec
 import spock.lang.Specification
 
@@ -11,46 +11,28 @@ class RequestTest extends Specification {
     def "request builder works"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
-        def newQueryParamBuilder = new QueryParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
+        def newQueryParamBuilder = new ParamSpecBuilder()
+        def newRequestBuilder = new RequestGenericSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(true).build()
+        ParameterSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("String").setMandatory(true).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeader).addQueryParam(newQueryParam).build()
 
         then:
         newRequest.getHeaders()[0].getName() == "headerName"
-        newRequest.getHeaders()[0].getValue() == "headerBody"
         newRequest.getQueryParams()[0].getName() == "queryName"
-        newRequest.getQueryParams()[0].getType() == "queryType"
-        newRequest.getQueryParams()[0].getValue() == "queryBody"
-        !newRequest.getQueryParams()[0].isMandatory()
+        newRequest.getQueryParams()[0].getType() == "String"
+        newRequest.getQueryParams()[0].isMandatory()
 
     }
 
-    def "request builder raises exception when missing header"() {
+    def "request builder raises exception when missing headers and bodyParams and queryParams"() {
 
-        def newQueryParamBuilder = new QueryParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
-
-        when:
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
-        newRequestBuilder.addQueryParam(newQueryParam).build()
-
-        then:
-        thrown RuntimeException
-
-    }
-
-    def "request builder raises exception when missing queryParam"() {
-
-        def newHeaderBuilder = new HeaderSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
+        def newRequestBuilder = new RequestGenericSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
-        newRequestBuilder.addHeader(newHeader).build()
+        newRequestBuilder.build()
 
         then:
         thrown RuntimeException

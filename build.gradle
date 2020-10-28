@@ -37,13 +37,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.freemarker:freemarker:2.3.30'
     implementation 'commons-validator:commons-validator:1.7'
-    implementation "com.github.tomakehurst:wiremock-jre8:2.27.2"
+    implementation "com.github.tomakehurst:wiremock:2.27.2"
 
     testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testImplementation 'org.slf4j:slf4j-nop:1.7.30'
-    testImplementation 'io.rest-assured:rest-assured:4.3.1'
-    testImplementation 'io.rest-assured:json-schema-validator:4.3.1'
 
 }
 

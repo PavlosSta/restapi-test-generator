@@ -8,6 +8,11 @@ import java.util.Set;
 public interface ResponseSpec {
 
     /**
+     * @return the body schema of the Response (JSON, String, Integer)
+     */
+    String getResponseBodySchema();
+
+    /**
      * @return a set with the Header Specifications of the Response
      */
     Set<HeaderSpec> getHeaders();
@@ -15,7 +20,7 @@ public interface ResponseSpec {
     /**
      * @return a set with the Status Specifications of the Request
      */
-    Set<StatusSpec> getStatuses();
+    StatusSpec getStatus();
 
 }
 

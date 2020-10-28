@@ -38,12 +38,14 @@
     * Ένα Response
     
 * Ένα Request έχει:
+    * Ένα Request Body (ίσως)
     * Κάποιους Headers (ίσως)
     * Κάποιες Query Parameters (ίσως)
     
 * Ένα Response έχει:
+    * Ένα Response Body (ίσως)
     * Κάποιους Headers (ίσως)
-    * Ένα status
+    * Ένα status (200 ή 201)
     
 * Ένας Header έχει:
     * Ένα Name
@@ -58,9 +60,6 @@
     * Μία Default Value
     * Αν είναι υποχρεωτική ή όχι
 
-* Ένα Status έχει:
-    * Έναν Code
-    * Ένα Label (ίσως)
 
 ## Παραδοχές
 1. Όλα JSON
@@ -70,6 +69,7 @@
 5. Ελέγχουμε μόνο 200 positive status, όχι error handling behaviour, μόνο success
 6. URL Encoded Request, 
 
-request body content types
-request body encoding του url encoded, www-form-urlencoded --> request body parameters
+request bodyParams content types
+request bodyParams encoding του url encoded, www-form-urlencoded --> request bodyParams parameters
 
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST

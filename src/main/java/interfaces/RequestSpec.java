@@ -15,7 +15,17 @@ public interface RequestSpec {
     /**
      * @return a set with the Query Parameter Specifications of the Request
      */
-    Set<QueryParamSpec>  getQueryParams();
+    Set<ParameterSpec>  getQueryParams();
+
+    /**
+     * @return a set with the Query Parameter Specifications of the Request
+     */
+    Set<ParameterSpec> getBodyParams();
+
+    /**
+     * @return the Content Type header of the Request
+     */
+    String getContentType();
 
 }
 

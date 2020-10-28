@@ -12,8 +12,8 @@ public class EndpointSpecBuilder {
     private String path;
     private String label;
     private String description;
-    private Set<String> attributes = new LinkedHashSet<>();
-    private Set<MethodSpec> methods = new LinkedHashSet<>();
+    private final Set<String> attributes = new LinkedHashSet<>();
+    private final Set<MethodSpec> methods = new LinkedHashSet<>();
 
     public EndpointSpecBuilder setPath(String path) {
         this.path = path;

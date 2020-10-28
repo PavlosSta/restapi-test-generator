@@ -1,12 +1,12 @@
 import implementations.HeaderSpecBuilder
 import implementations.MethodSpecBuilder
-import implementations.QueryParamSpecBuilder
-import implementations.RequestSpecBuilder
+import implementations.ParamSpecBuilder
+import implementations.RequestGenericSpecBuilder
 import implementations.ResponseSpecBuilder
 import implementations.StatusSpecBuilder
 import interfaces.HeaderSpec
 import interfaces.MethodSpec
-import interfaces.QueryParamSpec
+import interfaces.ParameterSpec
 import interfaces.RequestSpec
 import interfaces.ResponseSpec
 import interfaces.StatusSpec
@@ -18,18 +18,18 @@ class MethodTest extends Specification {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
-        def newQueryParamBuilder = new QueryParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
+        def newQueryParamBuilder = new ParamSpecBuilder()
+        def newRequestBuilder = new RequestGenericSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setMandatory(true).build()
+        ParameterSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("String").setMandatory(true).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(true).build()
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -40,18 +40,13 @@ class MethodTest extends Specification {
         newMethod.getType().name() == "GET"
 
         newMethod.getRequest().getHeaders()[0].getName() == "headerRequestName"
-        newMethod.getRequest().getHeaders()[0].getValue() == "headerRequestBody"
-        !newMethod.getRequest().getHeaders()[0].isMandatory()
+        newMethod.getRequest().getHeaders()[0].isMandatory()
         newMethod.getRequest().getQueryParams()[0].getName() == "queryName"
-        newMethod.getRequest().getQueryParams()[0].getType() == "queryType"
-        newMethod.getRequest().getQueryParams()[0].getValue() == "queryBody"
-        !newMethod.getRequest().getQueryParams()[0].isMandatory()
+        newMethod.getRequest().getQueryParams()[0].getType() == "String"
+        newMethod.getRequest().getQueryParams()[0].isMandatory()
 
         newMethod.getResponse().getHeaders()[0].getName() == "headerResponseName"
-        newMethod.getResponse().getHeaders()[0].getValue() == "headerResponseBody"
-        !newMethod.getResponse().getHeaders()[0].isMandatory()
-        newMethod.getResponse().getStatuses()[0].getCode() == "statusCode"
-        newMethod.getResponse().getStatuses()[0].getBody() == "statusBody"
+        newMethod.getResponse().getHeaders()[0].isMandatory()
 
     }
 
@@ -59,18 +54,18 @@ class MethodTest extends Specification {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
-        def newQueryParamBuilder = new QueryParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
+        def newQueryParamBuilder = new ParamSpecBuilder()
+        def newRequestBuilder = new RequestGenericSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setMandatory(false).build()
+        ParameterSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("String").setMandatory(false).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -90,7 +85,7 @@ class MethodTest extends Specification {
 
         when:
 
-        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setValue("headerResponseBody").setMandatory(false).build()
+        HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(false).build()
         StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
         ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
 
@@ -104,14 +99,14 @@ class MethodTest extends Specification {
     def "method builder raises exception when missing response"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
-        def newQueryParamBuilder = new QueryParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder()
+        def newQueryParamBuilder = new ParamSpecBuilder()
+        def newRequestBuilder = new RequestGenericSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
         when:
 
-        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setValue("headerRequestBody").setMandatory(false).build()
-        QueryParamSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("queryType").setValue("queryBody").setMandatory(false).build()
+        HeaderSpec newHeaderRequest = newHeaderBuilder.setName("headerRequestName").setMandatory(false).build()
+        ParameterSpec newQueryParam = newQueryParamBuilder.setName("queryName").setType("String").setMandatory(false).build()
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         newMethodBuilder.setType("GET").setRequest(newRequest).build()
