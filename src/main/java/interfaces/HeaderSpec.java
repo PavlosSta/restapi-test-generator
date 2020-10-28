@@ -11,14 +11,9 @@ public interface HeaderSpec {
     String getName();
 
     /**
-     * @return the value of the Header
-     */
-    String getValue();
-
-    /**
      * @return the default value of the Header (if mandatory)
      */
-    String defaultValueIfOptionalAndMissing();
+    String getDefaultValueIfOptionalAndMissing();
 
     /**
      * @return true if Header is mandatory

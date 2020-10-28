@@ -1,21 +1,19 @@
 package implementations;
 
-import interfaces.QueryParamSpec;
+import interfaces.ParameterSpec;
 
-public class QueryParamSpecImpl implements QueryParamSpec {
+public class ParameterSpecImpl implements ParameterSpec {
 
     private final String name;
-    private final String type;
-    private final String value;
     private final String defaultValue;
+    private final String type;
     private final boolean mandatory;
 
-    QueryParamSpecImpl(String name, String type, String value, String defaultValue, boolean mandatory) {
+    ParameterSpecImpl(String name, String defaultValue, String type, boolean mandatory) {
         this.name = name;
-        this.type = type;
-        this.value = value;
         this.defaultValue = defaultValue;
         this.mandatory = mandatory;
+        this.type = type;
     }
 
     public String getName() {
@@ -26,11 +24,7 @@ public class QueryParamSpecImpl implements QueryParamSpec {
         return this.type;
     }
 
-    public String getValue() {
-        return this.value;
-    }
-
-    public String getDefaultValue() {
+    public String defaultBodyIfOptionalAndMissing() {
         return this.defaultValue;
     }
 

@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
-    private Configuration cfg;
+    private final Configuration cfg;
 
     public FreeMarkerJavaCodeGenerator(APISpec apiSpec) {
 
@@ -60,14 +60,14 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
             if (endpoint.getAttributes() == null || endpoint.getAttributes().isEmpty()) {
                 for (MethodSpec method: endpoint.getMethods()) {
-                    if (method.getType().name() == "PUT" || method.getType().name() == "PATCH" || method.getType().name() == "DELETE") {
+                    if (method.getType().name().equals("PUT") || method.getType().name().equals("PATCH") || method.getType().name().equals("DELETE")) {
                         throw new RuntimeException("Endpoint bad input: incompatible methods with attributes");
                     }
                 }
             }
             else {
                 for (MethodSpec method: endpoint.getMethods()) {
-                    if (method.getType().name() == "POST") {
+                    if (method.getType().name().equals("POST")) {
                         throw new RuntimeException("Endpoint bad input: incompatible methods with attributes");
                     }
                 }
@@ -88,11 +88,8 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
             Template temp = cfg.getTemplate("restapi-client.ftl");
 
             // Writes to console
-            Writer fileWriter = new FileWriter(dest);
-            try {
+            try (Writer fileWriter = new FileWriter(dest)) {
                 temp.process(root, fileWriter);
-            } finally {
-                fileWriter.close();
             }
 
         } catch (IOException | TemplateException e) {
@@ -113,11 +110,8 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
             Template temp = cfg.getTemplate("restapi-client-test.ftl");
 
             // Writes to console
-            Writer fileWriter = new FileWriter(dest);
-            try {
+            try (Writer fileWriter = new FileWriter(dest)) {
                 temp.process(root, fileWriter);
-            } finally {
-                fileWriter.close();
             }
 
         } catch (IOException | TemplateException e) {
@@ -138,11 +132,8 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
             Template temp = cfg.getTemplate("restapi-server-test.ftl");
 
             // Writes to console
-            Writer fileWriter = new FileWriter(dest);
-            try {
+            try (Writer fileWriter = new FileWriter(dest)) {
                 temp.process(root, fileWriter);
-            } finally {
-                fileWriter.close();
             }
 
         } catch (IOException | TemplateException e) {
@@ -150,4 +141,4 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
         }
 
     }
-};
+}

@@ -13,7 +13,7 @@ public class APISpecBuilder {
 
     private String baseUrl; // eg. "https://www.myapi.com/api/"
     private String label;   // eg. "API name"
-    private Set<EndpointSpec> endpoints = new LinkedHashSet<>();
+    private final Set<EndpointSpec> endpoints = new LinkedHashSet<>();
 
     public APISpecBuilder setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;

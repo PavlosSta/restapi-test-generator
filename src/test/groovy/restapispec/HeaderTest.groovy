@@ -8,12 +8,11 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setDefaultValueIfOptionalAndMissing("defaultHeaderBody").setMandatory(true).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setDefaultValueIfOptionalAndMissing("defaultHeaderBody").setMandatory(true).build()
 
         then:
         newHeader.getName() == "headerName"
-        newHeader.getValue() == "headerBody"
-        newHeader.defaultValueIfOptionalAndMissing() == "defaultHeaderBody"
+        newHeader.getDefaultValueIfOptionalAndMissing() == "defaultHeaderBody"
         newHeader.isMandatory()
 
     }
@@ -22,11 +21,11 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(false).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(false).setDefaultValueIfOptionalAndMissing("defValue").build()
 
         then:
         newHeader.getName() == "headerName"
-        newHeader.getValue() == "headerBody"
+        newHeader.getDefaultValueIfOptionalAndMissing() == "defValue"
 
     }
 
@@ -34,7 +33,7 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        newHeaderBuilder.setValue("headerBody").setMandatory(false).build()
+        newHeaderBuilder.setMandatory(false).build()
 
         then:
         thrown RuntimeException
@@ -50,11 +49,11 @@ class HeaderTest extends Specification{
         thrown RuntimeException
     }
 
-    def "header builder raises exception when mandatory and missing default body"() {
+    def "header builder raises exception when optional and missing default body"() {
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        newHeaderBuilder.setName("headerName").setValue("headerBody").setMandatory(true).build()
+        newHeaderBuilder.setName("headerName").setMandatory(false).build()
 
         then:
         thrown RuntimeException

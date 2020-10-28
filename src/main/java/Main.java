@@ -2,8 +2,7 @@ import client.generator.FreeMarkerJavaCodeGenerator;
 import implementations.*;
 import interfaces.*;
 
-import java.io.*;
-import java.util.Iterator;
+import java.io.File;
 
 public class Main
 {
@@ -13,122 +12,325 @@ public class Main
 		EndpointSpecBuilder newEndpointBuilder;
 		HeaderSpecBuilder newHeaderBuilder;
 		MethodSpecBuilder newMethodBuilder;
-		QueryParamSpecBuilder newQueryParamBuilder;
-		RequestSpecBuilder newRequestBuilder;
+		ParamSpecBuilder newParamBuilder;
+		RequestGenericSpecBuilder newRequestGenericBuilder;
+		RequestURLSpecBuilder newRequestURLBuilder;
+		RequestJSONSpecBuilder newRequestJSONBuilder;
+
 		ResponseSpecBuilder newResponseBuilder;
 
+		// Positive Statuses
 
 		StatusSpecBuilder newStatusBuilder = new StatusSpecBuilder();
-		StatusSpec newStatus = newStatusBuilder
-				.setCode("statusLabel")
-				.setBody("statusBody")
+		StatusSpec status200 = newStatusBuilder
+				.setCode("200")
+				.setBody("OK")
+				.build();
+
+		StatusSpec status201 = newStatusBuilder
+				.setCode("201")
+				.setBody("Created")
+				.build();
+
+		// Login
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec usernameBodyParam = newParamBuilder
+				.setName("username")
+				.setType("String")
+				.setMandatory(true)
+				.build();
+		ParameterSpec passwordBodyParam = newParamBuilder
+				.setType("String")
+				.setName("password")
+				.setMandatory(true)
+				.build();
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec loginRequest = newRequestURLBuilder
+				.addBodyParam(usernameBodyParam)
+				.addBodyParam(passwordBodyParam)
 				.build();
 
 		newHeaderBuilder = new HeaderSpecBuilder();
-		HeaderSpec newHeader = newHeaderBuilder
-				.setName("headerName")
-				.setValue("headerBody")
-				.setDefaultValueIfOptionalAndMissing("headerDefBody")
+		HeaderSpec authenticationTokenHeader = newHeaderBuilder
+				.setName("X-OBSERVATORY-AUTH")
 				.setMandatory(true)
-				.build();
-
-		newQueryParamBuilder = new QueryParamSpecBuilder();
-		QueryParamSpec queryParamA1 = newQueryParamBuilder
-				.setName("QueryA")
-				.setType("String")
-				.setValue("3")
-				.setDefaultValue("queryDefBody")
-				.setMandatory(true)
-				.build();
-		QueryParamSpec queryParamA2 = newQueryParamBuilder
-				.setName("QueryA")
-				.setType("String")
-				.setValue("5")
-				.setDefaultValue("queryDefBody")
-				.setMandatory(true)
-				.build();
-		QueryParamSpec queryParamB = newQueryParamBuilder
-				.setName("QueryA")
-				.setType("String")
-				.setValue("2")
-				.setDefaultValue("queryDefBody")
-				.setMandatory(true)
-				.build();
-
-		newRequestBuilder = new RequestSpecBuilder();
-		RequestSpec newRequest = newRequestBuilder
-				.addHeader(newHeader)
-				.addQueryParam(queryParamA1)
-				.addQueryParam(queryParamA2)
-				.addQueryParam(queryParamB)
 				.build();
 
 		newResponseBuilder = new ResponseSpecBuilder();
-		ResponseSpec newResponse = newResponseBuilder
-				.addHeader(newHeader)
-				.addStatus(newStatus)
+		ResponseSpec loginResponse = newResponseBuilder
+				.addHeader(authenticationTokenHeader)
+				.addStatus(status201)
 				.build();
 
 		newMethodBuilder = new MethodSpecBuilder();
-		MethodSpec newMethodGET = newMethodBuilder
-				.setType("GET")
-				.setRequest(newRequest)
-				.setResponse(newResponse)
-				.build();
-
-		newMethodBuilder = new MethodSpecBuilder();
-		MethodSpec newMethodPOST = newMethodBuilder
+		MethodSpec loginMethodPOST = newMethodBuilder
 				.setType("POST")
-				.setRequest(newRequest)
-				.setResponse(newResponse)
+				.setRequest(loginRequest)
+				.setResponse(loginResponse)
+				.build();
+
+		newEndpointBuilder = new EndpointSpecBuilder();
+		EndpointSpec loginEndpoint = newEndpointBuilder
+				.setPath("/login")
+				.setLabel("login endpoint")
+				.addMethod(loginMethodPOST)
+				.build();
+
+		// Logout
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec logoutRequest = newRequestURLBuilder
+				.addHeader(authenticationTokenHeader)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec logoutResponse = newResponseBuilder
+				.addResponseBodySchema("{ \"message\": \"OK\" }")
+				.addStatus(status201)
 				.build();
 
 		newMethodBuilder = new MethodSpecBuilder();
-		MethodSpec newMethodPUT = newMethodBuilder
+		MethodSpec logoutMethodPOST = newMethodBuilder
+				.setType("POST")
+				.setRequest(logoutRequest)
+				.setResponse(logoutResponse)
+				.build();
+
+		newEndpointBuilder = new EndpointSpecBuilder();
+		EndpointSpec logoutEndpoint = newEndpointBuilder
+				.setPath("/logout")
+				.setLabel("logout endpoint")
+				.addMethod(logoutMethodPOST)
+				.build();
+
+
+		// Products
+
+		// GET Products
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec getProductsStartParam = newParamBuilder
+				.setName("start")
+				.setType("Integer")
+				.setDefaultValue("0")
+				.setMandatory(false)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec getProductsCountParam = newParamBuilder
+				.setName("count")
+				.setType("Integer")
+				.setDefaultValue("20")
+				.setMandatory(false)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec getProductsStatusParam = newParamBuilder
+				.setName("status")
+				.setType("String")
+				.setDefaultValue("ACTIVE")
+				.setMandatory(false)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec getProductsSortParam = newParamBuilder
+				.setName("sort")
+				.setType("String")
+				.setDefaultValue("id|DESC")
+				.setMandatory(false)
+				.build();
+
+		newRequestJSONBuilder = new RequestJSONSpecBuilder();
+		RequestSpec getProductsRequest = newRequestJSONBuilder
+				.addQueryParam(getProductsStartParam)
+				.addQueryParam(getProductsCountParam)
+				.addQueryParam(getProductsStatusParam)
+				.addQueryParam(getProductsSortParam)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec getProductsResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status200)
+				.build();
+
+		newMethodBuilder = new MethodSpecBuilder();
+		MethodSpec getProductsMethod = newMethodBuilder
+				.setType("GET")
+				.setRequest(getProductsRequest)
+				.setResponse(getProductsResponse)
+				.build();
+
+		// POST Products
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec postProductsNameParam = newParamBuilder
+				.setName("name")
+				.setType("String")
+				.setMandatory(true)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec postProductsDescriptionParam = newParamBuilder
+				.setName("description")
+				.setType("String")
+				.setMandatory(true)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec postProductsCategoryParam = newParamBuilder
+				.setName("category")
+				.setType("String")
+				.setMandatory(true)
+				.build();
+
+		newParamBuilder = new ParamSpecBuilder();
+		ParameterSpec postProductsTagsParam = newParamBuilder
+				.setName("tags")
+				.setType("String")
+				.setMandatory(true)
+				.build();
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec postProductsRequest = newRequestURLBuilder
+				.addBodyParam(postProductsNameParam)
+				.addBodyParam(postProductsDescriptionParam)
+				.addBodyParam(postProductsCategoryParam)
+				.addBodyParam(postProductsTagsParam)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec postProductsResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status201)
+				.build();
+
+		newMethodBuilder = new MethodSpecBuilder();
+		MethodSpec postProductsMethod = newMethodBuilder
+				.setType("POST")
+				.setRequest(postProductsRequest)
+				.setResponse(postProductsResponse)
+				.build();
+
+		// GET Products by id
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec getProductsByIdRequest = newRequestURLBuilder
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec getProductsByIdResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status200)
+				.build();
+
+		newMethodBuilder = new MethodSpecBuilder();
+		MethodSpec getProductsByIdMethod = newMethodBuilder
+				.setType("GET")
+				.setRequest(getProductsByIdRequest)
+				.setResponse(getProductsByIdResponse)
+				.build();
+
+		// PUT Products by id
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec putProductsByIdRequest = newRequestURLBuilder
+				.addBodyParam(postProductsNameParam)
+				.addBodyParam(postProductsDescriptionParam)
+				.addBodyParam(postProductsCategoryParam)
+				.addBodyParam(postProductsTagsParam)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec putProductsByIdResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status201)
+				.build();
+
+		newMethodBuilder = new MethodSpecBuilder();
+		MethodSpec putProductsByIdMethod = newMethodBuilder
 				.setType("PUT")
-				.setRequest(newRequest)
-				.setResponse(newResponse)
+				.setRequest(putProductsByIdRequest)
+				.setResponse(putProductsByIdResponse)
+				.build();
+
+		// PATCH Products by id
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec patchProductsByIdRequest = newRequestURLBuilder
+				.addBodyParam(postProductsNameParam)
+				.addBodyParam(postProductsDescriptionParam)
+				.addBodyParam(postProductsCategoryParam)
+				.addBodyParam(postProductsTagsParam)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec patchProductsByIdResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status201)
 				.build();
 
 		newMethodBuilder = new MethodSpecBuilder();
-		MethodSpec newMethodPATCH = newMethodBuilder
+		MethodSpec patchProductsByIdMethod = newMethodBuilder
 				.setType("PATCH")
-				.setRequest(newRequest)
-				.setResponse(newResponse)
+				.setRequest(patchProductsByIdRequest)
+				.setResponse(patchProductsByIdResponse)
+				.build();
+
+		// DELETE Products by id
+
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec deleteProductsByIdRequest = newRequestURLBuilder
+				.addHeader(authenticationTokenHeader)
+				.build();
+
+		newResponseBuilder = new ResponseSpecBuilder();
+		ResponseSpec deleteProductsByIdResponse = newResponseBuilder
+				.addResponseBodySchema("JSON")
+				.addStatus(status201)
 				.build();
 
 		newMethodBuilder = new MethodSpecBuilder();
-		MethodSpec newMethodDELETE = newMethodBuilder
-				.setType("DELETE")
-				.setRequest(newRequest)
-				.setResponse(newResponse)
+		MethodSpec deleteProductsByIdMethod = newMethodBuilder
+				.setType("PATCH")
+				.setRequest(patchProductsByIdRequest)
+				.setResponse(patchProductsByIdResponse)
 				.build();
 
-		newEndpointBuilder = new EndpointSpecBuilder();
-		EndpointSpec newEndpointWithAttribute = newEndpointBuilder
-				.setPath("/products")
-				.addAttribute("id")
-				.setLabel("endpoint for products with attribute")
-				.addMethod(newMethodGET)
-				.addMethod(newMethodPUT)
-				.addMethod(newMethodPATCH)
-				.addMethod(newMethodDELETE)
-				.build();
+		// Endpoint Products
 
 		newEndpointBuilder = new EndpointSpecBuilder();
-		EndpointSpec newEndpointWithoutAttribute = newEndpointBuilder
+		EndpointSpec productsWithoutAttribute = newEndpointBuilder
 				.setPath("/products")
 				.setLabel("endpoint for products without attribute")
-				.addMethod(newMethodGET)
-				.addMethod(newMethodPOST)
+				.addMethod(getProductsMethod)
+				.addMethod(postProductsMethod)
 				.build();
+
+		// Endpoint Products By Id
+
+		newEndpointBuilder = new EndpointSpecBuilder();
+		EndpointSpec productsWithAttribute = newEndpointBuilder
+				.setPath("/products")
+				.setLabel("endpoint for products with attribute")
+				.addMethod(getProductsByIdMethod)
+				.addMethod(putProductsByIdMethod)
+				.addMethod(patchProductsByIdMethod)
+				.addMethod(deleteProductsByIdMethod)
+				.addAttribute("id")
+				.build();
+
+
+		// API Build
 
 		newApiBuilder = new APISpecBuilder();
 		APISpec newAPI = newApiBuilder
 				.setLabel("api")
-				.setBaseUrl("/rest/api")
-				.addEndpoint(newEndpointWithAttribute)
-				.addEndpoint(newEndpointWithoutAttribute)
+				.setBaseUrl("/observatory/api")
+				.addEndpoint(loginEndpoint)
+				.addEndpoint(logoutEndpoint)
 				.build();
 
 		// Template engine / Code generation
@@ -144,10 +346,13 @@ public class Main
 		String serverName = "TestServer";
 		String serverPath = serverFolder + serverPackage.replaceAll("\\.","/") + "/" + serverName + ".groovy";
 
-		//RestAPIClient
-		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File("src/test/groovy/restapiclient/TestClient.groovy"));
+		System.out.println(clientPath);
+		System.out.println(serverPath);
 
-		javaGenerator.generateServer(new File("src/test/groovy/restapiserver/TestServer.groovy"));
+		//RestAPIClient
+	//	javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
+
+	//	javaGenerator.generateServer(new File(serverPath));
 
 		// buildSrc
 

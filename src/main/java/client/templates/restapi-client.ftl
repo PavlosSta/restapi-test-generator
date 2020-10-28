@@ -525,7 +525,7 @@ public class RestAPIClient {
             if (statusCode == 200 || statusCode == 201) {
                 try {
                     if (bodyProcessor != null) {
-                        return bodyProcessor.apply(new InputStreamReader(response.body(), StandardCharsets.UTF_8));
+                        return bodyProcessor.apply(new InputStreamReader(response.bodyParams(), StandardCharsets.UTF_8));
                     }
                     else {
                         return null;
@@ -536,7 +536,7 @@ public class RestAPIClient {
                 }
             }
             else {
-                throw new ServerResponseException(statusCode, ClientHelper.readContents(response.body()));
+                throw new ServerResponseException(statusCode, ClientHelper.readContents(response.bodyParams()));
             }
         }
         catch(IOException | InterruptedException e) {
