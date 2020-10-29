@@ -1,3 +1,5 @@
+package restapispec
+
 import implementations.HeaderSpecBuilder
 import implementations.ParamSpecBuilder
 import implementations.RequestGenericSpecBuilder

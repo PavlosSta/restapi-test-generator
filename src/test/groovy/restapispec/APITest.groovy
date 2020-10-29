@@ -1,3 +1,5 @@
+package restapispec
+
 import implementations.APISpecBuilder
 import implementations.EndpointSpecBuilder
 import implementations.HeaderSpecBuilder

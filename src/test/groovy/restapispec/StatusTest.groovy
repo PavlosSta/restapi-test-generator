@@ -1,3 +1,5 @@
+package restapispec
+
 import implementations.StatusSpecBuilder
 import interfaces.StatusSpec
 import spock.lang.Specification

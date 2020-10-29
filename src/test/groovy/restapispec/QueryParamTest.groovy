@@ -1,3 +1,5 @@
+package restapispec
+
 import implementations.ParamSpecBuilder
 import interfaces.ParameterSpec
 import spock.lang.Specification

@@ -7,14 +7,11 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
     id 'java-library'
-
-    // Apply the groovy plugin to also add support for Groovy (needed for Spock)
     id 'groovy'
-
     id 'application'
-
+    id 'idea'
+    id 'java-gradle-plugin'
 }
 
 mainClassName = "Main"
@@ -25,21 +22,19 @@ java {
 }
 
 repositories {
-    // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenCentral()
 }
 
 dependencies {
 
-    implementation 'org.codehaus.groovy:groovy-all:3.0.6'
+    implementation gradleApi()
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.freemarker:freemarker:2.3.30'
     implementation 'commons-validator:commons-validator:1.7'
     implementation "com.github.tomakehurst:wiremock:2.27.2"
 
-    testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-2.5'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testImplementation 'org.slf4j:slf4j-nop:1.7.30'
 
@@ -59,3 +54,12 @@ task generateClient {
     }
 }
 
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'org.pavlos.api-spec-test'
+            implementationClass = 'Main'
+        }
+    }
+}
