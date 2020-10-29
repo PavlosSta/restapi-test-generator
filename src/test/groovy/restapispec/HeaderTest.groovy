@@ -1,3 +1,5 @@
+package restapispec
+
 import implementations.HeaderSpecBuilder
 import interfaces.HeaderSpec
 import spock.lang.Specification
