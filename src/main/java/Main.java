@@ -350,7 +350,7 @@ public class Main
 		System.out.println(serverPath);
 
 		//RestAPIClient
-	//	javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
+		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
 
 	//	javaGenerator.generateServer(new File(serverPath));
 
