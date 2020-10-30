@@ -29,3 +29,48 @@ public interface RequestSpec {
 
 }
 
+/*
+GroovyApiSpecBuilder builder = new GroovyApiSpecBuilder()
+APISpec apiSpec = builder.build {
+    api {
+        baseUrl "www.api.com"
+        label "My api"
+        endpoint ("/foo") {
+            path "/foo"
+            label "..."
+            method ("get") {
+
+            }
+        }
+        
+
+    }
+}
+
+class GroovyApiSpecBuilder {
+
+    private APISpecBuilder builder;
+
+    void api(Closure c) {
+        builder = new APISpecBuilder();
+        c.call(this)
+    }
+
+    void baseUrl(String url) {
+        builder.setBaseUrl(url);
+    }
+
+    void endpoint(String path, Closure c) {
+
+    }
+
+    void methodMissing(String name) {
+
+    }
+
+    APISpec build(Closure c) {
+
+    }
+
+}
+*/
