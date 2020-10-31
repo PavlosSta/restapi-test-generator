@@ -4,9 +4,9 @@ package implementations;
 
         import interfaces.HeaderSpec;
         import interfaces.ParameterSpec;
-        import interfaces.RequestSpec;
+        import interfaces.RequestURLSpec;
 
-public class RequestURLSpecImpl implements RequestSpec {
+public class RequestURLSpecImpl implements RequestURLSpec {
 
     private final Set<HeaderSpec> headers;
     private final Set<ParameterSpec> queryParams;
@@ -30,8 +30,5 @@ public class RequestURLSpecImpl implements RequestSpec {
         return this.bodyParams;
     }
 
-    public String getContentType() {
-        return "application/x-www-form-urlencoded";
-    }
 
 }

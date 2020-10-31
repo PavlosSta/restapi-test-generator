@@ -2,7 +2,7 @@ package restapispec
 
 import implementations.HeaderSpecBuilder
 import implementations.ParamSpecBuilder
-import implementations.RequestGenericSpecBuilder
+import implementations.RequestSpecBuilder
 import interfaces.HeaderSpec
 import interfaces.ParameterSpec
 import interfaces.RequestSpec
@@ -14,7 +14,7 @@ class RequestTest extends Specification {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestGenericSpecBuilder()
+        def newRequestBuilder = new RequestSpecBuilder("URL")
 
         when:
         HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(true).build()
@@ -31,7 +31,7 @@ class RequestTest extends Specification {
 
     def "request builder raises exception when missing headers and bodyParams and queryParams"() {
 
-        def newRequestBuilder = new RequestGenericSpecBuilder()
+        def newRequestBuilder = new RequestSpecBuilder("URL")
 
         when:
         newRequestBuilder.build()

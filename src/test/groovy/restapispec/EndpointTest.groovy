@@ -4,7 +4,7 @@ import implementations.EndpointSpecBuilder
 import implementations.HeaderSpecBuilder
 import implementations.MethodSpecBuilder
 import implementations.ParamSpecBuilder
-import implementations.RequestGenericSpecBuilder
+import implementations.RequestSpecBuilder
 import implementations.ResponseSpecBuilder
 import implementations.StatusSpecBuilder
 import interfaces.EndpointSpec
@@ -23,7 +23,7 @@ class EndpointTest extends Specification {
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestGenericSpecBuilder()
+        def newRequestBuilder = new RequestSpecBuilder("URL")
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
         def newEndpointBuilder = new EndpointSpecBuilder()
@@ -68,7 +68,7 @@ class EndpointTest extends Specification {
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestGenericSpecBuilder()
+        def newRequestBuilder = new RequestSpecBuilder("URL")
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
         def newEndpointBuilder = new EndpointSpecBuilder()
