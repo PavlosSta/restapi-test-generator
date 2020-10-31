@@ -1,21 +1,21 @@
 package implementations;
 
-        import java.util.Set;
+import java.util.Set;
 
-        import interfaces.HeaderSpec;
-        import interfaces.ParameterSpec;
-        import interfaces.RequestSpec;
+import interfaces.HeaderSpec;
+import interfaces.ParameterSpec;
+import interfaces.RequestJSONSpec;
 
-public class RequestJSONSpecImpl implements RequestSpec {
+public class RequestJSONSpecImpl implements RequestJSONSpec {
 
     private final Set<HeaderSpec> headers;
     private final Set<ParameterSpec> queryParams;
-    private final Set<ParameterSpec> bodyParams;
+    private final String body;
 
-    RequestJSONSpecImpl(Set<HeaderSpec> headers, Set<ParameterSpec> queryParams, Set<ParameterSpec> bodyParams) {
+    RequestJSONSpecImpl(Set<HeaderSpec> headers, Set<ParameterSpec> queryParams, String body) {
         this.headers = headers;
         this.queryParams = queryParams;
-        this.bodyParams = bodyParams;
+        this.body = body;
     }
 
     public Set<HeaderSpec> getHeaders() {
@@ -26,13 +26,10 @@ public class RequestJSONSpecImpl implements RequestSpec {
         return this.queryParams;
     }
 
-    public Set<ParameterSpec> getBodyParams() {
-        return this.bodyParams;
+    public String getBody() {
+        return this.body;
     }
 
-    public String getContentType() {
-        return "application/json";
-    }
 
 
 }

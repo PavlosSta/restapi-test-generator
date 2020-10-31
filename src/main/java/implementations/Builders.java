@@ -22,8 +22,8 @@ public class Builders {
         return new ParamSpecBuilder();
     }
 
-    public static RequestGenericSpecBuilder newRequest() {
-        return new RequestGenericSpecBuilder();
+    public static RequestSpecBuilder newRequest() {
+        return new RequestSpecBuilder();
     }
 
     public static ResponseSpecBuilder newResponse() {
