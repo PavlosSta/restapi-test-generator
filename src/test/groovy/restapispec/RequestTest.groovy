@@ -28,16 +28,5 @@ class RequestTest extends Specification {
         newRequest.getQueryParams()[0].isMandatory()
 
     }
-
-    def "request builder raises exception when missing headers and bodyParams and queryParams"() {
-
-        def newRequestBuilder = new RequestSpecBuilder("URL")
-
-        when:
-        newRequestBuilder.build()
-
-        then:
-        thrown RuntimeException
-
-    }
+    
 }

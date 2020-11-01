@@ -10,12 +10,12 @@ public class RequestJSONSpecImpl implements RequestJSONSpec {
 
     private final Set<HeaderSpec> headers;
     private final Set<ParameterSpec> queryParams;
-    private final String body;
+    private final String bodySchema;
 
-    RequestJSONSpecImpl(Set<HeaderSpec> headers, Set<ParameterSpec> queryParams, String body) {
+    RequestJSONSpecImpl(Set<HeaderSpec> headers, Set<ParameterSpec> queryParams, String bodySchema) {
         this.headers = headers;
         this.queryParams = queryParams;
-        this.body = body;
+        this.bodySchema = bodySchema;
     }
 
     public Set<HeaderSpec> getHeaders() {
@@ -26,10 +26,8 @@ public class RequestJSONSpecImpl implements RequestJSONSpec {
         return this.queryParams;
     }
 
-    public String getBody() {
-        return this.body;
+    public String getRequestBodySchema() {
+        return this.bodySchema;
     }
-
-
 
 }
