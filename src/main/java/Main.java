@@ -219,7 +219,7 @@ public class Main
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec getProductsByIdResponse = newResponseBuilder
-				.addResponseBodySchema("JSON")
+				.addResponseBodySchema("Integer")
 				.addStatus(status200)
 				.build();
 
@@ -291,7 +291,7 @@ public class Main
 
 		newMethodBuilder = new MethodSpecBuilder();
 		MethodSpec deleteProductsByIdMethod = newMethodBuilder
-				.setType("PATCH")
+				.setType("DELETE")
 				.setRequest(deleteProductsByIdRequest)
 				.setResponse(deleteProductsByIdResponse)
 				.build();
@@ -328,6 +328,8 @@ public class Main
 				.setBaseUrl("/observatory/api")
 				.addEndpoint(loginEndpoint)
 				.addEndpoint(logoutEndpoint)
+				.addEndpoint(productsWithAttribute)
+				.addEndpoint(productsWithoutAttribute)
 				.build();
 
 		// Template engine / Code generation
@@ -348,7 +350,7 @@ public class Main
 
 		//RestAPIClient
 		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
-		//javaGenerator.generateServer(new File(serverPath));
+		javaGenerator.generateServer(new File(serverPath));
 
 		// buildSrc
 

@@ -47,7 +47,7 @@ class TestServer extends Specification {
     </#if>
 
         given:
-
+        <#if method.response.responseBodySchema == "JSON">
         ObjectMapper objectMapper = new ObjectMapper()
 
         <#if endpoint.attributes??>
@@ -63,35 +63,51 @@ class TestServer extends Specification {
         )
         ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
         </#if>
+        <#elseif method.response.responseBodySchema == "String">
+        <#if endpoint.attributes??>
+        String productString = "prod2"
+        <#else>
+        String productString = "prod1, prod2, prod3"
+        </#if>
+        <#else> <#-- Integer -->
+        Integer productInteger = 42
+        </#if>
 
         wms.givenThat(
                 get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>/.*</#if><#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("${header.value}"))
+                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
+                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(200)
+                        .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
+                        <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(productJSON)
+                        <#elseif method.response.responseBodySchema == "String">
+                        .withBody(productString)
+                        <#else>
+                        .withBody(productInteger.toString())
+                        </#if>
+
                 )
         )
 
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "${header.value}")
+        <#-- headers.put("${header.name}", "${header.value}") -->
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
+        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
         </#list>
         </#if>
 
@@ -139,15 +155,15 @@ class TestServer extends Specification {
         wms.givenThat(
                 post(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("${header.value}"))
+                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
+                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(201)
+                        .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
                         .withJsonBody(jsonBody)
                 )
@@ -156,14 +172,14 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "${header.value}")
+        <#-- headers.put("${header.name}", "${header.value}") -->
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
+        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
         </#list>
         </#if>
 
@@ -205,15 +221,15 @@ class TestServer extends Specification {
         wms.givenThat(
                 put(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("${header.value}"))
+                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
+                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(200)
+                        .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
                         .withJsonBody(jsonBody)
                 )
@@ -222,14 +238,14 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "${header.value}")
+        <#-- headers.put("${header.name}", "${header.value}") -->
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
+        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
         </#list>
         </#if>
 
@@ -246,7 +262,7 @@ class TestServer extends Specification {
         </#if>
 
         then:
-            
+
         products.get("value") == "ok"
 
     }
@@ -270,15 +286,15 @@ class TestServer extends Specification {
         wms.givenThat(
                 patch(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("${header.value}"))
+                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
+                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(200)
+                        .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
                         .withJsonBody(jsonBody)
                 )
@@ -287,14 +303,14 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "${header.value}")
+        <#-- headers.put("${header.name}", "${header.value}") -->
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
+        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
         </#list>
         </#if>
 
@@ -334,15 +350,15 @@ class TestServer extends Specification {
         wms.givenThat(
                 delete(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("${header.value}"))
+                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                .withQueryParam("${queryParam.name}", containing("${queryParam.value}"))
+                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(200)
+                        .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "${responseHeader.value}")
+                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
                         .withJsonBody(jsonBody)
                 )
@@ -352,14 +368,14 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "${header.value}")
+        <#-- headers.put("${header.name}", "${header.value}") -->
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}")
+        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
         </#list>
         </#if>
 
