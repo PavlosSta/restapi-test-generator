@@ -28,5 +28,5 @@ class RequestTest extends Specification {
         newRequest.getQueryParams()[0].isMandatory()
 
     }
-    
+
 }
