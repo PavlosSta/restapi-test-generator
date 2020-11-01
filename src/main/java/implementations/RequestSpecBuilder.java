@@ -64,9 +64,6 @@ public class RequestSpecBuilder {
         if (!(contentType.equals("JSON") || contentType.equals("URL"))) {
             throw new RuntimeException("Request: Bad content type. Supported: JSON, URL");
         }
-        if (headers.isEmpty()) {
-            throw new RuntimeException("Request: Empty headers");
-        }
         if (contentType.equals("JSON")) {
             return new RequestJSONSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(queryParams), this.body);
         }

@@ -9,8 +9,8 @@ public interface RequestJSONSpec extends RequestSpec {
     }
 
     /**
-     * @return a set with the Body Parameter Specifications of the Request
+     * @return the body schema of the Request (JSON, String, Integer)
      */
-    String getBody();
+    String getRequestBodySchema();
 
 }

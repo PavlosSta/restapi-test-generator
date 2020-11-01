@@ -292,8 +292,8 @@ public class Main
 		newMethodBuilder = new MethodSpecBuilder();
 		MethodSpec deleteProductsByIdMethod = newMethodBuilder
 				.setType("PATCH")
-				.setRequest(patchProductsByIdRequest)
-				.setResponse(patchProductsByIdResponse)
+				.setRequest(deleteProductsByIdRequest)
+				.setResponse(deleteProductsByIdResponse)
 				.build();
 
 		// Endpoint Products
@@ -348,8 +348,7 @@ public class Main
 
 		//RestAPIClient
 		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
-
-	//	javaGenerator.generateServer(new File(serverPath));
+		//javaGenerator.generateServer(new File(serverPath));
 
 		// buildSrc
 
