@@ -37,9 +37,14 @@ public class ResponseSpecBuilder {
     public ResponseSpec build() {
 
         if (status == null) {
-            throw new RuntimeException("Response bad input");
+            throw new RuntimeException("Response: Status missing");
         }
-
+        if (!(status.getCode().equals("200") || status.getCode().equals("201"))) {
+            throw new RuntimeException("Response: Status not supported (give 200 or 201)");
+        }
+        if (!(responseBody.equals("JSON") || responseBody.equals("String") || responseBody.equals("Integer") || responseBody.equals("int"))) {
+            throw new RuntimeException("Response: Response body schema not supported (give JSON, String or Integer)");
+        }
         return new ResponseSpecImpl(Collections.unmodifiableSet(headers), status, responseBody);
 
     }

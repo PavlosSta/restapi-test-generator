@@ -38,13 +38,16 @@ class TestServer extends Specification {
 
         ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 post(urlMatching("/observatory/api/login\\\\?.*"))
+                .withRequestBody(containing(jsonBodyRequest))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withJsonBody(resultJSON)
                 )
         )
 
@@ -54,11 +57,11 @@ class TestServer extends Specification {
 
         when:
 
-        Map<String, Object> products = caller.post_to_login_with_headers_and_queryParams("test", headers, queryParams)
+        Map<String, Object> result = caller.post_to_login_with_headers_and_queryParams(jsonBodyRequest, headers, queryParams)
 
         then:
 
-        products.get("value") == "ok"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
     // /logout: logout endpoint
@@ -70,27 +73,32 @@ class TestServer extends Specification {
 
         ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 post(urlMatching("/observatory/api/logout\\\\?.*"))
+                .withRequestBody(containing(jsonBodyRequest))
+                .withHeader("X-OBSERVATORY-AUTH", equalTo("headerValue"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withJsonBody(resultJSON)
                 )
         )
 
         Map<String, String> headers = new HashMap<>()
+        headers.put("X-OBSERVATORY-AUTH", "headerValue")
 
         Map<String, List<String>> queryParams = new HashMap<>()
 
         when:
 
-        Map<String, Object> products = caller.post_to_logout_with_headers_and_queryParams("test", headers, queryParams)
+        Map<String, Object> result = caller.post_to_logout_with_headers_and_queryParams(jsonBodyRequest, headers, queryParams)
 
         then:
 
-        products.get("value") == "ok"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
     // /products: endpoint for products with attribute
@@ -99,15 +107,16 @@ class TestServer extends Specification {
     def "GET products by id with headers and queryParams"() {
 
         given:
- 
-        Integer productInteger = 42
+        ObjectMapper objectMapper = new ObjectMapper()
+
+        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
+        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
 
         wms.givenThat(
                 get(urlMatching("/observatory/api/products/.*\\\\?.*"))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withBody(productInteger.toString())
-
+                        .withJsonBody(resultJSON)
                 )
         )
 
@@ -117,12 +126,11 @@ class TestServer extends Specification {
 
         when:
 
-        Map product = caller.get_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
+        Map<String, Object> result = caller.get_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
         then:
 
-        product.get("id") == "2"
-        product.get("name") == "prod2"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
 
@@ -149,11 +157,11 @@ class TestServer extends Specification {
 
         when:
 
-        Map<String, Object> products = caller.put_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
+        Map<String, Object> result = caller.put_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
 
         then:
 
-        products.get("value") == "ok"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
 
@@ -179,10 +187,10 @@ class TestServer extends Specification {
 
         when:
 
-        Map<String, Object> products = caller.patch_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
+        Map<String, Object> result = caller.patch_to_products_by_id_with_headers_and_queryParams("test", "2", headers, queryParams)
 
         then:
-        products.get("value") == "ok"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
 
@@ -207,10 +215,10 @@ class TestServer extends Specification {
 
         Map<String, List<String>> queryParams = new HashMap<>()
 
-        Map<String, Object> products = caller.delete_from_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
+        Map<String, Object> result = caller.delete_from_products_by_id_with_headers_and_queryParams("2", headers, queryParams)
 
         then:
-        products.get("value") == "ok"
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
 
     }
     // /products: endpoint for products without attribute
@@ -219,17 +227,13 @@ class TestServer extends Specification {
     def "GET products with headers and queryParams"() {
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
-
-        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
-        ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
-
+        String resultString = "prod2"
+        
         wms.givenThat(
                 get(urlMatching("/observatory/api/products\\\\?.*"))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withJsonBody(productJSON)
-
+                        .withBody(resultString)
                 )
         )
 
@@ -239,12 +243,11 @@ class TestServer extends Specification {
 
         when:
 
-        Map product = caller.get_products_with_headers_and_queryParams(headers, queryParams)
+        String result = caller.get_products_with_headers_and_queryParams(headers, queryParams)
 
         then:
 
-        product.get("id") == "2"
-        product.get("name") == "prod2"
+        result.matches("\\w+")
 
     }
 
@@ -255,13 +258,16 @@ class TestServer extends Specification {
 
         ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+
+        Integer resultInteger = 42
 
         wms.givenThat(
                 post(urlMatching("/observatory/api/products\\\\?.*"))
+                .withRequestBody(containing(jsonBodyRequest))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withBody(resultInteger.toString())
                 )
         )
 
@@ -271,11 +277,11 @@ class TestServer extends Specification {
 
         when:
 
-        Map<String, Object> products = caller.post_to_products_with_headers_and_queryParams("test", headers, queryParams)
+        Integer result = caller.post_to_products_with_headers_and_queryParams(jsonBodyRequest, headers, queryParams)
 
         then:
 
-        products.get("value") == "ok"
+        result.toString().matches("\\d+")
 
     }
 }

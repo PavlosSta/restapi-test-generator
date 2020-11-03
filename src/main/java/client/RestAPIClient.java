@@ -84,62 +84,51 @@ public class RestAPIClient {
     // POST
     public Map<String, Object> post_to_login(String input) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                 ClientHelper::parseJsonObject
         );
-
     }
+
     public Map<String, Object> post_to_login_with_headers(String input, Map<String, String> headers) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                 ClientHelper::parseJsonObject
         );
-
     }
+
     public Map<String, Object> post_to_login_with_queryParams(String input, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/login" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/login" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
     }
-    public Map<String, Object> post_to_login_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> post_to_login_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    () -> newPostRequest(urlPrefix + "/login", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/login" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/login" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
@@ -150,62 +139,51 @@ public class RestAPIClient {
     // POST
     public Map<String, Object> post_to_logout(String input) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                 ClientHelper::parseJsonObject
         );
-
     }
+
     public Map<String, Object> post_to_logout_with_headers(String input, Map<String, String> headers) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                 ClientHelper::parseJsonObject
         );
-
     }
+
     public Map<String, Object> post_to_logout_with_queryParams(String input, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/logout" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/logout" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
     }
-    public Map<String, Object> post_to_logout_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> post_to_logout_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    () -> newPostRequest(urlPrefix + "/logout", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/logout" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/logout" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
@@ -237,7 +215,7 @@ public class RestAPIClient {
             );
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
             return sendRequestAndParseResponseBodyAsUTF8Text(
                     () -> newGetRequest(urlPrefix + "/products/" + id + queryParamString),
@@ -254,7 +232,7 @@ public class RestAPIClient {
             );
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
             return sendRequestAndParseResponseBodyAsUTF8Text(
                     () -> newGetRequest(urlPrefix + "/products/" + id + queryParamString, headers),
@@ -265,128 +243,107 @@ public class RestAPIClient {
 
 
     // PUT
-    public Map<String, Object> put_to_products_by_id(String input, String id) {
-
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> put_to_products_by_id(String id, String input) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                 ClientHelper::parseJsonObject
         );
-
     }
-    public Map<String, Object> put_to_products_by_id_with_headers(String input, String id, Map<String, String> headers) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> put_to_products_by_id_with_headers(String id, String input, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                 ClientHelper::parseJsonObject
         );
-
     }
-    public Map<String, Object> put_to_products_by_id_with_queryParams(String input, String id, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> put_to_products_by_id_with_queryParams(String id, String input, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
     }
-    public Map<String, Object> put_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> put_to_products_by_id_with_headers_and_queryParams(String id, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    () -> newPutRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPutRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
     }
+
 
     // PATCH
-    public Map<String, Object> patch_to_products_by_id(String input, String id) {
-
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> patch_to_products_by_id(String id, String input) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                 ClientHelper::parseJsonObject
         );
-
     }
-    public Map<String, Object> patch_to_products_by_id_with_headers(String input, String id, Map<String, String> headers) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> patch_to_products_by_id_with_headers(String id, String input, Map<String, String> headers) {
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                 ClientHelper::parseJsonObject
         );
-
     }
-    public Map<String, Object> patch_to_products_by_id_with_queryParams(String input, String id, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> patch_to_products_by_id_with_queryParams(String id, String input, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData)),
+                    () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
                     ClientHelper::parseJsonObject
             );
         }
     }
-    public Map<String, Object> patch_to_products_by_id_with_headers_and_queryParams(String input, String id, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Map<String, Object> patch_to_products_by_id_with_headers_and_queryParams(String id, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+                    () -> newPatchRequest(urlPrefix + "/products/" + id, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPatchRequest(urlPrefix + "/products/" + id + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
@@ -416,9 +373,9 @@ public class RestAPIClient {
             );
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
+            return sendRequestAndParseResponseBodyAsUTF8Text(
                     () -> newDeleteRequest(urlPrefix + "/products/" + id + queryParamString),
                     ClientHelper::parseJsonObject
             );
@@ -433,9 +390,9 @@ public class RestAPIClient {
             );
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
+            return sendRequestAndParseResponseBodyAsUTF8Text(
                     () -> newDeleteRequest(urlPrefix + "/products/" + id + queryParamString, headers),
                     ClientHelper::parseJsonObject
             );
@@ -444,117 +401,82 @@ public class RestAPIClient {
     // /products: endpoint for products without attribute
 
     // GET
-    public Map<String, Object> get_products() {
+    public String get_products() {
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "/products"),
-                ClientHelper::parseJsonObject
-        );
+        return sendRequestAndParseResponseBodyAsString(
+                () -> newGetRequest(urlPrefix + "/products"));
     }
-    public Map<String, Object> get_products_with_headers(Map<String, String> headers) {
+    public String get_products_with_headers(Map<String, String> headers) {
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "/products", headers),
-                ClientHelper::parseJsonObject
-        );
+        return sendRequestAndParseResponseBodyAsString(
+                () -> newGetRequest(urlPrefix + "/products", headers));
     }
-    public Map<String, Object> get_products_with_queryParams(Map<String, List<String>> queryParams) {
+    public String get_products_with_queryParams(Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "/products"),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsString(
+                    () -> newGetRequest(urlPrefix + "/products"));
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "/products" + queryParamString),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsString(
+                    () -> newGetRequest(urlPrefix + "/products" + queryParamString));
         }
     }
-    public Map<String, Object> get_products_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public String get_products_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "/products", headers),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsString(
+                    () -> newGetRequest(urlPrefix + "/products", headers));
         }
         else {
-        String queryParamString = queryParamsToString(queryParams);
+            String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "/products" + queryParamString, headers),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsString(
+                    () -> newGetRequest(urlPrefix + "/products" + queryParamString, headers));
         }
     }
 
 
     // POST
-    public Map<String, Object> post_to_products(String input) {
+    public Integer post_to_products(String input) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
-
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
-                ClientHelper::parseJsonObject
-        );
-
+        return sendRequestAndParseResponseBodyAsInteger(
+                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
     }
-    public Map<String, Object> post_to_products_with_headers(String input, Map<String, String> headers) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Integer post_to_products_with_headers(String input, Map<String, String> headers) {
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
-                ClientHelper::parseJsonObject
-        );
-
+        return sendRequestAndParseResponseBodyAsInteger(
+                () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
     }
-    public Map<String, Object> post_to_products_with_queryParams(String input, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Integer post_to_products_with_queryParams(String input, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData)),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsInteger(
+                    () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/products" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData)),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsInteger(
+                    () -> newPostRequest(urlPrefix + "/products" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
         }
     }
-    public Map<String, Object> post_to_products_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
-        Map<String, Object> formData = new LinkedHashMap<>();
-        formData.put("input", input);
+    public Integer post_to_products_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, ofUrlEncodedFormData(formData), headers),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsInteger(
+                    () -> newPostRequest(urlPrefix + "/products", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
         }
         else {
         String queryParamString = queryParamsToString(queryParams);
 
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "/products" + queryParamString, URL_ENCODED, ofUrlEncodedFormData(formData), headers),
-                    ClientHelper::parseJsonObject
-            );
+            return sendRequestAndParseResponseBodyAsInteger(
+                    () -> newPostRequest(urlPrefix + "/products" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
         }
     }
 
@@ -663,6 +585,56 @@ public class RestAPIClient {
             }
             else {
                 throw new ServerResponseException(statusCode, ClientHelper.readContents(response.body()));
+            }
+        }
+        catch(IOException | InterruptedException e) {
+            throw new ConnectionException(e.getMessage(), e);
+        }
+    }
+
+    private String sendRequestAndParseResponseBodyAsString(Supplier<HttpRequest> requestSupplier) {
+
+        HttpRequest request = requestSupplier.get();
+
+        try {
+            System.out.println("Sending " + request.method() + " to " + request.uri());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200 || statusCode == 201) {
+                try {
+                    return response.body();
+                }
+                catch(Exception e) {
+                    throw new ResponseProcessingException(e.getMessage(), e);
+                }
+            }
+            else {
+                throw new ServerResponseException(statusCode, response.body());
+            }
+        }
+        catch(IOException | InterruptedException e) {
+            throw new ConnectionException(e.getMessage(), e);
+        }
+    }
+
+    private Integer sendRequestAndParseResponseBodyAsInteger(Supplier<HttpRequest> requestSupplier) {
+
+        HttpRequest request = requestSupplier.get();
+
+        try {
+            System.out.println("Sending " + request.method() + " to " + request.uri());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (statusCode == 200 || statusCode == 201) {
+                try {
+                    return Integer.parseInt(response.body());
+                }
+                catch(Exception e) {
+                    throw new ResponseProcessingException(e.getMessage(), e);
+                }
+            }
+            else {
+                throw new ServerResponseException(statusCode, response.body());
             }
         }
         catch(IOException | InterruptedException e) {

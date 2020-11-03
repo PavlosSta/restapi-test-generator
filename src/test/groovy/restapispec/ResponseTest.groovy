@@ -18,8 +18,8 @@ class ResponseTest extends Specification {
 
         when:
         HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(true).build()
-        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
-        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeader).addStatus(newStatus).build()
+        StatusSpec newStatus = newStatusBuilder.setCode("200").setBody("statusBody").build()
+        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeader).addStatus(newStatus).addResponseBodySchema("JSON").build()
 
         then:
         newResponse.getHeaders()[0].getName() == "headerName"

@@ -51,26 +51,26 @@ class TestServer extends Specification {
         ObjectMapper objectMapper = new ObjectMapper()
 
         <#if endpoint.attributes??>
-        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
-        ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of("id", "2", "name", "prod2")
+        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
         <#else>
-        Map<String, Object> agencyMap = Map.of(
-                "products",
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of(
+                "result",
                 List.of(Map.of("id", '1', "name", "prod1"),
                         Map.of("id", '2', "name", "prod2"),
                         Map.of("id", '3', "name", "prod3"),
                         Map.of("id", '4', "name", "prod4"))
         )
-        ObjectNode productJSON = objectMapper.valueToTree(agencyMap)
+        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
         </#if>
         <#elseif method.response.responseBodySchema == "String">
         <#if endpoint.attributes??>
-        String productString = "prod2"
+        String resultString = "prod2"
         <#else>
-        String productString = "prod1, prod2, prod3"
+        String resultString = "prod1, prod2, prod3"
         </#if>
         <#else> <#-- Integer -->
-        Integer productInteger = 42
+        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -87,13 +87,12 @@ class TestServer extends Specification {
                         <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
-                        .withJsonBody(productJSON)
+                        .withJsonBody(resultJSON)
                         <#elseif method.response.responseBodySchema == "String">
-                        .withBody(productString)
+                        .withBody(resultString)
                         <#else>
-                        .withBody(productInteger.toString())
+                        .withBody(resultInteger.toString())
                         </#if>
-
                 )
         )
 
@@ -114,23 +113,23 @@ class TestServer extends Specification {
         when:
 
         <#if method.request.headers?? && method.request.queryParams??>
-        Map product = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
         <#elseif method.request.headers??>
-        Map product = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers(<#if endpoint.attributes?first??>"2", </#if>headers)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers(<#if endpoint.attributes?first??>"2", </#if>headers)
         <#elseif method.request.queryParams??>
-        Map product = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_queryParams(<#if endpoint.attributes?first??>"2", </#if>queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_queryParams(<#if endpoint.attributes?first??>"2", </#if>queryParams)
         <#else>
-        Map product = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>(<#if endpoint.attributes?first??>"2"</#if>)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>(<#if endpoint.attributes?first??>"2"</#if>)
         </#if>
 
         then:
 
-        <#if endpoint.attributes??>
-        product.get("id") == "2"
-        product.get("name") == "prod2"
+        <#if method.response.responseBodySchema == "JSON">
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        <#elseif method.response.responseBodySchema == "String">
+        result.matches("\\w+")
         <#else>
-        products.get("products").toString() == "[[id:1, name:prod1], [id:2, name:prod2], [id:3, name:prod3], [id:4, name:prod4]]" ||
-            products.get("products").toString() == "[[name:prod1, id:1], [name:prod2, id:2], [name:prod3, id:3], [name:prod4, id:4]]"
+        result.toString().matches("\\d+")
         </#if>
 
     }
@@ -150,12 +149,21 @@ class TestServer extends Specification {
 
         ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+
+        <#if method.response.responseBodySchema == "JSON">
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#elseif method.response.responseBodySchema == "String">
+        String resultString = "ok"
+        <#else>
+        Integer resultInteger = 42
+        </#if>
 
         wms.givenThat(
                 post(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if method.request.queryParams??>\\\\?.*</#if>"))
+                .withRequestBody(containing(jsonBodyRequest))
                 <#list method.request.headers as header>
-                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
+                .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
                 <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
@@ -165,14 +173,20 @@ class TestServer extends Specification {
                         <#list method.response.headers as responseHeader>
                         <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
                         </#list>
-                        .withJsonBody(jsonBody)
+                        <#if method.response.responseBodySchema == "JSON">
+                        .withJsonBody(resultJSON)
+                        <#elseif method.response.responseBodySchema == "String">
+                        .withBody(resultString)
+                        <#else>
+                        .withBody(resultInteger.toString())
+                        </#if>
                 )
         )
 
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        <#-- headers.put("${header.name}", "${header.value}") -->
+        headers.put("${header.name}", "headerValue")
         </#list>
         </#if>
 
@@ -186,18 +200,24 @@ class TestServer extends Specification {
         when:
 
         <#if method.request.headers?? && method.request.queryParams??>
-        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams("test", headers, queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(jsonBodyRequest, headers, queryParams)
         <#elseif method.request.headers??>
-        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}_with_headers("test", headers)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_headers(jsonBodyRequest, headers)
         <#elseif method.request.queryParams??>
-        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}_with_queryParams("test", queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_queryParams(jsonBodyRequest, queryParams)
         <#else>
-        Map<String, Object> products = caller.post_to_${endpoint.path?keep_after("/")}("test")
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}(jsonBodyRequest)
         </#if>
 
         then:
 
-        products.get("value") == "ok"
+        <#if method.response.responseBodySchema == "JSON">
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        <#elseif method.response.responseBodySchema == "String">
+        result.matches("\\w+")
+        <#else>
+        result.toString().matches("\\d+")
+        </#if>
 
     }
     </#if>
@@ -252,18 +272,24 @@ class TestServer extends Specification {
         when:
 
         <#if method.request.headers?? && method.request.queryParams??>
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
         <#elseif method.request.headers??>
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
         <#elseif method.request.queryParams??>
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
         <#else>
-        Map<String, Object> products = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
         </#if>
 
         then:
 
-        products.get("value") == "ok"
+        <#if method.response.responseBodySchema == "JSON">
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        <#elseif method.response.responseBodySchema == "String">
+        result.matches("[\\{\\[].*[\\}\\]]")
+        <#else>
+        result.matches("\\d+")
+        </#if>
 
     }
     </#if>
@@ -317,17 +343,23 @@ class TestServer extends Specification {
         when:
 
         <#if method.request.headers?? && method.request.queryParams??>
-        Map<String, Object> products = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
         <#elseif method.request.headers??>
-        Map<String, Object> products = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
         <#elseif method.request.queryParams??>
-        Map<String, Object> products = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
         <#else>
-        Map<String, Object> products = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
         </#if>
 
         then:
-        products.get("value") == "ok"
+        <#if method.response.responseBodySchema == "JSON">
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        <#elseif method.response.responseBodySchema == "String">
+        result.matches("[\\{\\[].*[\\}\\]]")
+        <#else>
+        result.matches("\\d+")
+        </#if>
 
     }
     </#if>
@@ -380,17 +412,23 @@ class TestServer extends Specification {
         </#if>
 
         <#if method.request.headers?? && method.request.queryParams??>
-        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
         <#elseif method.request.headers??>
-        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("2", headers)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("2", headers)
         <#elseif method.request.queryParams??>
-        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("2", queryParams)
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("2", queryParams)
         <#else>
-        Map<String, Object> products = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
+        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
         </#if>
 
         then:
-        products.get("value") == "ok"
+        <#if method.response.responseBodySchema == "JSON">
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        <#elseif method.response.responseBodySchema == "String">
+        result.matches("[\\{\\[].*[\\}\\]]")
+        <#else>
+        result.matches("\\d+")
+        </#if>
 
     }
     </#if>
