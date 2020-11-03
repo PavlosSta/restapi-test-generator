@@ -1,4 +1,6 @@
 import client.generator.FreeMarkerJavaCodeGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import implementations.*;
 import interfaces.*;
 
@@ -59,6 +61,7 @@ public class Main
 		ResponseSpec loginResponse = newResponseBuilder
 				.addHeader(authenticationTokenHeader)
 				.addStatus(status201)
+				.addResponseBodySchema("JSON")
 				.build();
 
 		newMethodBuilder = new MethodSpecBuilder();
@@ -84,7 +87,7 @@ public class Main
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec logoutResponse = newResponseBuilder
-				.addResponseBodySchema("{ \"message\": \"OK\" }")
+				.addResponseBodySchema("JSON")
 				.addStatus(status201)
 				.build();
 
@@ -149,7 +152,7 @@ public class Main
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec getProductsResponse = newResponseBuilder
-				.addResponseBodySchema("JSON")
+				.addResponseBodySchema("String")
 				.addStatus(status200)
 				.build();
 
@@ -200,7 +203,7 @@ public class Main
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec postProductsResponse = newResponseBuilder
-				.addResponseBodySchema("JSON")
+				.addResponseBodySchema("Integer")
 				.addStatus(status201)
 				.build();
 
@@ -219,7 +222,7 @@ public class Main
 
 		newResponseBuilder = new ResponseSpecBuilder();
 		ResponseSpec getProductsByIdResponse = newResponseBuilder
-				.addResponseBodySchema("Integer")
+				.addResponseBodySchema("JSON")
 				.addStatus(status200)
 				.build();
 
@@ -345,12 +348,12 @@ public class Main
 		String serverName = "TestServer";
 		String serverPath = serverFolder + serverPackage.replaceAll("\\.","/") + "/" + serverName + ".groovy";
 
-		System.out.println(clientPath);
-		System.out.println(serverPath);
-
 		//RestAPIClient
 		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
 		javaGenerator.generateServer(new File(serverPath));
+
+	//	System.out.println("Client tests saved at: " + clientPath);
+	//	System.out.println("Server tests saved at: " + serverPath);
 
 		// buildSrc
 

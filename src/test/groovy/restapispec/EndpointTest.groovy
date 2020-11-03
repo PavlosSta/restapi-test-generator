@@ -35,8 +35,8 @@ class EndpointTest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(true).build()
-        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
-        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
+        StatusSpec newStatus = newStatusBuilder.setCode("200").setBody("statusBody").build()
+        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).addResponseBodySchema("JSON").build()
 
         MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
