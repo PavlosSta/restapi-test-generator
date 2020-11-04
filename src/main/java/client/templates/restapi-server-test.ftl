@@ -47,12 +47,19 @@ class TestServer extends Specification {
     </#if>
 
         given:
+        <#if method.request.contentType == "application/json">
+        ObjectMapper requestMapper = new ObjectMapper()
+        JsonNode requestJSON = requestMapper.readTree("{\"value\":\"ok\"}")
+        <#else>
+        </#if>
+
+
         <#if method.response.responseBodySchema == "JSON">
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper responseMapper = new ObjectMapper()
 
         <#if endpoint.attributes??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of("id", "2", "name", "prod2")
-        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
+        ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
         <#else>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of(
                 "result",
@@ -61,7 +68,7 @@ class TestServer extends Specification {
                         Map.of("id", '3', "name", "prod3"),
                         Map.of("id", '4', "name", "prod4"))
         )
-        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
+        ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
         </#if>
         <#elseif method.response.responseBodySchema == "String">
         <#if endpoint.attributes??>
@@ -163,12 +170,12 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper responseMapper = new ObjectMapper()
 
-        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+        String jsonBodyRequest = responseMapper.readTree("{\"name\":\"prod1\"}")
 
         <#if method.response.responseBodySchema == "JSON">
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
         <#elseif method.response.responseBodySchema == "String">
         String resultString = "ok"
         <#else>
@@ -267,8 +274,8 @@ class TestServer extends Specification {
         given:
 
         <#if method.response.responseBodySchema == "JSON">
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
         <#elseif method.response.responseBodySchema == "String">
         String resultString = "ok"
         <#else>
@@ -366,8 +373,8 @@ class TestServer extends Specification {
         given:
 
         <#if method.response.responseBodySchema == "JSON">
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
         <#elseif method.response.responseBodySchema == "String">
         String resultString = "ok"
         <#else>
@@ -464,8 +471,8 @@ class TestServer extends Specification {
         given:
 
         <#if method.response.responseBodySchema == "JSON">
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
         <#elseif method.response.responseBodySchema == "String">
         String resultString = "ok"
         <#else>

@@ -2,7 +2,7 @@ package restapispec
 
 import implementations.HeaderSpecBuilder
 import implementations.ParamSpecBuilder
-import implementations.RequestSpecBuilder
+import implementations.RequestJSONSpecBuilder
 import interfaces.HeaderSpec
 import interfaces.ParameterSpec
 import interfaces.RequestSpec
@@ -14,7 +14,7 @@ class RequestTest extends Specification {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder("URL")
+        def newRequestBuilder = new RequestJSONSpecBuilder()
 
         when:
         HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(true).build()
