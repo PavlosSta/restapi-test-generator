@@ -15,7 +15,7 @@ public interface RequestSpec {
     /**
      * @return a set with the Query Parameter Specifications of the Request
      */
-    Set<ParameterSpec>  getQueryParams();
+    Set<ParameterSpec> getQueryParams();
 
     /**
      * @return the Content Type header of the Request

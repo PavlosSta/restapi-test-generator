@@ -47,6 +47,7 @@ class TestServer extends Specification {
                 .withRequestBody(containing(jsonBodyRequest))
                 .willReturn(aResponse()
                         .withStatus(201)
+                        .withHeader("X-OBSERVATORY-AUTH", "headerValue")
                         .withJsonBody(resultJSON)
                 )
         )
@@ -122,7 +123,7 @@ class TestServer extends Specification {
 
         Map<String, String> headers = new HashMap<>()
 
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
 
         when:
 
@@ -140,14 +141,13 @@ class TestServer extends Specification {
         given:
 
         ObjectMapper objectMapper = new ObjectMapper()
-
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 put(urlMatching("/observatory/api/products/.*\\\\?.*"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withJsonBody(resultJSON)
                 )
         )
 
@@ -169,15 +169,15 @@ class TestServer extends Specification {
     def "PATCH to products by id with headers and queryParams"() {
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper objectMapper = new ObjectMapper()
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 patch(urlMatching("/observatory/api/products/.*\\\\?.*"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withJsonBody(resultJSON)
                 )
         )
 
@@ -198,20 +198,22 @@ class TestServer extends Specification {
     def "DELETE from products by id with headers and queryParams"() {
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper objectMapper = new ObjectMapper()
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 delete(urlMatching("/observatory/api/products/.*\\\\?.*"))
+                .withHeader("X-OBSERVATORY-AUTH", equalTo("headerValue"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withJsonBody(jsonBody)
+                        .withJsonBody(resultJSON)
                 )
         )
 
         when:
         Map<String, String> headers = new HashMap<>()
+        headers.put("X-OBSERVATORY-AUTH", "headerValue")
 
         Map<String, List<String>> queryParams = new HashMap<>()
 
@@ -231,6 +233,10 @@ class TestServer extends Specification {
         
         wms.givenThat(
                 get(urlMatching("/observatory/api/products\\\\?.*"))
+                .withQueryParam("start", containing("42"))
+                .withQueryParam("count", containing("42"))
+                .withQueryParam("status", containing("queryValue"))
+                .withQueryParam("sort", containing("queryValue"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(resultString)
@@ -239,7 +245,11 @@ class TestServer extends Specification {
 
         Map<String, String> headers = new HashMap<>()
 
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        queryParams.computeIfAbsent("start", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("count", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("status", { k -> new ArrayList<>() } ).add("queryValue")
+        queryParams.computeIfAbsent("sort", { k -> new ArrayList<>() } ).add("queryValue")
 
         when:
 

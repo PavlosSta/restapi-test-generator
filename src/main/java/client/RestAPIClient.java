@@ -70,7 +70,9 @@ public class RestAPIClient {
                 }
                 first = false;
             } else {
-                queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    queryParamString.append("&").append(entry.getKey()).append("=").append(entry.getValue().get(i));
+                }
             }
         }
 

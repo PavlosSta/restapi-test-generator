@@ -5,6 +5,10 @@ import implementations.*;
 import interfaces.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main
 {
@@ -351,6 +355,7 @@ public class Main
 		//RestAPIClient
 		javaGenerator.generateClient(new File("src/main/java/client/RestAPIClient.java"), new File(clientPath));
 		javaGenerator.generateServer(new File(serverPath));
+
 
 	//	System.out.println("Client tests saved at: " + clientPath);
 	//	System.out.println("Server tests saved at: " + serverPath);
