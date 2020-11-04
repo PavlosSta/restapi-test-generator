@@ -36,11 +36,11 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper responseMapper = new ObjectMapper()
 
-        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+        String jsonBodyRequest = responseMapper.readTree("{\"name\":\"prod1\"}")
 
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 post(urlMatching("/observatory/api/login\\\\?.*"))
@@ -72,11 +72,11 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper responseMapper = new ObjectMapper()
 
-        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+        String jsonBodyRequest = responseMapper.readTree("{\"name\":\"prod1\"}")
 
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 post(urlMatching("/observatory/api/logout\\\\?.*"))
@@ -108,10 +108,14 @@ class TestServer extends Specification {
     def "GET products by id with headers and queryParams"() {
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper requestMapper = new ObjectMapper()
+        JsonNode requestJSON = requestMapper.readTree("{\"value\":\"ok\"}")
+
+
+        ObjectMapper responseMapper = new ObjectMapper()
 
         Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
-        ObjectNode resultJSON = objectMapper.valueToTree(agencyMap)
+        ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
 
         wms.givenThat(
                 get(urlMatching("/observatory/api/products/.*\\\\?.*"))
@@ -140,8 +144,8 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 put(urlMatching("/observatory/api/products/.*\\\\?.*"))
@@ -170,8 +174,8 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 patch(urlMatching("/observatory/api/products/.*\\\\?.*"))
@@ -199,8 +203,8 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
-        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
 
         wms.givenThat(
                 delete(urlMatching("/observatory/api/products/.*\\\\?.*"))
@@ -229,6 +233,10 @@ class TestServer extends Specification {
     def "GET products with headers and queryParams"() {
 
         given:
+        ObjectMapper requestMapper = new ObjectMapper()
+        JsonNode requestJSON = requestMapper.readTree("{\"value\":\"ok\"}")
+
+
         String resultString = "prod2"
         
         wms.givenThat(
@@ -266,9 +274,9 @@ class TestServer extends Specification {
 
         given:
 
-        ObjectMapper objectMapper = new ObjectMapper()
+        ObjectMapper responseMapper = new ObjectMapper()
 
-        String jsonBodyRequest = objectMapper.readTree("{\"name\":\"prod1\"}")
+        String jsonBodyRequest = responseMapper.readTree("{\"name\":\"prod1\"}")
 
         Integer resultInteger = 42
 

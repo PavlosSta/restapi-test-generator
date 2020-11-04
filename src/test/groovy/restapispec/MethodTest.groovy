@@ -3,7 +3,7 @@ package restapispec
 import implementations.HeaderSpecBuilder
 import implementations.MethodSpecBuilder
 import implementations.ParamSpecBuilder
-import implementations.RequestSpecBuilder
+import implementations.RequestJSONSpecBuilder
 import implementations.ResponseSpecBuilder
 import implementations.StatusSpecBuilder
 import interfaces.HeaderSpec
@@ -21,7 +21,7 @@ class MethodTest extends Specification {
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder("JSON")
+        def newRequestBuilder = new RequestJSONSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
@@ -57,7 +57,7 @@ class MethodTest extends Specification {
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder("URL")
+        def newRequestBuilder = new RequestJSONSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
@@ -102,7 +102,7 @@ class MethodTest extends Specification {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
-        def newRequestBuilder = new RequestSpecBuilder("URL")
+        def newRequestBuilder = new RequestJSONSpecBuilder()
         def newMethodBuilder = new MethodSpecBuilder()
 
         when:

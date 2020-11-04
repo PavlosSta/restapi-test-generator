@@ -1,14 +1,8 @@
 import client.generator.FreeMarkerJavaCodeGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import implementations.*;
 import interfaces.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Main
 {
@@ -19,7 +13,8 @@ public class Main
 		HeaderSpecBuilder newHeaderBuilder;
 		MethodSpecBuilder newMethodBuilder;
 		ParamSpecBuilder newParamBuilder;
-		RequestSpecBuilder newRequestBuilder;
+		RequestJSONSpecBuilder newRequestJSONBuilder;
+		RequestURLSpecBuilder newRequestURLBuilder;
 		ResponseSpecBuilder newResponseBuilder;
 
 		// Positive Statuses
@@ -49,8 +44,8 @@ public class Main
 				.setMandatory(true)
 				.build();
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec loginRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec loginRequest = newRequestURLBuilder
 				.addBodyParam(usernameBodyParam)
 				.addBodyParam(passwordBodyParam)
 				.build();
@@ -84,8 +79,8 @@ public class Main
 
 		// Logout
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec logoutRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec logoutRequest = newRequestURLBuilder
 				.addHeader(authenticationTokenHeader)
 				.build();
 
@@ -146,8 +141,8 @@ public class Main
 				.setMandatory(false)
 				.build();
 
-		newRequestBuilder = new RequestSpecBuilder("JSON");
-		RequestSpec getProductsRequest = newRequestBuilder
+		newRequestJSONBuilder = new RequestJSONSpecBuilder();
+		RequestJSONSpec getProductsRequest = newRequestJSONBuilder
 				.addQueryParam(getProductsStartParam)
 				.addQueryParam(getProductsCountParam)
 				.addQueryParam(getProductsStatusParam)
@@ -197,8 +192,8 @@ public class Main
 				.setMandatory(true)
 				.build();
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec postProductsRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec postProductsRequest = newRequestURLBuilder
 				.addBodyParam(postProductsNameParam)
 				.addBodyParam(postProductsDescriptionParam)
 				.addBodyParam(postProductsCategoryParam)
@@ -220,8 +215,8 @@ public class Main
 
 		// GET Products by id
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec getProductsByIdRequest = newRequestBuilder
+		newRequestJSONBuilder = new RequestJSONSpecBuilder();
+		RequestSpec getProductsByIdRequest = newRequestJSONBuilder
 				.build();
 
 		newResponseBuilder = new ResponseSpecBuilder();
@@ -239,8 +234,8 @@ public class Main
 
 		// PUT Products by id
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec putProductsByIdRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec putProductsByIdRequest = newRequestURLBuilder
 				.addBodyParam(postProductsNameParam)
 				.addBodyParam(postProductsDescriptionParam)
 				.addBodyParam(postProductsCategoryParam)
@@ -262,8 +257,8 @@ public class Main
 
 		// PATCH Products by id
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec patchProductsByIdRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec patchProductsByIdRequest = newRequestURLBuilder
 				.addBodyParam(postProductsNameParam)
 				.addBodyParam(postProductsDescriptionParam)
 				.addBodyParam(postProductsCategoryParam)
@@ -285,8 +280,8 @@ public class Main
 
 		// DELETE Products by id
 
-		newRequestBuilder = new RequestSpecBuilder("URL");
-		RequestSpec deleteProductsByIdRequest = newRequestBuilder
+		newRequestURLBuilder = new RequestURLSpecBuilder();
+		RequestSpec deleteProductsByIdRequest = newRequestURLBuilder
 				.addHeader(authenticationTokenHeader)
 				.build();
 
