@@ -35,7 +35,7 @@ public class ParamSpecBuilder {
         if (name == null || (!mandatory && defaultValue == null)) {
             throw new RuntimeException("Query Parameter bad input");
         }
-        else if (!(type.equals("String") || type.equals("Integer") || type.equals("int") || type.equals("float") || type.equals("boolean"))) {
+        else if (!(type.equals("String") || type.equals("Integer") || type.equals("float") || type.equals("boolean"))) {
             throw new RuntimeException("Query Parameter bad type: " + type + ". Supported Types: String, Integer, float, boolean");
         }
 

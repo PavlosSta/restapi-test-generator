@@ -76,15 +76,23 @@ class TestServer extends Specification {
         wms.givenThat(
                 get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>/.*</#if><#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
+                .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
+                <#if queryParam.type == "String">
+                .withQueryParam("${queryParam.name}", containing("queryValue"))
+                <#elseif queryParam.type == "Integer">
+                .withQueryParam("${queryParam.name}", containing("42"))
+                <#elseif queryParam.type == "float">
+                .withQueryParam("${queryParam.name}", containing("42.5")))
+                <#else>
+                .withQueryParam("${queryParam.name}", containing(true))
+                </#if>
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
+                        .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
@@ -99,14 +107,22 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        <#-- headers.put("${header.name}", "${header.value}") -->
+        headers.put("${header.name}", "headerValue")
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#list>
         </#if>
 
@@ -166,12 +182,20 @@ class TestServer extends Specification {
                 .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
+                <#if queryParam.type == "String">
+                .withQueryParam("${queryParam.name}", containing("queryValue"))
+                <#elseif queryParam.type == "Integer">
+                .withQueryParam("${queryParam.name}", containing("42"))
+                <#elseif queryParam.type == "float">
+                .withQueryParam("${queryParam.name}", containing("42.5")))
+                <#else>
+                .withQueryParam("${queryParam.name}", containing(true))
+                </#if>
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
+                        .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
@@ -193,7 +217,15 @@ class TestServer extends Specification {
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#list>
         </#if>
 
@@ -234,38 +266,65 @@ class TestServer extends Specification {
 
         given:
 
+        <#if method.response.responseBodySchema == "JSON">
         ObjectMapper objectMapper = new ObjectMapper()
-
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#elseif method.response.responseBodySchema == "String">
+        String resultString = "ok"
+        <#else>
+        Integer resultInteger = 42
+        </#if>
 
         wms.givenThat(
                 put(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
+                .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
+                <#if queryParam.type == "String">
+                .withQueryParam("${queryParam.name}", containing("queryValue"))
+                <#elseif queryParam.type == "Integer">
+                .withQueryParam("${queryParam.name}", containing("42"))
+                <#elseif queryParam.type == "float">
+                .withQueryParam("${queryParam.name}", containing("42.5")))
+                <#else>
+                .withQueryParam("${queryParam.name}", containing(true))
+                </#if>
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
+                        .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
-                        .withJsonBody(jsonBody)
+                        <#if method.response.responseBodySchema == "JSON">
+                        .withJsonBody(resultJSON)
+                        <#elseif method.response.responseBodySchema == "String">
+                        .withBody(resultString)
+                        <#else>
+                        .withBody(resultInteger.toString())
+                        </#if>
                 )
         )
 
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        <#-- headers.put("${header.name}", "${header.value}") -->
+        headers.put("${header.name}", "headerValue")
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#list>
         </#if>
 
@@ -305,38 +364,66 @@ class TestServer extends Specification {
     </#if>
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#if method.response.responseBodySchema == "JSON">
+        ObjectMapper objectMapper = new ObjectMapper()
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#elseif method.response.responseBodySchema == "String">
+        String resultString = "ok"
+        <#else>
+        Integer resultInteger = 42
+        </#if>
 
         wms.givenThat(
                 patch(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
+                .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
+                <#if queryParam.type == "String">
+                .withQueryParam("${queryParam.name}", containing("queryValue"))
+                <#elseif queryParam.type == "Integer">
+                .withQueryParam("${queryParam.name}", containing("42"))
+                <#elseif queryParam.type == "float">
+                .withQueryParam("${queryParam.name}", containing("42.5"))
+                <#else>
+                .withQueryParam("${queryParam.name}", containing(true))
+                </#if>
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
+                        .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
-                        .withJsonBody(jsonBody)
+                        <#if method.response.responseBodySchema == "JSON">
+                        .withJsonBody(resultJSON)
+                        <#elseif method.response.responseBodySchema == "String">
+                        .withBody(resultString)
+                        <#else>
+                        .withBody(resultInteger.toString())
+                        </#if>
                 )
         )
 
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        <#-- headers.put("${header.name}", "${header.value}") -->
+        headers.put("${header.name}", "headerValue")
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#list>
         </#if>
 
@@ -375,24 +462,44 @@ class TestServer extends Specification {
     </#if>
 
         given:
-        ObjectMapper objectMapper = new ObjectMapper()
 
-        JsonNode jsonBody = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#if method.response.responseBodySchema == "JSON">
+        ObjectMapper objectMapper = new ObjectMapper()
+        JsonNode resultJSON = objectMapper.readTree("{\"value\":\"ok\"}")
+        <#elseif method.response.responseBodySchema == "String">
+        String resultString = "ok"
+        <#else>
+        Integer resultInteger = 42
+        </#if>
 
         wms.givenThat(
                 delete(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
                 <#list method.request.headers as header>
-                <#-- .withHeader("${header.name}", equalTo("${header.value}")) -->
+                .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
                 <#list method.request.queryParams as queryParam>
-                <#-- .withQueryParam("${queryParam.name}", containing("${queryParam.value}")) -->
+                <#if queryParam.type == "String">
+                .withQueryParam("${queryParam.name}", containing("queryValue"))
+                <#elseif queryParam.type == "Integer">
+                .withQueryParam("${queryParam.name}", containing("42"))
+                <#elseif queryParam.type == "float">
+                .withQueryParam("${queryParam.name}", containing("42.5")))
+                <#else>
+                .withQueryParam("${queryParam.name}", containing(true))
+                </#if>
                 </#list>
                 .willReturn(aResponse()
                         .withStatus(${method.response.status.code})
                         <#list method.response.headers as responseHeader>
-                        <#-- .withHeader("${responseHeader.name}", "${responseHeader.value}") -->
+                        .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
-                        .withJsonBody(jsonBody)
+                        <#if method.response.responseBodySchema == "JSON">
+                        .withJsonBody(resultJSON)
+                        <#elseif method.response.responseBodySchema == "String">
+                        .withBody(resultString)
+                        <#else>
+                        .withBody(resultInteger.toString())
+                        </#if>
                 )
         )
 
@@ -400,14 +507,22 @@ class TestServer extends Specification {
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        <#-- headers.put("${header.name}", "${header.value}") -->
+        headers.put("${header.name}", "headerValue")
         </#list>
         </#if>
 
         <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#-- queryParams.computeIfAbsent("${queryParam.name}", k -> new ArrayList<>()).add("${queryParam.value}") -->
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#list>
         </#if>
 
