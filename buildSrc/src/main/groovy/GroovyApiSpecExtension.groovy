@@ -1,0 +1,3 @@
+class GroovyApiSpecExtension {
+    String baseUrl
+}
