@@ -1,3 +1,4 @@
 class GroovyApiSpecExtension {
-    String baseUrl
+    String api_baseUrl
+    String api_label
 }
