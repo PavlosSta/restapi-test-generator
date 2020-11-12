@@ -23,19 +23,21 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 api_label "$extension.api_label"
 
                 endpoint {endpointBuilder}
-                endpoint_path "/login"
-                endpoint_label "login endpoint"
+                endpoint_path "$extension.endpoint_path"
+                endpoint_label "$extension.endpoint_label"
 
                 method {methodBuilder}
-                method_type "POST"
+                method_type "$extension.method_type"
 
                 requestURL {requestURLBuilder}
 
                 parameter {parameterBuilder}
-                parameter_name "username"
-                parameter_type "String"
-                parameter_mandatory true
+                parameter_name "$extension.parameter_name"
+                parameter_type "$extension.parameter_type"
+                parameter_mandatory Boolean.parseBoolean("$extension.parameter_mandatory")
                 requestURL_bodyParam(parameter_build {parameterBuilder})
+
+                /*
 
                 parameter {parameterBuilder}
                 parameter_name "password"
@@ -43,19 +45,21 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 parameter_mandatory true
                 requestURL_bodyParam(parameter_build {parameterBuilder})
 
+                */
+
                 method_request ( requestURL_build {requestURLBuilder} )
 
                 response {responseBuilder}
-                response_schema "JSON"
+                response_schema "$extension.response_schema"
 
                 header {headerBuilder}
-                header_name "X-OBSERVATORY-AUTH"
-                header_mandatory true
+                header_name "$extension.header_name"
+                header_mandatory Boolean.parseBoolean("$extension.header_mandatory")
                 response_header( header_build {headerBuilder} )
 
                 status {statusBuilder}
-                status_code "201"
-                status_body "Created"
+                status_code "$extension.status_code"
+                status_body "$extension.status_body"
                 response_status( status_build {statusBuilder} )
 
                 method_response ( response_build {responseBuilder} )
