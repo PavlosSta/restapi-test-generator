@@ -39,14 +39,14 @@ public class RestAPIClient {
     }
 
     private final String urlPrefix;
-    private final HttpClient org.pavlos.client;
+    private final HttpClient client;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public RestAPIClient(String host, int port) throws RuntimeException {
 
         try {
-            this.org.pavlos.client = newHttpClient();
+            this.client = newHttpClient();
         }
         catch(NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e.getMessage());
@@ -842,7 +842,7 @@ public class RestAPIClient {
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
-            HttpResponse<InputStream> response = org.pavlos.client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             int statusCode = response.statusCode();
             if (statusCode == 200 || statusCode == 201) {
                 try {
@@ -872,7 +872,7 @@ public class RestAPIClient {
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
-            HttpResponse<String> response = org.pavlos.client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
             if (statusCode == 200 || statusCode == 201) {
                 try {
@@ -897,7 +897,7 @@ public class RestAPIClient {
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
-            HttpResponse<String> response = org.pavlos.client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
             if (statusCode == 200 || statusCode == 201) {
                 try {
@@ -917,7 +917,7 @@ public class RestAPIClient {
     }
 
     /**
-     * Helper method to create a new http org.pavlos.client that can tolerate self-signed or improper ssl certificates.
+     * Helper method to create a new http client that can tolerate self-signed or improper ssl certificates.
      */
     private static HttpClient newHttpClient() throws NoSuchAlgorithmException, KeyManagementException {
 

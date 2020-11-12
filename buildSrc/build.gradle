@@ -4,11 +4,9 @@ plugins {
     id 'application'
     id 'maven-publish'
     id 'idea'
-    id 'java-gradle-plugin'
+    id 'groovy-gradle-plugin'
     id 'base'
 }
-
-mainClassName = "org.pavlos.Main"
 
 group = 'org.pavlos'
 version = '1.0'
@@ -44,28 +42,3 @@ test {
         events "passed", "skipped", "failed"
     }
 }
-
-/*
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'org.pavlos.api-spec-test'
-            artifactId = 'library'
-            version = '1.0'
-
-            from components.java
-        }
-    }
-}
-
- */
-
-gradlePlugin {
-    plugins {
-        apiPlugin {
-            id = 'org.pavlos.api-spec-test'
-            implementationClass = 'GroovyApiSpecBuilder'
-        }
-    }
-}
-

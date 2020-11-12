@@ -17,12 +17,11 @@ import java.util.Map;
 
 public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
-    private final Configuration cfg;
+    public FreeMarkerJavaCodeGenerator(APISpec apiSpec, Configuration cfg) {
 
-    public FreeMarkerJavaCodeGenerator(APISpec apiSpec) {
+        super(apiSpec, cfg);
 
-        super(apiSpec);
-
+        /*
         // Creates a Configuration instance
         cfg = new Configuration(Configuration.VERSION_2_3_30);
 
@@ -30,7 +29,8 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Specifies the source where the template files come from.
         try {
-            cfg.setDirectoryForTemplateLoading(new File("src/main/java/org.pavlos.client/templates"));
+            System.out.println(System.getProperty("user.dir"));
+            cfg.setDirectoryForTemplateLoading(new File("buildSrc/src/main/java/org/pavlos/client/templates"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,6 +47,8 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Do not fall back to higher scopes when reading a null loop variable:
         cfg.setFallbackOnNullLoopVariable(false);
+
+         */
 
     }
 
@@ -83,7 +85,7 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("restapi-org.pavlos.client.ftl");
+            Template temp = cfg.getTemplate("restapi-client.ftl");
 
             // Writes to console
             try (Writer fileWriter = new FileWriter(dest)) {
@@ -105,7 +107,7 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("restapi-org.pavlos.client-test.ftl");
+            Template temp = cfg.getTemplate("restapi-client-test.ftl");
 
             // Writes to console
             try (Writer fileWriter = new FileWriter(dest)) {

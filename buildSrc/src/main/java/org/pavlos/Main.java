@@ -337,7 +337,7 @@ public class Main
 				.build();
 
 		// Template engine / Code generation
-		FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
+		//FreeMarkerJavaCodeGenerator javaGenerator = new FreeMarkerJavaCodeGenerator(newAPI);
 
 		String clientFolder = "src/test/groovy/";
 		String clientPackage = "restapiclient";
@@ -350,8 +350,8 @@ public class Main
 		String serverPath = serverFolder + serverPackage.replaceAll("\\.","/") + "/" + serverName + ".groovy";
 
 		//RestAPIClient
-		javaGenerator.generateClient(new File("src/main/java/org.pavlos.client/RestAPIClient.java"), new File(clientPath));
-		javaGenerator.generateServer(new File(serverPath));
+		//javaGenerator.generateClient(new File("src/main/java/org.pavlos.client/RestAPIClient.java"), new File(clientPath));
+		//javaGenerator.generateServer(new File(serverPath));
 
 
 	//	System.out.println("Client tests saved at: " + clientPath);

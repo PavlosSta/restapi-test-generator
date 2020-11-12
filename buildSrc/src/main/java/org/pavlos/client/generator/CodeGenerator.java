@@ -1,5 +1,6 @@
 package org.pavlos.client.generator;
 
+import freemarker.template.Configuration;
 import org.pavlos.interfaces.APISpec;
 
 import java.io.File;
@@ -8,8 +9,11 @@ abstract class CodeGenerator {
 
     protected final APISpec apiSpec;
 
-    protected CodeGenerator(APISpec apiSpec) {
+    protected final Configuration cfg;
+
+    protected CodeGenerator(APISpec apiSpec, Configuration cfg) {
         this.apiSpec = apiSpec;
+        this.cfg = cfg;
     }
 
     protected abstract void validateForTargetLanguage(APISpec apiSpec);

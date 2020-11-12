@@ -1,10 +1,16 @@
 import com.github.tomakehurst.wiremock.http.Request
+import freemarker.template.Configuration
+import freemarker.template.TemplateExceptionHandler
 import org.apache.http.client.methods.RequestBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.internal.file.Stat
+import org.pavlos.client.generator.FreeMarkerJavaCodeGenerator
 import org.pavlos.implementations.*
 import org.pavlos.interfaces.*
+
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class GroovyApiSpecBuilder implements Plugin<Project> {
 
@@ -58,23 +64,86 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
                 api_endpoint ( endpoint_build {endpointBuilder} )
 
-                println(build({apiBuilder}).getLabel())
-
-
+                generate_tests ( build {apiBuilder} )
             }
         }
     }
 
     // Builders
-    private APISpecBuilder apiBuilder;
-    private EndpointSpecBuilder endpointBuilder;
-    private HeaderSpecBuilder headerBuilder;
-    private MethodSpecBuilder methodBuilder;
-    private ParamSpecBuilder parameterBuilder;
-    private RequestJSONSpecBuilder requestJSONBuilder;
-    private RequestURLSpecBuilder requestURLBuilder;
-    private ResponseSpecBuilder responseBuilder;
+    private APISpecBuilder apiBuilder
+    private EndpointSpecBuilder endpointBuilder
+    private HeaderSpecBuilder headerBuilder
+    private MethodSpecBuilder methodBuilder
+    private ParamSpecBuilder parameterBuilder
+    private RequestJSONSpecBuilder requestJSONBuilder
+    private RequestURLSpecBuilder requestURLBuilder
+    private ResponseSpecBuilder responseBuilder
     private StatusSpecBuilder statusBuilder
+    private FreeMarkerJavaCodeGenerator javaGenerator
+
+    // Freemarker Configuration
+    private Configuration cfg
+
+    // Generate Tests
+    void generate_tests(APISpec api) {
+
+        String projectPath = System.getProperty("user.dir")
+
+        // Creates a Configuration instance
+        cfg = new Configuration(Configuration.VERSION_2_3_30);
+
+        cfg.setClassForTemplateLoading(FreeMarkerJavaCodeGenerator.class, "templates");
+
+        // Specifies the source where the template files come from.
+        try {
+            System.out.println(projectPath + "/buildSrc/src/main/java/org/pavlos/client/templates")
+            cfg.setDirectoryForTemplateLoading(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/client/templates"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        cfg.setDefaultEncoding("UTF-8");
+
+        // Sets how errors will appear.
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+
+        // Don't log exceptions inside FreeMarker that it will thrown at you anyway:
+        cfg.setLogTemplateExceptions(false);
+
+        // Wrap unchecked exceptions thrown during template processing into TemplateException-s:
+        cfg.setWrapUncheckedExceptions(true);
+
+        // Do not fall back to higher scopes when reading a null loop variable:
+        cfg.setFallbackOnNullLoopVariable(false);
+
+        javaGenerator = new FreeMarkerJavaCodeGenerator(api, cfg)
+
+        String clientFolder = "/buildSrc/src/test/groovy/"
+        String clientPackage = "restapiclient"
+        String clientName = "TestClient"
+        String clientPath = projectPath + clientFolder + clientPackage.replaceAll("\\.","/")
+        String clientFile = clientPath + "/" + clientName + ".groovy"
+
+        String serverFolder = "/buildSrc/src/test/groovy/"
+        String serverPackage = "restapiserver"
+        String serverName = "TestServer"
+        String serverPath = projectPath + serverFolder + serverPackage.replaceAll("\\.","/")
+        String serverFile = serverPath + "/" + serverName + ".groovy"
+
+        try {
+            Files.createDirectories(Paths.get(serverPath))
+            Files.createDirectories(Paths.get(clientPath))
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        javaGenerator.generateClient(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/client/RestAPIClient.java"), new File(clientFile))
+        javaGenerator.generateServer(new File(serverFile))
+
+        System.out.println("Client tests saved at: " + clientPath)
+        System.out.println("Server tests saved at: " + serverPath)
+
+    }
 
     // API
     void api(Closure c) {
@@ -252,6 +321,5 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
     StatusSpec status_build(Closure c) {
         statusBuilder.build()
     }
-
 
 }

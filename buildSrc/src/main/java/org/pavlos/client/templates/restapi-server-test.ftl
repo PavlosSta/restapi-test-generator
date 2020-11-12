@@ -10,7 +10,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-import static com.github.tomakehurst.wiremock.org.pavlos.client.WireMock.*
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 @Stepwise
 class TestServer extends Specification {
