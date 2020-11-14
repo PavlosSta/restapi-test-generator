@@ -1,13 +1,10 @@
-import com.github.tomakehurst.wiremock.http.Request
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
-import org.apache.http.client.methods.RequestBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.internal.file.Stat
-import org.pavlos.client.generator.FreeMarkerJavaCodeGenerator
-import org.pavlos.implementations.*
-import org.pavlos.interfaces.*
+import org.pavlos.restapispec.client.generator.FreeMarkerJavaCodeGenerator
+import org.pavlos.restapispec.implementations.*
+import org.pavlos.restapispec.interfaces.*
 
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -15,26 +12,37 @@ import java.nio.file.Paths
 class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void apply(Project project) {
-        def extension = project.extensions.create('api', GroovyApiSpecExtension)
+        def apiExtension = project.extensions.create('api', ApiExtension)
+        def endpointExtension = project.extensions.create('endpoint', EndpointExtension)
+        def methodExtension = project.extensions.create('method', MethodExtension)
+        def parameterExtension = project.extensions.create('parameter', ParameterExtension)
+        def requestURLExtension = project.extensions.create('requestURL', RequestURLExtension)
+        def requestJSONExtension = project.extensions.create('requestJSON', RequestJSONExtension)
+        def responseExtension = project.extensions.create('response', ResponseExtension)
+        def headerExtension = project.extensions.create('header', HeaderExtension)
+        def statusExtension = project.extensions.create('kostas', StatusExtension)
+
         project.task('generator') {
             doLast {
                 api {apiBuilder}
-                api_baseUrl "$extension.api_baseUrl"
-                api_label "$extension.api_label"
+                api_baseUrl "$apiExtension.api_baseUrl"
+                api_label "$apiExtension.api_label"
 
                 endpoint {endpointBuilder}
-                endpoint_path "$extension.endpoint_path"
-                endpoint_label "$extension.endpoint_label"
+                endpoint_path "$endpointExtension.path"
+                endpoint_label "$endpointExtension.label"
 
                 method {methodBuilder}
-                method_type "$extension.method_type"
+                method_type "$methodExtension.type"
+                System.out.println("$methodExtension.type")
 
                 requestURL {requestURLBuilder}
 
                 parameter {parameterBuilder}
-                parameter_name "$extension.parameter_name"
-                parameter_type "$extension.parameter_type"
-                parameter_mandatory Boolean.parseBoolean("$extension.parameter_mandatory")
+                parameter_name "$parameterExtension.name"
+                System.out.println("$parameterExtension.name")
+                parameter_type "$parameterExtension.type"
+                parameter_mandatory Boolean.parseBoolean("$parameterExtension.mandatory")
                 requestURL_bodyParam(parameter_build {parameterBuilder})
 
                 /*
@@ -50,16 +58,17 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 method_request ( requestURL_build {requestURLBuilder} )
 
                 response {responseBuilder}
-                response_schema "$extension.response_schema"
+                response_schema "$responseExtension.schema"
 
                 header {headerBuilder}
-                header_name "$extension.header_name"
-                header_mandatory Boolean.parseBoolean("$extension.header_mandatory")
+                header_name "$headerExtension.name"
+                System.out.println("$headerExtension.name")
+                header_mandatory Boolean.parseBoolean("$headerExtension.mandatory")
                 response_header( header_build {headerBuilder} )
 
                 status {statusBuilder}
-                status_code "$extension.status_code"
-                status_body "$extension.status_body"
+                status_code "$statusExtension.code"
+                status_body "$statusExtension.body"
                 response_status( status_build {statusBuilder} )
 
                 method_response ( response_build {responseBuilder} )
@@ -100,8 +109,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
         // Specifies the source where the template files come from.
         try {
-            System.out.println(projectPath + "/buildSrc/src/main/java/org/pavlos/client/templates")
-            cfg.setDirectoryForTemplateLoading(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/client/templates"));
+            cfg.setDirectoryForTemplateLoading(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/restapispec/client/templates"))
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,27 +129,28 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
         javaGenerator = new FreeMarkerJavaCodeGenerator(api, cfg)
 
-        String clientFolder = "/buildSrc/src/test/groovy/"
-        String clientPackage = "restapiclient"
+        String clientFolder = "/ApiSpecTestProject/src/test/groovy/"
+        String clientPackage = "testproject/restapiclient"
         String clientName = "TestClient"
-        String clientPath = projectPath + clientFolder + clientPackage.replaceAll("\\.","/")
+        String clientPath = projectPath + clientFolder + clientPackage
         String clientFile = clientPath + "/" + clientName + ".groovy"
 
-        String serverFolder = "/buildSrc/src/test/groovy/"
-        String serverPackage = "restapiserver"
+        String serverFolder = "/ApiSpecTestProject/src/test/groovy/"
+        String serverPackage = "testproject/restapiserver"
         String serverName = "TestServer"
-        String serverPath = projectPath + serverFolder + serverPackage.replaceAll("\\.","/")
+        String serverPath = projectPath + serverFolder + serverPackage
         String serverFile = serverPath + "/" + serverName + ".groovy"
 
         try {
+            Files.createDirectories(Paths.get(projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client"))
             Files.createDirectories(Paths.get(serverPath))
             Files.createDirectories(Paths.get(clientPath))
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("Cannot create directories");
             e.printStackTrace();
         }
 
-        javaGenerator.generateClient(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/client/RestAPIClient.java"), new File(clientFile))
+        javaGenerator.generateClient(new File(projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client/RestAPIClient.java"), new File(clientFile))
         javaGenerator.generateServer(new File(serverFile))
 
         System.out.println("Client tests saved at: " + clientPath)

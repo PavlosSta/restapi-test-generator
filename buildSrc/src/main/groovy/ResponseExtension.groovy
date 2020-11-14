@@ -1,0 +1,3 @@
+class ResponseExtension {
+    String schema
+}
