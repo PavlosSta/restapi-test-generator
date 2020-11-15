@@ -13,7 +13,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void apply(Project project) {
         def apiExtension = project.extensions.create('api', ApiExtension)
-        def endpointExtension = project.extensions.create('endpoint', EndpointExtension)
+    /*    def endpointExtension = project.extensions.create('endpoint', endpoint)
         def methodExtension = project.extensions.create('method', MethodExtension)
         def parameterExtension = project.extensions.create('parameter', ParameterExtension)
         def requestURLExtension = project.extensions.create('requestURL', RequestURLExtension)
@@ -22,22 +22,34 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         def headerExtension = project.extensions.create('header', HeaderExtension)
         def statusExtension = project.extensions.create('httpStatus', StatusExtension)
 
+     */
+
         project.task('generate') {
             doLast {
                 api {apiBuilder}
                 api_baseUrl "$apiExtension.baseUrl"
                 api_label "$apiExtension.label"
 
+                /*
                 List<String> list = "$apiExtension.numbers".getValues()[0]
+
 
                 println(list)
                 list.each {
                     println "Item: $it" // `it` is an implicit parameter corresponding to the current element
                 }
+
+                */
+
+                println(apiExtension.endpoints)
+
+                apiExtension.endpoints.each {
+                    println(it.path)
+                    println(it.label)
+
+                }
                 
-                endpoint {endpointBuilder}
-                endpoint_path "$endpointExtension.path"
-                endpoint_label "$endpointExtension.label"
+                /*
 
                 method {methodBuilder}
                 method_type "$methodExtension.type"
@@ -50,6 +62,8 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 parameter_mandatory Boolean.parseBoolean("$parameterExtension.mandatory")
                 requestURL_bodyParam(parameter_build {parameterBuilder})
 
+                 */
+
                 /*
 
                 parameter {parameterBuilder}
@@ -57,8 +71,6 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 parameter_type "String"
                 parameter_mandatory true
                 requestURL_bodyParam(parameter_build {parameterBuilder})
-
-                */
 
                 method_request ( requestURL_build {requestURLBuilder} )
 
@@ -82,6 +94,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 api_endpoint ( endpoint_build {endpointBuilder} )
 
                 generate_tests ( build {apiBuilder} )
+                */
             }
         }
     }
