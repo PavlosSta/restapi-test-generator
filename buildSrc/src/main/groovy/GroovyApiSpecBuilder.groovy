@@ -20,27 +20,32 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         def requestJSONExtension = project.extensions.create('requestJSON', RequestJSONExtension)
         def responseExtension = project.extensions.create('response', ResponseExtension)
         def headerExtension = project.extensions.create('header', HeaderExtension)
-        def statusExtension = project.extensions.create('kostas', StatusExtension)
+        def statusExtension = project.extensions.create('httpStatus', StatusExtension)
 
-        project.task('generator') {
+        project.task('generate') {
             doLast {
                 api {apiBuilder}
-                api_baseUrl "$apiExtension.api_baseUrl"
-                api_label "$apiExtension.api_label"
+                api_baseUrl "$apiExtension.baseUrl"
+                api_label "$apiExtension.label"
 
+                List<String> list = "$apiExtension.numbers".getValues()[0]
+
+                println(list)
+                list.each {
+                    println "Item: $it" // `it` is an implicit parameter corresponding to the current element
+                }
+                
                 endpoint {endpointBuilder}
                 endpoint_path "$endpointExtension.path"
                 endpoint_label "$endpointExtension.label"
 
                 method {methodBuilder}
                 method_type "$methodExtension.type"
-                System.out.println("$methodExtension.type")
 
                 requestURL {requestURLBuilder}
 
                 parameter {parameterBuilder}
                 parameter_name "$parameterExtension.name"
-                System.out.println("$parameterExtension.name")
                 parameter_type "$parameterExtension.type"
                 parameter_mandatory Boolean.parseBoolean("$parameterExtension.mandatory")
                 requestURL_bodyParam(parameter_build {parameterBuilder})
@@ -62,7 +67,6 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
                 header {headerBuilder}
                 header_name "$headerExtension.name"
-                System.out.println("$headerExtension.name")
                 header_mandatory Boolean.parseBoolean("$headerExtension.mandatory")
                 response_header( header_build {headerBuilder} )
 
@@ -153,8 +157,9 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         javaGenerator.generateClient(new File(projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client/RestAPIClient.java"), new File(clientFile))
         javaGenerator.generateServer(new File(serverFile))
 
-        System.out.println("Client tests saved at: " + clientPath)
-        System.out.println("Server tests saved at: " + serverPath)
+        System.out.println("RestAPI Client saved at: " + projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client")
+        System.out.println("Client tests saved at:   " + clientPath)
+        System.out.println("Server tests saved at:   " + serverPath)
 
     }
 
