@@ -2,5 +2,5 @@ class ApiExtension {
     String baseUrl
     String label
 
-    List<String> numbers
+    List<endpoint> endpoints
 }
