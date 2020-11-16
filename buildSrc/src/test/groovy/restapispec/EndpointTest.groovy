@@ -18,7 +18,7 @@ import spock.lang.Specification
 
 class EndpointTest extends Specification {
 
-    def "endpoint builder works"() {
+    def "GroovyApiSpecBuilder.endpoint builder works"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
@@ -63,7 +63,7 @@ class EndpointTest extends Specification {
 
     }
 
-    def "endpoint builder raises exception when missing path"() {
+    def "GroovyApiSpecBuilder.endpoint builder raises exception when missing path"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
         def newStatusBuilder = new StatusSpecBuilder()
@@ -92,7 +92,7 @@ class EndpointTest extends Specification {
 
     }
 
-    def "endpoint builder raises exception when missing method"() {
+    def "GroovyApiSpecBuilder.endpoint builder raises exception when missing method"() {
 
         def newEndpointBuilder = new EndpointSpecBuilder()
 

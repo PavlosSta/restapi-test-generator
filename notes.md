@@ -49,14 +49,12 @@
     
 * Ένας Header έχει:
     * Ένα Name
-    * Μία Value
     * Αν είναι υποχρεωτικός ή όχι
     * Αν είναι υποχρεωτικός, τότε ένα *Default Value If Optional And Missing*
 
 * Μία Query Parameter έχει:
     * Ένα Name
     * Έναν Type (String, Integer etc.)
-    * Μία Value
     * Μία Default Value
     * Αν είναι υποχρεωτική ή όχι
 

@@ -5,7 +5,7 @@ GET, PUT, POST, PATCH, DELETE
 
 ## URI
 
-http(s)://uri(:port)/baseUrl/endpoint?param1=value1&param2=value2
+http(s)://uri(:port)/baseUrl/GroovyApiSpecBuilder.endpoint?param1=value1&param2=value2
 
 ## Headers (Key: value)
 

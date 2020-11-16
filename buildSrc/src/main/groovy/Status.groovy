@@ -1,4 +1,4 @@
-class StatusExtension {
+class Status {
     String code
     String body
 }
