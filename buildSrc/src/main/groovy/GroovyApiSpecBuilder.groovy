@@ -13,16 +13,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void apply(Project project) {
         def apiExtension = project.extensions.create('api', ApiExtension)
-    /*    def endpointExtension = project.extensions.create('endpoint', endpoint)
-        def methodExtension = project.extensions.create('method', MethodExtension)
-        def parameterExtension = project.extensions.create('parameter', ParameterExtension)
-        def requestURLExtension = project.extensions.create('requestURL', RequestURLExtension)
-        def requestJSONExtension = project.extensions.create('requestJSON', RequestJSONExtension)
-        def responseExtension = project.extensions.create('response', ResponseExtension)
-        def headerExtension = project.extensions.create('header', HeaderExtension)
-        def statusExtension = project.extensions.create('httpStatus', StatusExtension)
 
-     */
 
         project.task('generate') {
             doLast {
@@ -30,71 +21,110 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 api_baseUrl "$apiExtension.baseUrl"
                 api_label "$apiExtension.label"
 
-                /*
-                List<String> list = "$apiExtension.numbers".getValues()[0]
-
-
-                println(list)
-                list.each {
-                    println "Item: $it" // `it` is an implicit parameter corresponding to the current element
-                }
-
-                */
-
-                println(apiExtension.endpoints)
-
                 apiExtension.endpoints.each {
-                    println(it.path)
-                    println(it.label)
 
+                    endpoint { endpointBuilder }
+                    endpoint_path(it.path)
+                    endpoint_label(it.label)
+
+                    it.methods.each {
+
+                        method { methodBuilder }
+                        method_type(it.type)
+
+                        if (it.requestJSON) {
+                            requestJSON { requestJSONBuilder }
+                            requestJSON_bodySchema(it.requestJSON.bodySchema)
+
+                            it.requestJSON.headers.each {
+                                header { headerBuilder }
+                                header_name(it.name)
+                                header_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    header_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestJSON_header(header_build { headerBuilder })
+                            }
+
+                            it.requestJSON.queryParameters.each {
+                                parameter { parameterBuilder }
+                                parameter_name(it.name)
+                                parameter_type(it.type)
+                                parameter_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    parameter_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestJSON_queryParameter(parameter_build { parameterBuilder })
+                            }
+
+                            method_request(requestJSON_build { requestJSONBuilder })
+
+                        }
+                        else if (it.requestURL) {
+                            requestURL { requestURLBuilder }
+
+                            it.requestURL.bodyParameters.each {
+                                parameter { parameterBuilder }
+                                parameter_name(it.name)
+                                parameter_type(it.type)
+                                parameter_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    parameter_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestURL_bodyParameter(parameter_build { parameterBuilder })
+                            }
+
+                            it.requestURL.headers.each {
+                                header { headerBuilder }
+                                header_name(it.name)
+                                header_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    header_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestURL_header(header_build { headerBuilder })
+                            }
+
+                            it.requestURL.queryParameters.each {
+                                parameter { parameterBuilder }
+                                parameter_name(it.name)
+                                parameter_type(it.type)
+                                parameter_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    parameter_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestURL_queryParameter(parameter_build { parameterBuilder })
+                            }
+
+                            method_request(requestURL_build { requestURLBuilder })
+                    
+                        }
+
+                        response {responseBuilder}
+                        response_schema(it.response.schema)
+
+                        status {statusBuilder}
+                        status_code(it.response.status.code)
+                        status_body(it.response.status.body)
+                        response_status(status_build {statusBuilder})
+
+                        it.response.headers.each {
+                            header { headerBuilder }
+                            header_name(it.name)
+                            header_mandatory(it.mandatory)
+                            if (!it.mandatory) {
+                                header_defaultValue(it.defaultValueIfOptionalAndMissing)
+                            }
+                            response_header(header_build { headerBuilder })
+                        }
+
+                        method_response(response_build {responseBuilder})
+
+                        endpoint_method(method_build {methodBuilder})
+
+                    }
+                    api_endpoint ( endpoint_build {endpointBuilder} )
                 }
-                
-                /*
-
-                method {methodBuilder}
-                method_type "$methodExtension.type"
-
-                requestURL {requestURLBuilder}
-
-                parameter {parameterBuilder}
-                parameter_name "$parameterExtension.name"
-                parameter_type "$parameterExtension.type"
-                parameter_mandatory Boolean.parseBoolean("$parameterExtension.mandatory")
-                requestURL_bodyParam(parameter_build {parameterBuilder})
-
-                 */
-
-                /*
-
-                parameter {parameterBuilder}
-                parameter_name "password"
-                parameter_type "String"
-                parameter_mandatory true
-                requestURL_bodyParam(parameter_build {parameterBuilder})
-
-                method_request ( requestURL_build {requestURLBuilder} )
-
-                response {responseBuilder}
-                response_schema "$responseExtension.schema"
-
-                header {headerBuilder}
-                header_name "$headerExtension.name"
-                header_mandatory Boolean.parseBoolean("$headerExtension.mandatory")
-                response_header( header_build {headerBuilder} )
-
-                status {statusBuilder}
-                status_code "$statusExtension.code"
-                status_body "$statusExtension.body"
-                response_status( status_build {statusBuilder} )
-
-                method_response ( response_build {responseBuilder} )
-
-                endpoint_method ( method_build {methodBuilder} )
-
-                api_endpoint ( endpoint_build {endpointBuilder} )
-
                 generate_tests ( build {apiBuilder} )
-                */
             }
         }
     }
@@ -244,10 +274,26 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         headerBuilder.setMandatory(mandatory)
     }
 
+    void header_defaultValue(String defaultValue) {
+        headerBuilder.setDefaultValueIfOptionalAndMissing(defaultValue)
+    }
+
     // RequestJSON
     void requestJSON(Closure c) {
         requestJSONBuilder = new RequestJSONSpecBuilder()
         c.call(this)
+    }
+
+    void requestJSON_bodySchema(String bodySchema) {
+        requestJSONBuilder.setBody(bodySchema)
+    }
+
+    void requestJSON_header(HeaderSpec header) {
+        requestJSONBuilder.addHeader(header)
+    }
+
+    void requestJSON_queryParameter(ParameterSpec queryParameter) {
+        requestJSONBuilder.addQueryParam(queryParameter)
     }
 
     // RequestURL
@@ -256,8 +302,16 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         c.call(this)
     }
 
-    void requestURL_bodyParam(ParameterSpec bodyParam) {
+    void requestURL_bodyParameter(ParameterSpec bodyParam) {
         requestURLBuilder.addBodyParam(bodyParam)
+    }
+
+    void requestURL_header(HeaderSpec header) {
+        requestURLBuilder.addHeader(header)
+    }
+
+    void requestURL_queryParameter(ParameterSpec bodyParam) {
+        requestURLBuilder.addQueryParam(bodyParam)
     }
 
     // Response
@@ -294,6 +348,10 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void parameter_mandatory(boolean mandatory) {
         parameterBuilder.setMandatory(mandatory)
+    }
+
+    void parameter_defaultValue(String defaultValue) {
+        parameterBuilder.setDefaultValue(defaultValue)
     }
 
     // Status

@@ -85,7 +85,7 @@ public class RestAPIClient {
 
     // Methods for each Endpoint:
 
-    // /login: login endpoint
+    // /login: login GroovyApiSpecBuilder.endpoint
 
     // POST
     public Map<String, Object> post_to_login(String input) {
@@ -140,7 +140,7 @@ public class RestAPIClient {
         }
     }
 
-    // /logout: logout endpoint
+    // /logout: logout GroovyApiSpecBuilder.endpoint
 
     // POST
     public Map<String, Object> post_to_logout(String input) {
@@ -195,7 +195,7 @@ public class RestAPIClient {
         }
     }
 
-    // /products: endpoint for products with attribute
+    // /products: GroovyApiSpecBuilder.endpoint for products with attribute
 
     // GET
     public Map<String, Object> get_products_by_id(String id) {
@@ -404,7 +404,7 @@ public class RestAPIClient {
             );
         }
     }
-    // /products: endpoint for products without attribute
+    // /products: GroovyApiSpecBuilder.endpoint for products without attribute
 
     // GET
     public String get_products() {

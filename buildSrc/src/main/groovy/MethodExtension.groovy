@@ -1,3 +1,0 @@
-class MethodExtension {
-    String type
-}

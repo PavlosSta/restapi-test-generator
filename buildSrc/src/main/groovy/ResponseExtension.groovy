@@ -1,3 +1,0 @@
-class ResponseExtension {
-    String schema
-}

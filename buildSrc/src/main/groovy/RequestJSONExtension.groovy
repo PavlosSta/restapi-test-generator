@@ -1,4 +1,0 @@
-class RequestJSONExtension {
-    String bodySchema;
-
-}
