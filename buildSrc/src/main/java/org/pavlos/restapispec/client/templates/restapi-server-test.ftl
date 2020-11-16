@@ -1,8 +1,11 @@
 <#-- @ftlvariable name="api" type="org.pavlos.restapispec.interfaces.APISpec" -->
 <#-- @ftlvariable name="clientPackage" type="String" -->
-package ${serverPackage};
+<#-- @ftlvariable name="clientName" type="String" -->
+<#-- @ftlvariable name="testPackage" type="String" -->
+<#-- @ftlvariable name="testName" type="String" -->
+package ${testPackage};
 
-import ${clientPackage}.RestAPIClient
+import ${clientPackage}.${clientName}
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -15,12 +18,12 @@ import spock.lang.Stepwise
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 @Stepwise
-class TestServer extends Specification {
+class ${testName} extends Specification {
 
     private static final int MOCK_SERVER_PORT = 8766
 
     @Shared WireMockServer wms
-    @Shared RestAPIClient caller = new RestAPIClient("localhost", MOCK_SERVER_PORT)
+    @Shared ${clientName} caller = new ${clientName}("localhost", MOCK_SERVER_PORT)
 
     def setupSpec() {
         wms = new WireMockServer(WireMockConfiguration.options().httpsPort(MOCK_SERVER_PORT))

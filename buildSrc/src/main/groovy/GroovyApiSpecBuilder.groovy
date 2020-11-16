@@ -14,7 +14,6 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
     void apply(Project project) {
         def apiExtension = project.extensions.create('api', ApiExtension)
 
-
         project.task('generate') {
             doLast {
                 api {apiBuilder}
@@ -124,7 +123,71 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                     }
                     api_endpoint ( endpoint_build {endpointBuilder} )
                 }
-                generate_tests ( build {apiBuilder} )
+
+                /* Generate Rest API Client and Tests */
+
+                String projectPath = System.getProperty("user.dir")
+
+                // Creates a Configuration instance
+                cfg = new Configuration(Configuration.VERSION_2_3_30);
+
+                cfg.setClassForTemplateLoading(FreeMarkerJavaCodeGenerator.class, "templates");
+
+                // Specifies the source where the template files come from.
+                try {
+                    cfg.setDirectoryForTemplateLoading(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/restapispec/client/templates"))
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                cfg.setDefaultEncoding("UTF-8");
+
+                // Sets how errors will appear.
+                cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+
+                // Don't log exceptions inside FreeMarker that it will thrown at you anyway:
+                cfg.setLogTemplateExceptions(false);
+
+                // Wrap unchecked exceptions thrown during template processing into TemplateException-s:
+                cfg.setWrapUncheckedExceptions(true);
+
+                // Do not fall back to higher scopes when reading a null loop variable:
+                cfg.setFallbackOnNullLoopVariable(false);
+
+                javaGenerator = new FreeMarkerJavaCodeGenerator(build {apiBuilder}, cfg)
+
+                String clientFolder = "$apiExtension.clientFolder"
+                String clientPackage = "$apiExtension.clientPackage"
+                String clientName = "$apiExtension.clientName"
+                String clientPath = projectPath + clientFolder + clientPackage
+                String clientFile = clientPath + "/" + clientName + ".java"
+
+                String testFolder = "$apiExtension.testFolder"
+                String testPackage = "$apiExtension.testPackage"
+                String testName = "$apiExtension.testName"
+                String testPath = projectPath + testFolder + testPackage
+                String testFile = testPath + "/" + testName + ".groovy"
+
+                String mockFolder = "$apiExtension.mockFolder"
+                String mockPackage = "$apiExtension.mockPackage"
+                String mockName = "$apiExtension.mockName"
+                String mockPath = projectPath + mockFolder + mockPackage
+                String mockFile = mockPath + "/" + mockName + ".groovy"
+
+                try {
+                    Files.createDirectories(Paths.get(clientPath))
+                    Files.createDirectories(Paths.get(testPath))
+                    Files.createDirectories(Paths.get(mockPath))
+                } catch (IOException e) {
+                    System.out.println("Cannot create directories");
+                    e.printStackTrace();
+                }
+
+                javaGenerator.generateClient(new File(clientFile), new File(testFile), clientPackage.replaceAll("/","."), clientName, testPackage.replaceAll("/","."), testName)
+                javaGenerator.generateMock(new File(mockFile), clientPackage.replaceAll("/","."), clientName, mockPackage.replaceAll("/","."), mockName)
+
+                System.out.println("RestAPI Client saved at: " + clientPath)
+                System.out.println("Client tests saved at:   " + testPath)
+                System.out.println("Mock Server tests saved at:   " + mockPath)
             }
         }
     }
@@ -143,68 +206,6 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     // Freemarker Configuration
     private Configuration cfg
-
-    // Generate Tests
-    void generate_tests(APISpec api) {
-
-        String projectPath = System.getProperty("user.dir")
-
-        // Creates a Configuration instance
-        cfg = new Configuration(Configuration.VERSION_2_3_30);
-
-        cfg.setClassForTemplateLoading(FreeMarkerJavaCodeGenerator.class, "templates");
-
-        // Specifies the source where the template files come from.
-        try {
-            cfg.setDirectoryForTemplateLoading(new File(projectPath + "/buildSrc/src/main/java/org/pavlos/restapispec/client/templates"))
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        cfg.setDefaultEncoding("UTF-8");
-
-        // Sets how errors will appear.
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-        // Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-        cfg.setLogTemplateExceptions(false);
-
-        // Wrap unchecked exceptions thrown during template processing into TemplateException-s:
-        cfg.setWrapUncheckedExceptions(true);
-
-        // Do not fall back to higher scopes when reading a null loop variable:
-        cfg.setFallbackOnNullLoopVariable(false);
-
-        javaGenerator = new FreeMarkerJavaCodeGenerator(api, cfg)
-
-        String clientFolder = "/ApiSpecTestProject/src/test/groovy/"
-        String clientPackage = "testproject/restapiclient"
-        String clientName = "TestClient"
-        String clientPath = projectPath + clientFolder + clientPackage
-        String clientFile = clientPath + "/" + clientName + ".groovy"
-
-        String serverFolder = "/ApiSpecTestProject/src/test/groovy/"
-        String serverPackage = "testproject/restapiserver"
-        String serverName = "TestServer"
-        String serverPath = projectPath + serverFolder + serverPackage
-        String serverFile = serverPath + "/" + serverName + ".groovy"
-
-        try {
-            Files.createDirectories(Paths.get(projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client"))
-            Files.createDirectories(Paths.get(serverPath))
-            Files.createDirectories(Paths.get(clientPath))
-        } catch (IOException e) {
-            System.out.println("Cannot create directories");
-            e.printStackTrace();
-        }
-
-        javaGenerator.generateClient(new File(projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client/RestAPIClient.java"), new File(clientFile))
-        javaGenerator.generateServer(new File(serverFile))
-
-        System.out.println("RestAPI Client saved at: " + projectPath + "/ApiSpecTestProject/src/main/java/org/pavlos/testproject/client")
-        System.out.println("Client tests saved at:   " + clientPath)
-        System.out.println("Server tests saved at:   " + serverPath)
-
-    }
 
     // API
     void api(Closure c) {

@@ -18,19 +18,19 @@ abstract class CodeGenerator {
 
     protected abstract void validateForTargetLanguage(APISpec apiSpec);
 
-    protected abstract void generateClientCode(File dest);
+    protected abstract void generateClientCode(File dest, String clientPackage, String clientName);
 
-    protected abstract void generateTestClientCode(File dest);
+    protected abstract void generateTestClientCode(File dest, String clientPackage, String clientName, String mockPackage, String mockName);
 
-    protected abstract void generateTestServerCode(File dest);
+    protected abstract void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName);
 
-    public void generateClient(File clientDest, File testClientDest) {
+    public void generateClient(File clientDest, File testClientDest, String clientPackage, String clientName, String mockPackage, String mockName) {
         validateForTargetLanguage(apiSpec);
-        generateClientCode(clientDest);
-        generateTestClientCode(testClientDest);
+        generateClientCode(clientDest, clientPackage, clientName);
+        generateTestClientCode(testClientDest, clientPackage, clientName, mockPackage, mockName);
     }
 
-    public void generateServer(File testServerDest) {
-        generateTestServerCode(testServerDest);
+    public void generateMock(File mockServerDest, String clientPackage, String clientName, String testPackage, String testName) {
+        generateTestServerCode(mockServerDest, clientPackage, clientName, testPackage, testName);
     }
 }

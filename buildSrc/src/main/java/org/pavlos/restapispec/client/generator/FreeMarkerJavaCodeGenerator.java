@@ -70,12 +70,13 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
     }
 
     @Override
-    protected void generateClientCode(File dest) {
+    protected void generateClientCode(File dest, String clientPackage, String clientName) {
 
         /* Create a data-model */
         Map<String, Object> root = new HashMap<>();
         root.put("api", apiSpec);
-        root.put("clientPackage", "org.pavlos.testproject.client");
+        root.put("clientPackage", clientPackage);
+        root.put("clientName", clientName);
 
         // Gets the template
         try {
@@ -93,16 +94,19 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
     }
 
     @Override
-    protected void generateTestClientCode(File dest) {
+    protected void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName) {
 
         /* Create a data-model */
         Map<String, Object> root = new HashMap<>();
         root.put("api", apiSpec);
-        root.put("clientPackage", "org.pavlos.testproject.client");
+        root.put("clientPackage", clientPackage);
+        root.put("clientName", clientName);
+        root.put("testPackage", testPackage);
+        root.put("testName", testName);
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("restapi-client-test.ftl");
+            Template temp = cfg.getTemplate("restapi-server-test.ftl");
 
             // Writes to console
             try (Writer fileWriter = new FileWriter(dest)) {
@@ -116,17 +120,19 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
     }
 
     @Override
-    protected void generateTestServerCode(File dest) {
+    protected void generateTestClientCode(File dest, String clientPackage, String clientName, String mockPackage, String mockName) {
 
         /* Create a data-model */
         Map<String, Object> root = new HashMap<>();
         root.put("api", apiSpec);
-        root.put("clientPackage", "org.pavlos.testproject.client");
-        root.put("serverPackage", "testproject.restapiserver");
+        root.put("clientPackage", clientPackage);
+        root.put("clientName", clientName);
+        root.put("mockPackage", mockPackage);
+        root.put("mockName", mockName);
 
         // Gets the template
         try {
-            Template temp = cfg.getTemplate("restapi-server-test.ftl");
+            Template temp = cfg.getTemplate("restapi-client-test.ftl");
 
             // Writes to console
             try (Writer fileWriter = new FileWriter(dest)) {

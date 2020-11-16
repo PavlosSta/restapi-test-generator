@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="api" type="org.pavlos.restapispec.interfaces.APISpec" -->
 <#-- @ftlvariable name="clientPackage" type="String" -->
+<#-- @ftlvariable name="clientName" type="String" -->
 package ${clientPackage};
 
 import com.google.gson.Gson;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class RestAPIClient {
+public class ${clientName} {
 
     public static final String BASE_URL = "${api.baseUrl}";
 
@@ -47,7 +48,7 @@ public class RestAPIClient {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public RestAPIClient(String host, int port) throws RuntimeException {
+    public ${clientName}(String host, int port) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
