@@ -28,7 +28,7 @@ class QueryParamTest extends Specification {
         then:
         newQueryParam.getName() == "queryName"
         newQueryParam.getType() == "String"
-        newQueryParam.defaultBodyIfOptionalAndMissing() == "defaultQueryBody"
+        newQueryParam.getDefaultBodyIfOptionalAndMissing() == "defaultQueryBody"
 
     }
 

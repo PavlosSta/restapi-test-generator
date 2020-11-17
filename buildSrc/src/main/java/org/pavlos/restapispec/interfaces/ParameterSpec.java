@@ -18,7 +18,7 @@ public interface ParameterSpec {
     /**
      * @return the default body of the Parameter (if mandatory)
      */
-    String defaultBodyIfOptionalAndMissing();
+    String getDefaultBodyIfOptionalAndMissing();
 
     /**
      * @return true if Parameter is mandatory

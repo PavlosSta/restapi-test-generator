@@ -37,18 +37,9 @@ class ${mockName} extends Specification {
     <#list api.endpoints as endpoint>
     // ${endpoint.path}: ${endpoint.label}
     <#list endpoint.methods as method>
-
     // ${method.type}
     <#if method.type == "GET">
-    <#if method.request.headers?? && method.request.queryParams??>
     def "GET ${endpoint.path?keep_after("/")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>with headers and queryParams"() {
-    <#elseif method.request.headers??>
-    def "GET ${endpoint.path?keep_after("/")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>with headers"() {
-    <#elseif method.request.queryParams??>
-    def "GET ${endpoint.path?keep_after("/")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>with queryParams"() {
-    <#else>
-    def "GET ${endpoint.path?keep_after("/")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>"() {
-    </#if>
 
         given:
         <#if method.request.contentType == "application/json">
@@ -56,7 +47,6 @@ class ${mockName} extends Specification {
         JsonNode requestJSON = requestMapper.readTree("{\"value\":\"ok\"}")
         <#else>
         </#if>
-
 
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
@@ -115,14 +105,11 @@ class ${mockName} extends Specification {
                 )
         )
 
-        <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
         headers.put("${header.name}", "headerValue")
         </#list>
-        </#if>
 
-        <#if method.request.queryParams??>
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
         <#if queryParam.type == "String">
@@ -135,19 +122,10 @@ class ${mockName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
         </#if>
         </#list>
-        </#if>
 
         when:
 
-        <#if method.request.headers?? && method.request.queryParams??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
-        <#elseif method.request.headers??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers(<#if endpoint.attributes?first??>"2", </#if>headers)
-        <#elseif method.request.queryParams??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_queryParams(<#if endpoint.attributes?first??>"2", </#if>queryParams)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>(<#if endpoint.attributes?first??>"2"</#if>)
-        </#if>
 
         then:
 
@@ -162,15 +140,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "POST" && !endpoint.attributes?first??>
-    <#if method.request.headers?? && method.request.queryParams??>
     def "POST to ${endpoint.path?keep_after("/")} with headers and queryParams"() {
-    <#elseif method.request.headers??>
-    def "POST to ${endpoint.path?keep_after("/")} with headers"() {
-    <#elseif method.request.queryParams??>
-    def "POST to ${endpoint.path?keep_after("/")} with queryParams"() {
-    <#else>
-    def "POST to ${endpoint.path?keep_after("/")}"() {
-    </#if>
 
         given:
 
@@ -218,14 +188,11 @@ class ${mockName} extends Specification {
                 )
         )
 
-        <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
         headers.put("${header.name}", "headerValue")
         </#list>
-        </#if>
 
-        <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
         <#if queryParam.type == "String">
@@ -238,19 +205,10 @@ class ${mockName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
         </#if>
         </#list>
-        </#if>
 
         when:
 
-        <#if method.request.headers?? && method.request.queryParams??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(jsonBodyRequest, headers, queryParams)
-        <#elseif method.request.headers??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_headers(jsonBodyRequest, headers)
-        <#elseif method.request.queryParams??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}_with_queryParams(jsonBodyRequest, queryParams)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")}(jsonBodyRequest)
-        </#if>
 
         then:
 
@@ -265,15 +223,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "PUT" && endpoint.attributes?first??>
-    <#if method.request.headers?? && method.request.queryParams??>
     def "PUT to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers and queryParams"() {
-    <#elseif method.request.headers??>
-    def "PUT to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers"() {
-    <#elseif method.request.queryParams??>
-    def "PUT to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with queryParams"() {
-    <#else>
-    def "PUT to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
-    </#if>
 
         given:
 
@@ -317,14 +267,11 @@ class ${mockName} extends Specification {
                 )
         )
 
-        <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
         headers.put("${header.name}", "headerValue")
         </#list>
-        </#if>
 
-        <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
         <#if queryParam.type == "String">
@@ -337,19 +284,10 @@ class ${mockName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
         </#if>
         </#list>
-        </#if>
 
         when:
 
-        <#if method.request.headers?? && method.request.queryParams??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
-        <#elseif method.request.headers??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
-        <#elseif method.request.queryParams??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
-        </#if>
 
         then:
 
@@ -364,15 +302,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "PATCH">
-    <#if method.request.headers?? && method.request.queryParams??>
     def "PATCH to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers and queryParams"() {
-    <#elseif method.request.headers??>
-    def "PATCH to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers"() {
-    <#elseif method.request.queryParams??>
-    def "PATCH to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with queryParams"() {
-    <#else>
-    def "PATCH to ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
-    </#if>
 
         given:
 
@@ -416,14 +346,11 @@ class ${mockName} extends Specification {
                 )
         )
 
-        <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
         headers.put("${header.name}", "headerValue")
         </#list>
-        </#if>
 
-        <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
         <#if queryParam.type == "String">
@@ -436,19 +363,10 @@ class ${mockName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
         </#if>
         </#list>
-        </#if>
 
         when:
 
-        <#if method.request.headers?? && method.request.queryParams??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("test", "2", headers, queryParams)
-        <#elseif method.request.headers??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("test", "2", headers)
-        <#elseif method.request.queryParams??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("test", "2", queryParams)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("test", "2")
-        </#if>
 
         then:
         <#if method.response.responseBodySchema == "JSON">
@@ -462,15 +380,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "DELETE">
-    <#if method.request.headers?? && method.request.queryParams??>
     def "DELETE from ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers and queryParams"() {
-    <#elseif method.request.headers??>
-    def "DELETE from ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with headers"() {
-    <#elseif method.request.queryParams??>
-    def "DELETE from ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first} with queryParams"() {
-    <#else>
-    def "DELETE from ${endpoint.path?keep_after("/")} by ${endpoint.attributes?first}"() {
-    </#if>
 
         given:
 
@@ -515,14 +425,12 @@ class ${mockName} extends Specification {
         )
 
         when:
-        <#if method.request.headers??>
+
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
         headers.put("${header.name}", "headerValue")
         </#list>
-        </#if>
 
-        <#if method.request.queryParams??>
         Map<String, List<String>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
         <#if queryParam.type == "String">
@@ -535,17 +443,8 @@ class ${mockName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
         </#if>
         </#list>
-        </#if>
 
-        <#if method.request.headers?? && method.request.queryParams??>
         <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
-        <#elseif method.request.headers??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers("2", headers)
-        <#elseif method.request.queryParams??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams("2", queryParams)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}("2")
-        </#if>
 
         then:
         <#if method.response.responseBodySchema == "JSON">
