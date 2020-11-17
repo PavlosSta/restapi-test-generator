@@ -94,73 +94,6 @@ public class ${clientName} {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
-
-        <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
-                ClientHelper::parseJsonObject
-        );
-        <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        </#if>
-    }
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
-
-        <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
-                ClientHelper::parseJsonObject
-        );
-        <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        </#if>
-    }
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        }
-        </#if>
-        else {
-            String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString));
-        }
-        </#if>
-    }
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -199,77 +132,6 @@ public class ${clientName} {
         </#if>
     }
     <#else>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}() {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}"),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}"));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}"));
-    }
-    </#if>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_with_headers(Map<String, String> headers) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}", headers),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}", headers));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newGetRequest(urlPrefix + "${endpoint.path}", headers));
-    }
-    </#if>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_with_queryParams(Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}"),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}"));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}"));
-        }
-        </#if>
-        else {
-            String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString));
-        }
-        </#if>
-    }
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -311,80 +173,6 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "POST">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> post_to_${endpoint.path?keep_after("/")}(String input) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> post_to_${endpoint.path?keep_after("/")}_with_headers(String input, Map<String, String> headers) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> post_to_${endpoint.path?keep_after("/")}_with_queryParams(String input, Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}", URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-        else {
-        String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-    }
-
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> post_to_${endpoint.path?keep_after("/")}_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -425,80 +213,6 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "PUT">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}, String input) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, String input, Map<String, String> headers) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, String input, Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-        else {
-        String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-    }
-
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> put_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -539,80 +253,6 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "PATCH">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}, String input) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, String input, Map<String, String> headers) {
-
-    <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers),
-                ClientHelper::parseJsonObject
-        );
-    }
-    <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input), headers));
-    }
-    </#if>
-
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, String input, Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-        else {
-        String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, URL_ENCODED, HttpRequest.BodyPublishers.ofString(input)));
-        }
-        </#if>
-    }
-
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> patch_to_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -650,75 +290,9 @@ public class ${clientName} {
         }
         </#if>
     }
+
     </#if>
     <#if method.type == "DELETE">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}(String ${endpoint.attributes?first}) {
-
-        <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
-                ClientHelper::parseJsonObject
-        );
-        <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        </#if>
-    }
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers(String ${endpoint.attributes?first}, Map<String, String> headers) {
-
-        <#if method.response.responseBodySchema == "JSON">
-        return sendRequestAndParseResponseBodyAsUTF8Text(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
-                ClientHelper::parseJsonObject
-        );
-        <#elseif method.response.responseBodySchema == "String">
-        return sendRequestAndParseResponseBodyAsString(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        <#else>
-        return sendRequestAndParseResponseBodyAsInteger(
-                () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        </#if>
-    }
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_queryParams(String ${endpoint.attributes?first}, Map<String, List<String>> queryParams) {
-
-        if(queryParams.isEmpty()) {
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}));
-        }
-        </#if>
-        else {
-            String queryParamString = queryParamsToString(queryParams);
-
-        <#if method.response.responseBodySchema == "JSON">
-            return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString),
-                    ClientHelper::parseJsonObject
-            );
-        }
-        <#elseif method.response.responseBodySchema == "String">
-            return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString));
-        }
-        </#if>
-    }
     public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> delete_from_${endpoint.path?keep_after("/")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
@@ -785,43 +359,6 @@ public class ${clientName} {
     private HttpRequest newDeleteRequest(String url, Map<String, String> headers) {
 
         return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody(), headers);
-    }
-
-    private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
-
-        return newRequest("POST", url, contentType, bodyPublisher);
-    }
-
-    private HttpRequest newGetRequest(String url) {
-
-        return newRequest("GET", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
-    }
-
-    private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
-
-        return newRequest("PUT", url, contentType, bodyPublisher);
-    }
-
-    private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
-
-        return newRequest("PATCH", url, contentType, bodyPublisher);
-    }
-
-    private HttpRequest newDeleteRequest(String url) {
-
-        return newRequest("DELETE", url, URL_ENCODED, HttpRequest.BodyPublishers.noBody());
-    }
-
-    private HttpRequest newRequest(String method, String url, String contentType,
-                                   HttpRequest.BodyPublisher bodyPublisher) {
-
-        HttpRequest.Builder builder = HttpRequest.newBuilder();
-
-        return builder
-                .method(method, bodyPublisher)
-                .header(CONTENT_TYPE_HEADER, contentType)
-                .uri(URI.create(url))
-                .build();
     }
 
     private HttpRequest newRequest(String method, String url, String contentType,

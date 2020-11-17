@@ -24,7 +24,7 @@ public class ParameterSpecImpl implements ParameterSpec {
         return this.type;
     }
 
-    public String defaultBodyIfOptionalAndMissing() {
+    public String getDefaultBodyIfOptionalAndMissing() {
         return this.defaultValue;
     }
 
