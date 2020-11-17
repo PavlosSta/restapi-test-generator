@@ -22,7 +22,7 @@ abstract class CodeGenerator {
 
     protected abstract void generateTestClientCode(File dest, String clientPackage, String clientName, String mockPackage, String mockName);
 
-    protected abstract void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName);
+    protected abstract void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName, String serverPort);
 
     public void generateClient(File clientDest, File testClientDest, String clientPackage, String clientName, String mockPackage, String mockName) {
         validateForTargetLanguage(apiSpec);
@@ -30,7 +30,7 @@ abstract class CodeGenerator {
         generateTestClientCode(testClientDest, clientPackage, clientName, mockPackage, mockName);
     }
 
-    public void generateMock(File mockServerDest, String clientPackage, String clientName, String testPackage, String testName) {
-        generateTestServerCode(mockServerDest, clientPackage, clientName, testPackage, testName);
+    public void generateTests(File mockServerDest, String clientPackage, String clientName, String testPackage, String testName, String serverPort) {
+        generateTestServerCode(mockServerDest, clientPackage, clientName, testPackage, testName, serverPort);
     }
 }

@@ -94,7 +94,7 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
     }
 
     @Override
-    protected void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName) {
+    protected void generateTestServerCode(File dest, String clientPackage, String clientName, String testPackage, String testName, String serverPort) {
 
         /* Create a data-model */
         Map<String, Object> root = new HashMap<>();
@@ -103,6 +103,7 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
         root.put("clientName", clientName);
         root.put("testPackage", testPackage);
         root.put("testName", testName);
+        root.put("serverPort", serverPort);
 
         // Gets the template
         try {
