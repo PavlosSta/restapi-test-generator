@@ -53,6 +53,7 @@ class ${testName} extends Specification {
         <#if method.request.queryParams??>
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
+        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
         <#elseif queryParam.type == "Integer">
@@ -61,6 +62,7 @@ class ${testName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
         <#else>
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#if>
         </#list>
         </#if>
@@ -154,8 +156,9 @@ class ${testName} extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
+        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
         <#elseif queryParam.type == "Integer">
@@ -164,6 +167,7 @@ class ${testName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
         <#else>
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#if>
         </#list>
         </#if>
@@ -253,16 +257,18 @@ class ${testName} extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
+        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
         <#elseif queryParam.type == "Integer">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
         <#elseif queryParam.type == "float">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
         <#else>
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#if>
         </#list>
         </#if>
@@ -352,8 +358,9 @@ class ${testName} extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
+        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
         <#elseif queryParam.type == "Integer">
@@ -362,6 +369,7 @@ class ${testName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
         <#else>
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#if>
         </#list>
         </#if>
@@ -451,8 +459,9 @@ class ${testName} extends Specification {
         </#if>
 
         <#if method.request.queryParams??>
-        Map<String, List<String>> queryParams = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
+        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
         <#elseif queryParam.type == "Integer">
@@ -461,6 +470,7 @@ class ${testName} extends Specification {
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
         <#else>
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
+        </#if>
         </#if>
         </#list>
         </#if>
