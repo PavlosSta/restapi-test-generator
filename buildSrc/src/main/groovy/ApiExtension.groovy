@@ -14,4 +14,6 @@ class ApiExtension {
     String mockFolder
     String mockPackage
     String mockName
+
+    String serverPort
 }

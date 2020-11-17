@@ -26,6 +26,10 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                     endpoint_path(it.path)
                     endpoint_label(it.label)
 
+                    if (it.attribute) {
+                        endpoint_attribute(it.attribute)
+                    }
+
                     it.methods.each {
 
                         method { methodBuilder }
@@ -182,8 +186,8 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                     e.printStackTrace();
                 }
 
-                javaGenerator.generateClient(new File(clientFile), new File(testFile), clientPackage.replaceAll("/","."), clientName, testPackage.replaceAll("/","."), testName)
-                javaGenerator.generateMock(new File(mockFile), clientPackage.replaceAll("/","."), clientName, mockPackage.replaceAll("/","."), mockName)
+                javaGenerator.generateClient(new File(clientFile), new File(mockFile), clientPackage.replaceAll("/","."), clientName, mockPackage.replaceAll("/","."), mockName)
+                javaGenerator.generateTests(new File(testFile), clientPackage.replaceAll("/","."), clientName, testPackage.replaceAll("/","."), testName, apiExtension.serverPort)
 
                 System.out.println("RestAPI Client saved at: " + clientPath)
                 System.out.println("Client tests saved at:   " + testPath)
@@ -237,6 +241,10 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void endpoint_label(String label) {
         endpointBuilder.setLabel(label)
+    }
+
+    void endpoint_attribute(String attribute) {
+        endpointBuilder.addAttribute(attribute)
     }
 
     void endpoint_method(MethodSpec method) {

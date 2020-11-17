@@ -3,6 +3,7 @@
 <#-- @ftlvariable name="clientName" type="String" -->
 <#-- @ftlvariable name="testPackage" type="String" -->
 <#-- @ftlvariable name="testName" type="String" -->
+<#-- @ftlvariable name="serverPort" type="String" -->
 package ${testPackage};
 
 import ${clientPackage}.${clientName}
@@ -20,19 +21,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*
 @Stepwise
 class ${testName} extends Specification {
 
-    private static final int MOCK_SERVER_PORT = 8766
+    private static final int SERVER_PORT = ${serverPort}
 
-    @Shared WireMockServer wms
-    @Shared ${clientName} caller = new ${clientName}("localhost", MOCK_SERVER_PORT)
-
-    def setupSpec() {
-        wms = new WireMockServer(WireMockConfiguration.options().httpsPort(MOCK_SERVER_PORT))
-        wms.start()
-    }
-
-    def cleanupSpec() {
-        wms.stop()
-    }
+    @Shared ${clientName} caller = new ${clientName}("localhost", SERVER_PORT)
 
     <#list api.endpoints as endpoint>
     // ${endpoint.path}: ${endpoint.label}
@@ -51,69 +42,6 @@ class ${testName} extends Specification {
     </#if>
 
         given:
-        <#if method.request.contentType == "application/json">
-        ObjectMapper requestMapper = new ObjectMapper()
-        JsonNode requestJSON = requestMapper.readTree("{\"value\":\"ok\"}")
-        <#else>
-        </#if>
-
-
-        <#if method.response.responseBodySchema == "JSON">
-        ObjectMapper responseMapper = new ObjectMapper()
-
-        <#if endpoint.attributes??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of("id", "2", "name", "prod2")
-        ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
-        <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of(
-                "result",
-                List.of(Map.of("id", '1', "name", "prod1"),
-                        Map.of("id", '2', "name", "prod2"),
-                        Map.of("id", '3', "name", "prod3"),
-                        Map.of("id", '4', "name", "prod4"))
-        )
-        ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
-        </#if>
-        <#elseif method.response.responseBodySchema == "String">
-        <#if endpoint.attributes??>
-        String resultString = "prod2"
-        <#else>
-        String resultString = "prod1, prod2, prod3"
-        </#if>
-        <#else> <#-- Integer -->
-        Integer resultInteger = 42
-        </#if>
-
-        wms.givenThat(
-                get(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if endpoint.attributes?first??>/.*</#if><#if method.request.queryParams??>\\\\?.*</#if>"))
-                <#list method.request.headers as header>
-                .withHeader("${header.name}", equalTo("headerValue"))
-                </#list>
-                <#list method.request.queryParams as queryParam>
-                <#if queryParam.type == "String">
-                .withQueryParam("${queryParam.name}", containing("queryValue"))
-                <#elseif queryParam.type == "Integer">
-                .withQueryParam("${queryParam.name}", containing("42"))
-                <#elseif queryParam.type == "float">
-                .withQueryParam("${queryParam.name}", containing("42.5")))
-                <#else>
-                .withQueryParam("${queryParam.name}", containing(true))
-                </#if>
-                </#list>
-                .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
-                        <#list method.response.headers as responseHeader>
-                        .withHeader("${responseHeader.name}", "headerValue")
-                        </#list>
-                        <#if method.response.responseBodySchema == "JSON">
-                        .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
-                        .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
-                        </#if>
-                )
-        )
 
         <#if method.request.headers??>
         Map<String, String> headers = new HashMap<>()
