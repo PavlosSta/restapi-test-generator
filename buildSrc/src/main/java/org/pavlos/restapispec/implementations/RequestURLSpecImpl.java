@@ -27,7 +27,7 @@ public class RequestURLSpecImpl implements RequestURLSpec {
     }
 
     public Set<ParameterSpec> getBodyParams() {
-        return null;
+        return this.bodyParams;
     }
 
 }

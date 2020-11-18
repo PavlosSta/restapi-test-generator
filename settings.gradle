@@ -9,3 +9,4 @@
 
 rootProject.name = 'api-spec-test'
 include 'ApiSpecTestProject'
+include 'SoftEng'
