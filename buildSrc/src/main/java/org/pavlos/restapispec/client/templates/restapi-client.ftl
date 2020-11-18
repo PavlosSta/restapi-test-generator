@@ -93,7 +93,7 @@ public class ${clientName} {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -131,7 +131,7 @@ public class ${clientName} {
         </#if>
     }
     <#else>
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> get_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -172,7 +172,7 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "POST">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -212,7 +212,7 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "PUT">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -252,7 +252,7 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "PATCH">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -292,7 +292,7 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "DELETE">
-    public <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -377,9 +377,11 @@ public class ${clientName} {
     }
 
     private Map<String, Object> sendRequestAndParseResponseBodyAsUTF8Text(Supplier<HttpRequest> requestSupplier,
-                                                            Function<Reader, Map<String, Object>> bodyProcessor) {
+                                                                          Function<Reader, Map<String, Object>> bodyProcessor) {
 
         HttpRequest request = requestSupplier.get();
+
+        Map<String, Object> bodyHeaders = new HashMap<>();
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
@@ -388,7 +390,9 @@ public class ${clientName} {
             if (statusCode == 200 || statusCode == 201) {
                 try {
                     if (bodyProcessor != null) {
-                        return bodyProcessor.apply(new InputStreamReader(response.body(), StandardCharsets.UTF_8));
+                        bodyHeaders.put("headers", response.headers().map());
+                        bodyHeaders.put("body", bodyProcessor.apply(new InputStreamReader(response.body(), StandardCharsets.UTF_8)));
+                        return bodyHeaders;
                     }
                     else {
                         return null;
@@ -407,9 +411,11 @@ public class ${clientName} {
         }
     }
 
-    private String sendRequestAndParseResponseBodyAsString(Supplier<HttpRequest> requestSupplier) {
+    private Map<String, Object> sendRequestAndParseResponseBodyAsString(Supplier<HttpRequest> requestSupplier) {
 
         HttpRequest request = requestSupplier.get();
+
+        Map<String, Object> bodyHeaders = new HashMap<>();
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
@@ -417,7 +423,9 @@ public class ${clientName} {
             int statusCode = response.statusCode();
             if (statusCode == 200 || statusCode == 201) {
                 try {
-                    return response.body();
+                    bodyHeaders.put("headers", response.headers().map());
+                    bodyHeaders.put("body", response.body());
+                    return bodyHeaders;
                 }
                 catch(Exception e) {
                     throw new ResponseProcessingException(e.getMessage(), e);
@@ -432,9 +440,11 @@ public class ${clientName} {
         }
     }
 
-    private Integer sendRequestAndParseResponseBodyAsInteger(Supplier<HttpRequest> requestSupplier) {
+    private Map<String, Object> sendRequestAndParseResponseBodyAsInteger(Supplier<HttpRequest> requestSupplier) {
 
         HttpRequest request = requestSupplier.get();
+
+        Map<String, Object> bodyHeaders = new HashMap<>();
 
         try {
             System.out.println("Sending " + request.method() + " to " + request.uri());
@@ -442,7 +452,9 @@ public class ${clientName} {
             int statusCode = response.statusCode();
             if (statusCode == 200 || statusCode == 201) {
                 try {
-                    return Integer.parseInt(response.body());
+                    bodyHeaders.put("headers", response.headers().map());
+                    bodyHeaders.put("body", Integer.parseInt(response.body()));
+                    return bodyHeaders;
                 }
                 catch(Exception e) {
                     throw new ResponseProcessingException(e.getMessage(), e);
@@ -456,7 +468,6 @@ public class ${clientName} {
             throw new ConnectionException(e.getMessage(), e);
         }
     }
-
     /**
      * Helper method to create a new http client that can tolerate self-signed or improper ssl certificates.
      */
