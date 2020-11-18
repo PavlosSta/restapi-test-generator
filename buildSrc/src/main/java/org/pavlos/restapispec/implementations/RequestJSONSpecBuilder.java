@@ -12,7 +12,7 @@ public class RequestJSONSpecBuilder {
 
     private final Set<HeaderSpec> headers = new LinkedHashSet<>();
     private final Set<ParameterSpec> queryParams = new LinkedHashSet<>();
-    private String body;
+    private final Set<ParameterSpec> bodyParams = new LinkedHashSet<>();
 
     public RequestJSONSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
@@ -34,13 +34,18 @@ public class RequestJSONSpecBuilder {
         return this;
     }
 
-    public RequestJSONSpecBuilder setBody(String body) {
-        this.body = body;
+    public RequestJSONSpecBuilder addBodyParams(Set<ParameterSpec> bodyParams) {
+        this.bodyParams.addAll(bodyParams);
+        return this;
+    }
+
+    public RequestJSONSpecBuilder addBodyParam(ParameterSpec bodyParam) {
+        this.bodyParams.add(bodyParam);
         return this;
     }
 
     public RequestJSONSpec build() {
-        return new RequestJSONSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(queryParams), this.body);
+        return new RequestJSONSpecImpl(Collections.unmodifiableSet(headers), Collections.unmodifiableSet(queryParams), Collections.unmodifiableSet(bodyParams));
     }
 
 }

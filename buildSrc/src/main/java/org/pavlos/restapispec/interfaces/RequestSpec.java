@@ -22,6 +22,11 @@ public interface RequestSpec {
      */
     String getContentType();
 
+    /**
+     * @return a set with the Body Parameter Specifications of the Request
+     */
+    Set<ParameterSpec> getBodyParams();
+
 }
 
 /*
