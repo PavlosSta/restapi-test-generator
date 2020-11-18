@@ -37,7 +37,17 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
                         if (it.requestJSON) {
                             requestJSON { requestJSONBuilder }
-                            requestJSON_bodySchema(it.requestJSON.bodySchema)
+
+                            it.requestJSON.bodyParameters.each {
+                                parameter { parameterBuilder }
+                                parameter_name(it.name)
+                                parameter_type(it.type)
+                                parameter_mandatory(it.mandatory)
+                                if (!it.mandatory) {
+                                    parameter_defaultValue(it.defaultValueIfOptionalAndMissing)
+                                }
+                                requestJSON_bodyParameter(parameter_build { parameterBuilder })
+                            }
 
                             it.requestJSON.headers.each {
                                 header { headerBuilder }
@@ -103,6 +113,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                         }
 
                         response {responseBuilder}
+
                         response_schema(it.response.schema)
 
                         status {statusBuilder}
@@ -293,8 +304,8 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         c.call(this)
     }
 
-    void requestJSON_bodySchema(String bodySchema) {
-        requestJSONBuilder.setBody(bodySchema)
+    void requestJSON_bodyParameter(ParameterSpec bodyParam) {
+        requestJSONBuilder.addBodyParam(bodyParam)
     }
 
     void requestJSON_header(HeaderSpec header) {
@@ -329,16 +340,16 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
         c.call(this)
     }
 
+    void response_schema(String schema) {
+        responseBuilder.addResponseBodySchema(schema)
+    }
+
     void response_status(StatusSpec status) {
         responseBuilder.addStatus(status)
     }
 
     void response_header(HeaderSpec header) {
         responseBuilder.addHeader(header)
-    }
-
-    void response_schema(String schema) {
-        responseBuilder.addResponseBodySchema(schema)
     }
 
     // Parameter
