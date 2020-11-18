@@ -54,9 +54,16 @@ class ${testName} extends Specification {
         </#list>
         when:
 
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+        Map<String, Object> result = caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
 
         then:
+
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
         result.toString().matches("[\\{\\[].*[\\}\\]]")
@@ -65,6 +72,10 @@ class ${testName} extends Specification {
         <#else>
         result.toString().matches("\\d+")
         </#if>
+
+        <#list method.response.headers as responseHeader>
+        resultHeaders.containsKey("${responseHeader.name}")
+        </#list>
 
     }
     </#if>
@@ -115,9 +126,16 @@ class ${testName} extends Specification {
 
         when:
 
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+        Map<String, Object> result = caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
 
         then:
+
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
         result.toString().matches("[\\{\\[].*[\\}\\]]")
@@ -126,6 +144,10 @@ class ${testName} extends Specification {
         <#else>
         result.toString().matches("\\d+")
         </#if>
+
+        <#list method.response.headers as responseHeader>
+        resultHeaders.containsKey("${responseHeader.name}")
+        </#list>
 
     }
     </#if>
@@ -176,9 +198,16 @@ class ${testName} extends Specification {
 
         when:
 
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+        Map<String, Object> result = caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
 
         then:
+
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
         result.toString().matches("[\\{\\[].*[\\}\\]]")
@@ -187,6 +216,10 @@ class ${testName} extends Specification {
         <#else>
         result.matches("\\d+")
         </#if>
+
+        <#list method.response.headers as responseHeader>
+        resultHeaders.containsKey("${responseHeader.name}")
+        </#list>
 
     }
     </#if>
@@ -237,9 +270,17 @@ class ${testName} extends Specification {
 
         when:
 
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+        Map<String, Object> result = caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
 
         then:
+
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
+
         <#if method.response.responseBodySchema == "JSON">
         result.toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
@@ -247,6 +288,10 @@ class ${testName} extends Specification {
         <#else>
         result.matches("\\d+")
         </#if>
+
+        <#list method.response.headers as responseHeader>
+        resultHeaders.containsKey("${responseHeader.name}")
+        </#list>
 
     }
     </#if>
@@ -277,9 +322,17 @@ class ${testName} extends Specification {
 
         when:
 
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> result = caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+        Map<String, Object> result = caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
 
         then:
+
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
+
         <#if method.response.responseBodySchema == "JSON">
         result.toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
@@ -287,6 +340,10 @@ class ${testName} extends Specification {
         <#else>
         result.matches("\\d+")
         </#if>
+
+        <#list method.response.headers as responseHeader>
+        resultHeaders.containsKey("${responseHeader.name}")
+        </#list>
 
     }
     </#if>
