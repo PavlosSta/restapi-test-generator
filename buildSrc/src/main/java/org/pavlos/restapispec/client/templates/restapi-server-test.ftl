@@ -37,7 +37,7 @@ class ${testName} extends Specification {
 
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "headerValue")
+        headers.put("${header.name}", 'headerValue')
         </#list>
 
         Map<String, List<Object>> queryParams = new HashMap<>()
@@ -73,6 +73,10 @@ class ${testName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -87,9 +91,11 @@ class ${testName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "headerValue")
+        headers.put("${header.name}", 'headerValue')
         </#list>
 
         Map<String, List<Object>> queryParams = new HashMap<>()
@@ -128,6 +134,10 @@ class ${testName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -142,9 +152,11 @@ class ${testName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "headerValue")
+        headers.put("${header.name}", 'headerValue')
         </#list>
 
         Map<String, List<Object>> queryParams = new HashMap<>()
@@ -183,6 +195,10 @@ class ${testName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -197,9 +213,11 @@ class ${testName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "headerValue")
+        headers.put("${header.name}", 'headerValue')
         </#list>
 
         Map<String, List<Object>> queryParams = new HashMap<>()
@@ -239,7 +257,7 @@ class ${testName} extends Specification {
 
         Map<String, String> headers = new HashMap<>()
         <#list method.request.headers as header>
-        headers.put("${header.name}", "headerValue")
+        headers.put("${header.name}", 'headerValue')
         </#list>
 
         Map<String, List<Object>> queryParams = new HashMap<>()

@@ -140,6 +140,10 @@ class ${mockName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -154,6 +158,8 @@ class ${mockName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
@@ -165,7 +171,9 @@ class ${mockName} extends Specification {
 
         wms.givenThat(
                 post(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}<#if method.request.queryParams??>\\\\?.*</#if>"))
+                <#if method.request.bodyParams?first??>
                 .withRequestBody(containing(requestBody))
+                </#if>
                 <#list method.request.headers as header>
                 .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
@@ -234,6 +242,10 @@ class ${mockName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -248,6 +260,8 @@ class ${mockName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
@@ -259,6 +273,9 @@ class ${mockName} extends Specification {
 
         wms.givenThat(
                 put(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
+                <#if method.request.bodyParams?first??>
+                .withRequestBody(containing(requestBody))
+                </#if>
                 <#list method.request.headers as header>
                 .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
@@ -327,6 +344,10 @@ class ${mockName} extends Specification {
 
         given:
 
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
         String requestBody = new JSONObject()
             <#list method.request.bodyParams as bodyParam>
             <#if bodyParam.type == "String">
@@ -341,6 +362,8 @@ class ${mockName} extends Specification {
             </#list>
             .toString();
 
+        </#if>
+
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
@@ -352,6 +375,9 @@ class ${mockName} extends Specification {
 
         wms.givenThat(
                 patch(urlMatching("${api.baseUrl}/${endpoint.path?keep_after("/")}/.*<#if method.request.queryParams??>\\\\?.*</#if>"))
+                <#if method.request.bodyParams?first??>
+                .withRequestBody(containing(requestBody))
+                </#if>
                 <#list method.request.headers as header>
                 .withHeader("${header.name}", equalTo("headerValue"))
                 </#list>
