@@ -71,3 +71,9 @@ request bodyParams content types
 request bodyParams encoding του url encoded, www-form-urlencoded --> request bodyParams parameters
 
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+
+## Μελλοντικές προεκτάσεις
+1. αναλυτικότερο login - logout (ίσως μια αυτόματη διαδικασία για τις πιο συνηθισμένες μεθόδους)
+2. Post που δημιουργούν προϊόντα να ελέγχονται με αντίστοιχο GET
+3. Ομοίως για put, patch, delete
+4. Έλεγχος τιμών για δεδομένα

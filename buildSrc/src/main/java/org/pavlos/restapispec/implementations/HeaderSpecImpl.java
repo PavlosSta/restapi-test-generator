@@ -18,7 +18,7 @@ public class HeaderSpecImpl implements HeaderSpec {
         return this.name;
     }
 
-    public boolean isMandatory() {
+    public boolean getMandatory() {
         return this.mandatory;
     }
 
