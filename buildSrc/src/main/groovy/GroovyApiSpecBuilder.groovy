@@ -25,6 +25,7 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                     endpoint { endpointBuilder }
                     endpoint_path(it.path)
                     endpoint_label(it.label)
+                    endpoint_description(it.description)
 
                     if (it.attribute) {
                         endpoint_attribute(it.attribute)
@@ -252,6 +253,10 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
 
     void endpoint_label(String label) {
         endpointBuilder.setLabel(label)
+    }
+
+    void endpoint_description(String description) {
+        endpointBuilder.addDescription(description)
     }
 
     void endpoint_attribute(String attribute) {

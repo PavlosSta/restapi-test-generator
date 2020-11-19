@@ -25,7 +25,7 @@ class RequestTest extends Specification {
         newRequest.getHeaders()[0].getName() == "headerName"
         newRequest.getQueryParams()[0].getName() == "queryName"
         newRequest.getQueryParams()[0].getType() == "String"
-        newRequest.getQueryParams()[0].isMandatory()
+        newRequest.getQueryParams()[0].getMandatory()
 
     }
 

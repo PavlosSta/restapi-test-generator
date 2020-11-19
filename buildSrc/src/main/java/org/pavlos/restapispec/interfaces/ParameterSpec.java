@@ -23,7 +23,7 @@ public interface ParameterSpec {
     /**
      * @return true if Parameter is mandatory
      */
-    boolean isMandatory();
+    boolean getMandatory();
 
 }
 

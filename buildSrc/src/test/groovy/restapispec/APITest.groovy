@@ -76,7 +76,7 @@ class APITest extends Specification {
         newAPI.getEndpoints()[0].getMethods()[0].getRequest().getHeaders()[0].getMandatory()
         newAPI.getEndpoints()[0].getMethods()[0].getRequest().getQueryParams()[0].getName() == "queryName"
         newAPI.getEndpoints()[0].getMethods()[0].getRequest().getQueryParams()[0].getType() == "String"
-        newAPI.getEndpoints()[0].getMethods()[0].getRequest().getQueryParams()[0].isMandatory()
+        newAPI.getEndpoints()[0].getMethods()[0].getRequest().getQueryParams()[0].getMandatory()
 
         newAPI.getEndpoints()[0].getMethods()[0].getResponse().getHeaders()[0].getName() == "headerResponseName"
         newAPI.getEndpoints()[0].getMethods()[0].getResponse().getHeaders()[0].getMandatory()
