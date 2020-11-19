@@ -22,7 +22,6 @@ public interface EndpointSpec {
      */
     String getDescription();
 
-
     /**
      *
      * @return a set with the attributes of the Endpoint if they exist, eg. {id} from products/{id}

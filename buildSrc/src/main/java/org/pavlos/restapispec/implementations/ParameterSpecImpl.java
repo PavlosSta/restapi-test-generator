@@ -28,7 +28,7 @@ public class ParameterSpecImpl implements ParameterSpec {
         return this.defaultValue;
     }
 
-    public boolean isMandatory() {
+    public boolean getMandatory() {
         return this.mandatory;
     }
 

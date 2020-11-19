@@ -270,7 +270,6 @@ class ${testName} extends Specification {
         thrown RuntimeException
 
     }
-
     </#if>
     </#list>
     <#list method.request.queryParams as queryParamMandatory>
@@ -507,7 +506,6 @@ class ${testName} extends Specification {
         thrown RuntimeException
 
     }
-
     </#if>
     </#list>
     <#list method.request.queryParams as queryParamMandatory>

@@ -15,7 +15,7 @@ class QueryParamTest extends Specification {
         then:
         newQueryParam.getName() == "queryName"
         newQueryParam.getType() == "String"
-        newQueryParam.isMandatory()
+        newQueryParam.getMandatory()
 
     }
 
