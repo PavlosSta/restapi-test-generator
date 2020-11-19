@@ -53,13 +53,13 @@ class EndpointTest extends Specification {
         newEndpoint.getMethods()[0].getType().name() == "GET"
 
         newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getName() == "headerRequestName"
-        newEndpoint.getMethods()[0].getRequest().getHeaders()[0].isMandatory()
+        newEndpoint.getMethods()[0].getRequest().getHeaders()[0].getMandatory()
         newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getName() == "queryName"
         newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].getType() == "String"
         newEndpoint.getMethods()[0].getRequest().getQueryParams()[0].isMandatory()
 
         newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getName() == "headerResponseName"
-        newEndpoint.getMethods()[0].getResponse().getHeaders()[0].isMandatory()
+        newEndpoint.getMethods()[0].getResponse().getHeaders()[0].getMandatory()
 
     }
 

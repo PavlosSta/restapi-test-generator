@@ -42,13 +42,13 @@ class MethodTest extends Specification {
         newMethod.getType().name() == "GET"
 
         newMethod.getRequest().getHeaders()[0].getName() == "headerRequestName"
-        newMethod.getRequest().getHeaders()[0].isMandatory()
+        newMethod.getRequest().getHeaders()[0].getMandatory()
         newMethod.getRequest().getQueryParams()[0].getName() == "queryName"
         newMethod.getRequest().getQueryParams()[0].getType() == "String"
         newMethod.getRequest().getQueryParams()[0].isMandatory()
 
         newMethod.getResponse().getHeaders()[0].getName() == "headerResponseName"
-        newMethod.getResponse().getHeaders()[0].isMandatory()
+        newMethod.getResponse().getHeaders()[0].getMandatory()
 
     }
 

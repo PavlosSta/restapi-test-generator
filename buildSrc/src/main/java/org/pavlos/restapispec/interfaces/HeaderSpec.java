@@ -18,6 +18,6 @@ public interface HeaderSpec {
     /**
      * @return true if Header is mandatory
      */
-    boolean isMandatory();
+    boolean getMandatory();
 }
 

@@ -17,8 +17,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
-
 @Stepwise
 class ${testName} extends Specification {
 
@@ -49,7 +47,7 @@ class ${testName} extends Specification {
         <#elseif queryParam.type == "float">
         queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#else>
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>true<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         </#if>
         </#list>
         when:
@@ -78,6 +76,76 @@ class ${testName} extends Specification {
         </#list>
 
     }
+    <#list method.request.queryParams as queryParamMandatory>
+    <#if queryParamMandatory.mandatory>
+    def "GET ${endpoint.path?keep_after("/")?replace("/", "_")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>without mandatory queryParam: ${queryParamMandatory.name}"() {
+        given:
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.name != queryParamMandatory.name>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#if>
+        </#list>
+
+        when:
+
+        caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.headers as headerMandatory>
+    <#if headerMandatory.mandatory>
+    def "GET ${endpoint.path?keep_after("/")?replace("/", "_")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>without mandatory header: ${headerMandatory.name}"() {
+        given:
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        <#if header.name != headerMandatory.name>
+        headers.put("${header.name}", 'headerValue')
+        </#if>
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
     </#if>
     <#if method.type == "POST" && !endpoint.attributes?first??>
     def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")} with headers and queryParams"() {
@@ -111,16 +179,14 @@ class ${testName} extends Specification {
 
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "Integer">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "float">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#else>
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
-        </#if>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         </#if>
         </#list>
 
@@ -150,6 +216,173 @@ class ${testName} extends Specification {
         </#list>
 
     }
+    <#list method.request.bodyParams as bodyParamMandatory>
+    <#if bodyParamMandatory.mandatory>
+    def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory bodyParam: ${bodyParamMandatory.name}"() {
+
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.name != bodyParamMandatory.name><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#if></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.name != bodyParamMandatory.name>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+
+    </#if>
+    </#list>
+    <#list method.request.queryParams as queryParamMandatory>
+    <#if queryParamMandatory.mandatory>
+    def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory queryParam: ${queryParamMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.name != queryParamMandatory.name>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#if>
+        </#list>
+
+        when:
+
+        caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.headers as headerMandatory>
+    <#if headerMandatory.mandatory>
+    def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory header: ${headerMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        <#if header.name != headerMandatory.name>
+        headers.put("${header.name}", 'headerValue')
+        </#if>
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
     </#if>
     <#if method.type == "PUT" && endpoint.attributes?first??>
     def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
@@ -183,16 +416,14 @@ class ${testName} extends Specification {
 
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "Integer">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "float">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#else>
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
-        </#if>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         </#if>
         </#list>
 
@@ -222,6 +453,173 @@ class ${testName} extends Specification {
         </#list>
 
     }
+    <#list method.request.bodyParams as bodyParamMandatory>
+    <#if bodyParamMandatory.mandatory>
+    def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory bodyParam: ${bodyParamMandatory.name}"() {
+
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.name != bodyParamMandatory.name><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#if></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.name != bodyParamMandatory.name>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+
+    </#if>
+    </#list>
+    <#list method.request.queryParams as queryParamMandatory>
+    <#if queryParamMandatory.mandatory>
+    def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory queryParam: ${queryParamMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.name != queryParamMandatory.name>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#if>
+        </#list>
+
+        when:
+
+        caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.headers as headerMandatory>
+    <#if headerMandatory.mandatory>
+    def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory header: ${headerMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        <#if header.name != headerMandatory.name>
+        headers.put("${header.name}", 'headerValue')
+        </#if>
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
     </#if>
     <#if method.type == "PATCH">
     def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
@@ -255,16 +653,14 @@ class ${testName} extends Specification {
 
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "Integer">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "float">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#else>
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
-        </#if>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         </#if>
         </#list>
 
@@ -294,6 +690,172 @@ class ${testName} extends Specification {
         </#list>
 
     }
+    <#list method.request.bodyParams as bodyParamMandatory>
+    <#if bodyParamMandatory.mandatory>
+    def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory bodyParam: ${bodyParamMandatory.name}"() {
+
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.name != bodyParamMandatory.name><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#if></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.name != bodyParamMandatory.name>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.queryParams as queryParamMandatory>
+    <#if queryParamMandatory.mandatory>
+    def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory queryParam: ${queryParamMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.name != queryParamMandatory.name>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#if>
+        </#list>
+
+        when:
+
+        caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.headers as headerMandatory>
+    <#if headerMandatory.mandatory>
+    def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} without mandatory header: ${headerMandatory.name}"() {
+        given:
+
+        <#if method.request.contentType == "application/x-www-form-urlencoded">
+        String requestBody = "<#list method.request.bodyParams as bodyParam><#if bodyParam.type == "String">${bodyParam.name}=bodyParamValue<#elseif bodyParam.type == "Integer">${bodyParam.name}=42<#elseif bodyParam.type == "float">${bodyParam.name}=42.5<#else>${bodyParam.name}=false</#if><#sep>&</#sep></#list>"
+
+        <#else>
+        String requestBody = new JSONObject()
+            <#list method.request.bodyParams as bodyParam>
+            <#if bodyParam.type == "String">
+            .put("${bodyParam.name}", "bodyParamValue")
+            <#elseif bodyParam.type == "Integer">
+            .put("${bodyParam.name}", "42")
+            <#elseif bodyParam.type == "float">
+            .put("${bodyParam.name}", "42.5")
+            <#else>
+            .put("${bodyParam.name}", true)
+            </#if>
+            </#list>
+            .toString();
+
+        </#if>
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        <#if header.name != headerMandatory.name>
+        headers.put("${header.name}", 'headerValue')
+        </#if>
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
     </#if>
     <#if method.type == "DELETE">
     def "DELETE from ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
@@ -307,16 +869,14 @@ class ${testName} extends Specification {
 
         Map<String, List<Object>> queryParams = new HashMap<>()
         <#list method.request.queryParams as queryParam>
-        <#if queryParam.mandatory>
         <#if queryParam.type == "String">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("queryValue")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "Integer">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42")
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#elseif queryParam.type == "float">
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("42.5"))
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         <#else>
-        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add(true)
-        </#if>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
         </#if>
         </#list>
 
@@ -346,6 +906,76 @@ class ${testName} extends Specification {
         </#list>
 
     }
+    <#list method.request.queryParams as queryParamMandatory>
+    <#if queryParamMandatory.mandatory>
+    def "DELETE from ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} without mandatory queryParam: ${queryParamMandatory.name}"() {
+        given:
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        headers.put("${header.name}", 'headerValue')
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.name != queryParamMandatory.name>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#if>
+        </#list>
+
+        when:
+
+        caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
+    <#list method.request.headers as headerMandatory>
+    <#if headerMandatory.mandatory>
+    def "DELETE from ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} without mandatory header: ${headerMandatory.name}"() {
+        given:
+
+        Map<String, String> headers = new HashMap<>()
+        <#list method.request.headers as header>
+        <#if header.name != headerMandatory.name>
+        headers.put("${header.name}", 'headerValue')
+        </#if>
+        </#list>
+
+        Map<String, List<Object>> queryParams = new HashMap<>()
+        <#list method.request.queryParams as queryParam>
+        <#if queryParam.type == "String">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>queryValue<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "Integer">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#elseif queryParam.type == "float">
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>42.5<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        <#else>
+        queryParams.computeIfAbsent("${queryParam.name}", { k -> new ArrayList<>() } ).add("<#if queryParam.mandatory>false<#else>${queryParam.defaultBodyIfOptionalAndMissing}</#if>")
+        </#if>
+        </#list>
+
+        when:
+
+        caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+
+        then:
+        thrown RuntimeException
+
+    }
+    </#if>
+    </#list>
     </#if>
     </#list>
     </#list>

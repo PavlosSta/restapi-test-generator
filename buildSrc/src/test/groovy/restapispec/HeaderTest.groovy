@@ -15,7 +15,7 @@ class HeaderTest extends Specification{
         then:
         newHeader.getName() == "headerName"
         newHeader.getDefaultValueIfOptionalAndMissing() == "defaultHeaderBody"
-        newHeader.isMandatory()
+        newHeader.getMandatory()
 
     }
 
