@@ -35,6 +35,7 @@ class ApiExtension {
     private ResponseSpecBuilder responseBuilder
     private StatusSpecBuilder statusBuilder
 
+    private String whoseLabel = "API"
     private String whoCalls
 
     void baseUrl(String baseUrl) {
@@ -42,12 +43,19 @@ class ApiExtension {
     }
 
     void label(String label) {
-        apiBuilder.setLabel(label)
+        if (whoseLabel == "API") {
+            apiBuilder.setLabel(label)
+        }
+        else if (whoseLabel == "Endpoint") {
+            endpointBuilder.setLabel(label)
+            whoseLabel = "API"
+        }
     }
 
     void endpoint(String path, Closure configuration) {
         endpointBuilder = new EndpointSpecBuilder()
         endpointBuilder.setPath(path)
+        whoseLabel = "Endpoint"
         configuration.call(this)
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
@@ -56,6 +64,7 @@ class ApiExtension {
         endpointBuilder = new EndpointSpecBuilder()
         endpointBuilder.setPath(path)
         endpointBuilder.addAttribute(attribute)
+        whoseLabel = "Endpoint"
         configuration.call(this)
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
