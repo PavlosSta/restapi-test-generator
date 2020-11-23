@@ -25,7 +25,12 @@ class ${testName} extends Specification {
     @Shared ${clientName} caller = new ${clientName}("localhost", SERVER_PORT)
 
     <#list api.endpoints as endpoint>
-    // ${endpoint.path}: ${endpoint.label}
+    // ${endpoint.path}<#if endpoint.label??>: ${endpoint.label}</#if>
+    <#if endpoint.description??>
+    /*
+        ${endpoint.description}
+    */
+    </#if>
     <#list endpoint.methods as method>
     // ${method.type}
     <#if method.type == "GET">

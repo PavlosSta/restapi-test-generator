@@ -36,7 +36,12 @@ class ${mockName} extends Specification {
     }
 
     <#list api.endpoints as endpoint>
-    // ${endpoint.path}: ${endpoint.label}
+    // ${endpoint.path}<#if endpoint.label??>: ${endpoint.label}</#if>
+    <#if endpoint.description??>
+    /*
+        ${endpoint.description}
+    */
+    </#if>
     <#list endpoint.methods as method>
     // ${method.type}
     <#if method.type == "GET">
