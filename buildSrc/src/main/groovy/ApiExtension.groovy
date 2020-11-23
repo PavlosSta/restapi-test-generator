@@ -69,10 +69,6 @@ class ApiExtension {
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
 
-    void endpointLabel(String label) {
-        endpointBuilder.setLabel(label)
-    }
-
     void description(String description) {
         endpointBuilder.addDescription(description)
     }
