@@ -7,11 +7,10 @@ public interface MethodSpec {
 
     enum MethodType {
         GET,
-        PUT,
         POST,
-        DELETE,
+        PUT,
         PATCH,
-        HEAD
+        DELETE
     }
 
     /**

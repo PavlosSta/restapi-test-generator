@@ -28,8 +28,3 @@ public interface RequestSpec {
     Set<ParameterSpec> getBodyParams();
 
 }
-
-/*
-
-
-*/
