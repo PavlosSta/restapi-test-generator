@@ -22,6 +22,9 @@ public class StatusSpecBuilder {
         if (code == null || body == null) {
             throw new RuntimeException("Status bad input");
         }
+        if (Integer.parseInt(code) < 1000 || Integer.parseInt(code) > 599) {
+            throw new RuntimeException("Status: code invalid");
+        }
 
         return new StatusSpecImpl(code, body);
 

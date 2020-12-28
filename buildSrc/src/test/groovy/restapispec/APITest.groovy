@@ -83,7 +83,7 @@ class APITest extends Specification {
     }
 
 
-    def "API builder raises exception when missing GroovyApiSpecBuilder.endpoint"() {
+    def "API builder raises exception when missing Endpoint"() {
 
         def newAPIBuilder = new APISpecBuilder()
 
