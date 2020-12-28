@@ -40,4 +40,14 @@ class StatusTest extends Specification{
         then:
         thrown RuntimeException
     }
+
+    def "status builder raises exception when invalid code"() {
+        def newStatusBuilder = new StatusSpecBuilder()
+
+        when:
+        newStatusBuilder.setBody("statusBody").setCode("600").build()
+
+        then:
+        thrown RuntimeException
+    }
 }

@@ -10,11 +10,10 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setDefaultValueIfOptionalAndMissing("defaultHeaderBody").setMandatory(true).build()
+        HeaderSpec newHeader = newHeaderBuilder.setName("headerName").setMandatory(true).build()
 
         then:
         newHeader.getName() == "headerName"
-        newHeader.getDefaultValueIfOptionalAndMissing() == "defaultHeaderBody"
         newHeader.getMandatory()
 
     }
@@ -28,6 +27,7 @@ class HeaderTest extends Specification{
         then:
         newHeader.getName() == "headerName"
         newHeader.getDefaultValueIfOptionalAndMissing() == "defValue"
+        !newHeader.getMandatory()
 
     }
 
@@ -45,7 +45,7 @@ class HeaderTest extends Specification{
         def newHeaderBuilder = new HeaderSpecBuilder()
 
         when:
-        newHeaderBuilder.setName("headerName").setMandatory(false).build()
+        newHeaderBuilder.setName("headerName").setMandatory(true).build()
 
         then:
         thrown RuntimeException
