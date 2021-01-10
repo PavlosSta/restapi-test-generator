@@ -10,11 +10,11 @@ class StatusTest extends Specification{
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
-        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
+        StatusSpec newStatus = newStatusBuilder.setCode("201").setBody("statusBody").build()
 
         then:
         newStatus.getBody() == "statusBody"
-        newStatus.getCode() == "statusCode"
+        newStatus.getCode() == "201"
 
     }
 
@@ -35,7 +35,7 @@ class StatusTest extends Specification{
         def newStatusBuilder = new StatusSpecBuilder()
 
         when:
-        newStatusBuilder.setBody("statusBody").build()
+        newStatusBuilder.setBody("201").build()
 
         then:
         thrown RuntimeException

@@ -8,5 +8,5 @@
  */
 
 rootProject.name = 'api-spec-test'
-include 'ApiSpecTestProject'
+// include 'ApiSpecTestProject'
 include 'SoftEng'
