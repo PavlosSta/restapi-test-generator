@@ -69,11 +69,11 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.matches("\\w+")
+        result.get("body").toString().matches("\\w+")
         <#else>
-        result.toString().matches("\\d+")
+        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -209,11 +209,11 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.matches("\\w+")
+        result.get("body").toString().matches("\\w+")
         <#else>
-        result.toString().matches("\\d+")
+        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -445,11 +445,11 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
-        result.matches("\\d+")
+        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -681,11 +681,11 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
-        result.matches("\\d+")
+        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -897,11 +897,11 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.toString().matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
-        result.matches("\\d+")
+        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
