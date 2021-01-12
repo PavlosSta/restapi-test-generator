@@ -137,7 +137,7 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.get("body").matches("\\w+")
+        result.get("body").toString().matches("\\w+")
         <#else>
         result.get("body").toString().matches("\\d+")
         </#if>
@@ -248,7 +248,7 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.get("body").matches("\\w+")
+        result.get("body").toString().matches("\\w+")
         <#else>
         result.get("body").toString().matches("\\d+")
         </#if>
@@ -358,7 +358,7 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.get("body").matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
         result.get("body").toString().matches("\\d+")
         </#if>
@@ -467,7 +467,7 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.get("body").matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
         result.get("body").toString().matches("\\d+")
         </#if>
@@ -553,7 +553,7 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
         <#elseif method.response.responseBodySchema == "String">
-        result.get("body").matches("[\\{\\[].*[\\}\\]]")
+        result.get("body").toString().matches("\\w+")
         <#else>
         result.get("body").toString().matches("\\d+")
         </#if>
