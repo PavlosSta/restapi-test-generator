@@ -21,28 +21,6 @@ public class FreeMarkerJavaCodeGenerator extends CodeGenerator {
 
         super(apiSpec, cfg);
 
-        /*
-        // Creates a Configuration instance
-        cfg = new Configuration(Configuration.VERSION_2_3_30);
-        cfg.setClassForTemplateLoading(FreeMarkerJavaCodeGenerator.class, "templates");
-        // Specifies the source where the template files come from.
-        try {
-            System.out.println(System.getProperty("user.dir"));
-            cfg.setDirectoryForTemplateLoading(new File("buildSrc/src/main/java/org/pavlos/client/templates"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        cfg.setDefaultEncoding("UTF-8");
-        // Sets how errors will appear.
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        // Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-        cfg.setLogTemplateExceptions(false);
-        // Wrap unchecked exceptions thrown during template processing into TemplateException-s:
-        cfg.setWrapUncheckedExceptions(true);
-        // Do not fall back to higher scopes when reading a null loop variable:
-        cfg.setFallbackOnNullLoopVariable(false);
-         */
-
     }
 
     protected void validateForTargetLanguage(APISpec newAPI) {
