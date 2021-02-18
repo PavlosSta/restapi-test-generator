@@ -37,5 +37,4 @@ public class Builders {
     public static StatusSpecBuilder newStatus() {
         return new StatusSpecBuilder();
     }
-
 }
