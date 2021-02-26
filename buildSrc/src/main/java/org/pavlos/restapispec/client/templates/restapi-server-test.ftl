@@ -8,6 +8,8 @@ package ${testPackage};
 
 import ${clientPackage}.${clientName}
 import org.json.JSONObject
+import groovy.json.JsonParserType
+import groovy.json.JsonSlurper
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -69,7 +71,10 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+        def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
+        jsonSlurper.parseText(result.get("body").toString())
+
+        noExceptionThrown()
         <#elseif method.response.responseBodySchema == "String">
         result.get("body").toString().matches("\\w+")
         <#else>
@@ -209,7 +214,10 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+        def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
+        jsonSlurper.parseText(result.get("body").toString())
+
+        noExceptionThrown()
         <#elseif method.response.responseBodySchema == "String">
         result.get("body").toString().matches("\\w+")
         <#else>
@@ -445,7 +453,10 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+        def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
+        jsonSlurper.parseText(result.get("body").toString())
+
+        noExceptionThrown()
         <#elseif method.response.responseBodySchema == "String">
         result.get("body").toString().matches("\\w+")
         <#else>
@@ -681,7 +692,10 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+        def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
+        jsonSlurper.parseText(result.get("body").toString())
+
+        noExceptionThrown()
         <#elseif method.response.responseBodySchema == "String">
         result.get("body").toString().matches("\\w+")
         <#else>
@@ -897,7 +911,10 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
-        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+        def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
+        jsonSlurper.parseText(result.get("body").toString())
+
+        noExceptionThrown()
         <#elseif method.response.responseBodySchema == "String">
         result.get("body").toString().matches("\\w+")
         <#else>
