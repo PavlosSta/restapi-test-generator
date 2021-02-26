@@ -60,6 +60,7 @@ class ApiExtension {
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
 
+    /*
     void endpoint(String path, String attribute, Closure configuration) {
         endpointBuilder = new EndpointSpecBuilder()
         endpointBuilder.setPath(path)
@@ -68,6 +69,8 @@ class ApiExtension {
         configuration.call(this)
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
+
+     */
 
     void description(String description) {
         endpointBuilder.addDescription(description)
