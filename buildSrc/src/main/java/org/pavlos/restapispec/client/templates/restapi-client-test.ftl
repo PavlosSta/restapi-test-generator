@@ -55,10 +55,10 @@ class ${mockName} extends Specification {
         ObjectMapper responseMapper = new ObjectMapper()
 
         <#if endpoint.attributes??>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of("id", "2", "name", "prod2")
+        Map<String, Object> agencyMap = Map.of("id", "2", "name", "prod2")
         ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
         <#else>
-        <#if method.response.responseBodySchema == "JSON">Map<String, Object><#elseif method.response.responseBodySchema == "String">String<#else>Integer</#if> agencyMap = Map.of(
+        Map<String, Object> agencyMap = Map.of(
                 "result",
                 List.of(Map.of("id", '1', "name", "prod1"),
                         Map.of("id", '2', "name", "prod2"),
@@ -67,14 +67,12 @@ class ${mockName} extends Specification {
         )
         ObjectNode resultJSON = responseMapper.valueToTree(agencyMap)
         </#if>
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         <#if endpoint.attributes??>
         String resultString = "prod2"
         <#else>
         String resultString = "prod1, prod2, prod3"
         </#if>
-        <#else> <#-- Integer -->
-        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -100,10 +98,8 @@ class ${mockName} extends Specification {
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
+                        <#elseif method.response.responseBodySchema == "Text">
                         .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
                         </#if>
                 )
         )
@@ -141,10 +137,8 @@ class ${mockName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -182,10 +176,8 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         String resultString = "ok"
-        <#else>
-        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -214,10 +206,8 @@ class ${mockName} extends Specification {
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
+                        <#elseif method.response.responseBodySchema == "Text">
                         .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
                         </#if>
                 )
         )
@@ -255,10 +245,8 @@ class ${mockName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -295,10 +283,8 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         String resultString = "ok"
-        <#else>
-        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -327,10 +313,8 @@ class ${mockName} extends Specification {
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
+                        <#elseif method.response.responseBodySchema == "Text">
                         .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
                         </#if>
                 )
         )
@@ -368,10 +352,8 @@ class ${mockName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -408,10 +390,8 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         String resultString = "ok"
-        <#else>
-        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -440,10 +420,8 @@ class ${mockName} extends Specification {
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
+                        <#elseif method.response.responseBodySchema == "Text">
                         .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
                         </#if>
                 )
         )
@@ -480,10 +458,8 @@ class ${mockName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -500,10 +476,8 @@ class ${mockName} extends Specification {
         <#if method.response.responseBodySchema == "JSON">
         ObjectMapper responseMapper = new ObjectMapper()
         JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         String resultString = "ok"
-        <#else>
-        Integer resultInteger = 42
         </#if>
 
         wms.givenThat(
@@ -529,10 +503,8 @@ class ${mockName} extends Specification {
                         </#list>
                         <#if method.response.responseBodySchema == "JSON">
                         .withJsonBody(resultJSON)
-                        <#elseif method.response.responseBodySchema == "String">
+                        <#elseif method.response.responseBodySchema == "Text">
                         .withBody(resultString)
-                        <#else>
-                        .withBody(resultInteger.toString())
                         </#if>
                 )
         )
@@ -569,10 +541,8 @@ class ${mockName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>

@@ -107,12 +107,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
         }
         </#if>
@@ -125,12 +121,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
         }
         </#if>
@@ -145,12 +137,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}", headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newGetRequest(urlPrefix + "${endpoint.path}", headers));
         }
         </#if>
@@ -163,12 +151,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString, headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newGetRequest(urlPrefix + "${endpoint.path}" + queryParamString, headers));
         }
         </#if>
@@ -186,12 +170,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}", "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPostRequest(urlPrefix + "${endpoint.path}", "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -204,12 +184,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPostRequest(urlPrefix + "${endpoint.path}" + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -226,12 +202,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -244,12 +216,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -266,12 +234,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -284,12 +248,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
@@ -306,12 +266,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
         }
         </#if>
@@ -324,12 +280,8 @@ public class ${clientName} {
                     ClientHelper::parseJsonObject
             );
         }
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
-        }
-        <#else>
-            return sendRequestAndParseResponseBodyAsInteger(
                     () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
         }
         </#if>
@@ -445,34 +397,6 @@ public class ${clientName} {
         }
     }
 
-    private Map<String, Object> sendRequestAndParseResponseBodyAsInteger(Supplier<HttpRequest> requestSupplier) {
-
-        HttpRequest request = requestSupplier.get();
-
-        Map<String, Object> bodyHeaders = new HashMap<>();
-
-        try {
-            System.out.println("Sending " + request.method() + " to " + request.uri());
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            int statusCode = response.statusCode();
-            if (statusCode == 200 || statusCode == 201) {
-                try {
-                    bodyHeaders.put("headers", response.headers().map());
-                    bodyHeaders.put("body", Integer.parseInt(response.body()));
-                    return bodyHeaders;
-                }
-                catch(Exception e) {
-                    throw new ResponseProcessingException(e.getMessage(), e);
-                }
-            }
-            else {
-                throw new ServerResponseException(statusCode, response.body());
-            }
-        }
-        catch(IOException | InterruptedException e) {
-            throw new ConnectionException(e.getMessage(), e);
-        }
-    }
     /**
      * Helper method to create a new http client that can tolerate self-signed or improper ssl certificates.
      */
