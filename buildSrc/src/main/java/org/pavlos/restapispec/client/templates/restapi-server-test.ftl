@@ -75,10 +75,8 @@ class ${testName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -218,10 +216,8 @@ class ${testName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -457,10 +453,8 @@ class ${testName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -696,10 +690,8 @@ class ${testName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
@@ -915,10 +907,8 @@ class ${testName} extends Specification {
         jsonSlurper.parseText(result.get("body").toString())
 
         noExceptionThrown()
-        <#elseif method.response.responseBodySchema == "String">
+        <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
-        <#else>
-        result.get("body").toString().matches("\\d+")
         </#if>
 
         <#list method.response.headers as responseHeader>
