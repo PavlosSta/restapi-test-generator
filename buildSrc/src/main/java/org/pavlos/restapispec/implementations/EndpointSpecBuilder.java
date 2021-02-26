@@ -1,8 +1,11 @@
 package org.pavlos.restapispec.implementations;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.pavlos.restapispec.interfaces.EndpointSpec;
 import org.pavlos.restapispec.interfaces.MethodSpec;
@@ -17,6 +20,13 @@ public class EndpointSpecBuilder {
 
     public EndpointSpecBuilder setPath(String path) {
         this.path = path;
+
+        Pattern p = Pattern.compile("\\{[a-zA-Z]+}");
+        Matcher m1 = p.matcher(path);
+
+        while (m1.find()) {
+            this.attributes.add(m1.group().replace("{","").replace("}",""));
+        }
         return this;
     }
 
@@ -51,6 +61,7 @@ public class EndpointSpecBuilder {
             throw new RuntimeException("Endpoint bad input");
         }
 
+        System.out.println(attributes);
         return new EndpointSpecImpl(path, label, description, attributes, Collections.unmodifiableSet(methods));
 
     }
