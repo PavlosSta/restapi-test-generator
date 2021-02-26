@@ -8,7 +8,7 @@ import java.util.Set;
 public interface ResponseSpec {
 
     /**
-     * @return the body schema of the Response (JSON, String, Integer)
+     * @return the body schema of the Response (JSON, Text)
      */
     String getResponseBodySchema();
 
