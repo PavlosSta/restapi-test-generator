@@ -19,7 +19,6 @@ public class EndpointSpecBuilder {
     private final Set<MethodSpec> methods = new LinkedHashSet<>();
 
     public EndpointSpecBuilder setPath(String path) {
-        this.path = path;
 
         Pattern p = Pattern.compile("\\{[a-zA-Z]+}");
         Matcher m1 = p.matcher(path);
@@ -27,6 +26,8 @@ public class EndpointSpecBuilder {
         while (m1.find()) {
             this.attributes.add(m1.group().replace("{","").replace("}",""));
         }
+
+        this.path = "/" + path.split("/")[1];
         return this;
     }
 
@@ -61,7 +62,6 @@ public class EndpointSpecBuilder {
             throw new RuntimeException("Endpoint bad input");
         }
 
-        System.out.println(attributes);
         return new EndpointSpecImpl(path, label, description, attributes, Collections.unmodifiableSet(methods));
 
     }

@@ -98,18 +98,18 @@ public class ${clientName} {
     // ${method.type}
     <#if method.type == "GET">
     <#if endpoint.attributes?first??>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>String ${attr}, </#list>Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, headers));
         }
         </#if>
         else {
@@ -117,18 +117,18 @@ public class ${clientName} {
 
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers),
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
+                    () -> newGetRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, headers));
         }
         </#if>
     }
     <#else>
-    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> get_${endpoint.path?keep_after("/")?replace("/", "_")}(Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -161,7 +161,7 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "POST">
-    public Map<String, Object> post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> post_to_${endpoint.path?keep_after("/")?replace("/", "_")}(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
@@ -193,18 +193,18 @@ public class ${clientName} {
 
     </#if>
     <#if method.type == "PUT">
-    public Map<String, Object> put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>String ${attr}, </#list>String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
         else {
@@ -212,31 +212,31 @@ public class ${clientName} {
 
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
+                    () -> newPutRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
     }
 
     </#if>
     <#if method.type == "PATCH">
-    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>String ${attr}, </#list>String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
         else {
@@ -244,31 +244,31 @@ public class ${clientName} {
 
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
+                    () -> newPatchRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, "${method.request.contentType}", HttpRequest.BodyPublishers.ofString(input), headers));
         }
         </#if>
     }
 
     </#if>
     <#if method.type == "DELETE">
-    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams(String ${endpoint.attributes?first}, Map<String, String> headers, Map<String, List<String>> queryParams) {
+    public Map<String, Object> delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>String ${attr}, </#list>Map<String, String> headers, Map<String, List<String>> queryParams) {
 
         if(queryParams.isEmpty()) {
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers),
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first}, headers));
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list>, headers));
         }
         </#if>
         else {
@@ -276,13 +276,13 @@ public class ${clientName} {
 
         <#if method.response.responseBodySchema == "JSON">
             return sendRequestAndParseResponseBodyAsUTF8Text(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers),
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, headers),
                     ClientHelper::parseJsonObject
             );
         }
         <#elseif method.response.responseBodySchema == "Text">
             return sendRequestAndParseResponseBodyAsString(
-                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + ${endpoint.attributes?first} + queryParamString, headers));
+                    () -> newDeleteRequest(urlPrefix + "${endpoint.path}/" + <#list endpoint.attributes as attr>${attr}<#sep> + "/" + </#sep></#list> + queryParamString, headers));
         }
         </#if>
     }

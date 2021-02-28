@@ -47,7 +47,7 @@ class ${mockName} extends Specification {
     <#list endpoint.methods as method>
     // ${method.type}
     <#if method.type == "GET">
-    def "GET ${endpoint.path?keep_after("/")?replace("/", "_")} <#if endpoint.attributes?first??>by ${endpoint.attributes?first} </#if>with headers and queryParams"() {
+    def "GET ${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??> by attributes</#if>"() {
 
         given:
 
@@ -124,7 +124,7 @@ class ${mockName} extends Specification {
 
         when:
 
-        Map<String, Object> result = caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_${endpoint.attributes?first}</#if>_with_headers_and_queryParams(<#if endpoint.attributes?first??>"2", </#if>headers, queryParams)
+        Map<String, Object> result = caller.get_${endpoint.path?keep_after("/")?replace("/", "_")}<#if endpoint.attributes?first??>_by_attributes</#if>(<#list endpoint.attributes as attr>"2", </#list>headers, queryParams)
 
         <#if method.response.headers?first??>
         Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
@@ -149,7 +149,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "POST" && !endpoint.attributes?first??>
-    def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")} with headers and queryParams"() {
+    def "POST to ${endpoint.path?keep_after("/")?replace("/", "_")}"() {
 
         given:
 
@@ -232,7 +232,7 @@ class ${mockName} extends Specification {
 
         when:
 
-        Map<String, Object> result = caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}_with_headers_and_queryParams(requestBody, headers, queryParams)
+        Map<String, Object> result = caller.post_to_${endpoint.path?keep_after("/")?replace("/", "_")}(requestBody, headers, queryParams)
 
         <#if method.response.headers?first??>
         Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
@@ -256,7 +256,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "PUT" && endpoint.attributes?first??>
-    def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
+    def "PUT to ${endpoint.path?keep_after("/")?replace("/", "_")} by attributes"() {
 
         given:
 
@@ -339,7 +339,7 @@ class ${mockName} extends Specification {
 
         when:
 
-        Map<String, Object> result = caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+        Map<String, Object> result = caller.put_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>"2", </#list>requestBody, headers, queryParams)
 
         <#if method.response.headers?first??>
         Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
@@ -363,7 +363,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "PATCH">
-    def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
+    def "PATCH to ${endpoint.path?keep_after("/")?replace("/", "_")} by attributes"() {
 
         given:
 
@@ -446,7 +446,7 @@ class ${mockName} extends Specification {
 
         when:
 
-        Map<String, Object> result = caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", requestBody, headers, queryParams)
+        Map<String, Object> result = caller.patch_to_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>"2", </#list>requestBody, headers, queryParams)
 
         <#if method.response.headers?first??>
         Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
@@ -469,7 +469,7 @@ class ${mockName} extends Specification {
     }
     </#if>
     <#if method.type == "DELETE">
-    def "DELETE from ${endpoint.path?keep_after("/")?replace("/", "_")} by ${endpoint.attributes?first} with headers and queryParams"() {
+    def "DELETE from ${endpoint.path?keep_after("/")?replace("/", "_")} by attributes"() {
 
         given:
 
@@ -529,7 +529,7 @@ class ${mockName} extends Specification {
 
         when:
 
-        Map<String, Object> result = caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_${endpoint.attributes?first}_with_headers_and_queryParams("2", headers, queryParams)
+        Map<String, Object> result = caller.delete_from_${endpoint.path?keep_after("/")?replace("/", "_")}_by_attributes(<#list endpoint.attributes as attr>"2", </#list>headers, queryParams)
 
         <#if method.response.headers?first??>
         Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
