@@ -13,14 +13,15 @@ public interface ResponseSpec {
     String getResponseBodySchema();
 
     /**
+     * @return the code of the status
+     */
+    Integer getCode();
+
+    /**
      * @return a set with the Header Specifications of the Response
      */
     Set<HeaderSpec> getHeaders();
 
-    /**
-     * @return a set with the Status Specifications of the Request
-     */
-    StatusSpec getStatus();
 
 }
 

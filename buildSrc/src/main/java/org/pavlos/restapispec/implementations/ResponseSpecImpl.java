@@ -4,18 +4,17 @@ import java.util.Set;
 
 import org.pavlos.restapispec.interfaces.HeaderSpec;
 import org.pavlos.restapispec.interfaces.ResponseSpec;
-import org.pavlos.restapispec.interfaces.StatusSpec;
 
 public class ResponseSpecImpl implements ResponseSpec {
 
     private final Set<HeaderSpec> headers;
-    private final StatusSpec status;
     private final String responseBodySchema;
+    private final Integer code;
 
-    ResponseSpecImpl(Set<HeaderSpec> headers, StatusSpec status, String responseBodySchema) {
+    ResponseSpecImpl(Set<HeaderSpec> headers, String responseBodySchema, Integer code) {
         this.headers = headers;
-        this.status = status;
         this.responseBodySchema = responseBodySchema;
+        this.code = code;
     }
 
     public String getResponseBodySchema() {
@@ -26,8 +25,8 @@ public class ResponseSpecImpl implements ResponseSpec {
         return this.headers;
     }
 
-    public StatusSpec getStatus() {
-        return this.status;
+    public Integer getCode() {
+        return this.code;
     }
 
 }
