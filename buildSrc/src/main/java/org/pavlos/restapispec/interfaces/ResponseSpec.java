@@ -22,6 +22,11 @@ public interface ResponseSpec {
      */
     Set<HeaderSpec> getHeaders();
 
+    /**
+     *
+     * @return a set with the Body Attributes of the Response
+     */
+    Set<String> getBodyAttributes();
 
 }
 

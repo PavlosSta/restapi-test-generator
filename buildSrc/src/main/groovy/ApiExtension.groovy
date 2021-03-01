@@ -194,4 +194,8 @@ class ApiExtension {
 
     }
 
+    void withBodyAttribute(String bodyAttribute) {
+        responseBuilder.addBodyAttribute(bodyAttribute)
+    }
+
 }
