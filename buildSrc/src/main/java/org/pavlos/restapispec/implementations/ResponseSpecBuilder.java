@@ -12,6 +12,8 @@ public class ResponseSpecBuilder {
     private final Set<HeaderSpec> headers = new LinkedHashSet<>();
     private String responseBody;
     private Integer code;
+    private final Set<String> bodyAttributes = new LinkedHashSet<>();
+
 
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
         this.headers.addAll(headers);
@@ -33,6 +35,11 @@ public class ResponseSpecBuilder {
         return this;
     }
 
+    public ResponseSpecBuilder addBodyAttribute(String bodyAttribute) {
+        this.bodyAttributes.add(bodyAttribute);
+        return this;
+    }
+
     public ResponseSpec build() {
 
         if (code == null) {
@@ -44,7 +51,7 @@ public class ResponseSpecBuilder {
         if (!(responseBody.equals("JSON") || responseBody.equals("Text"))) {
             throw new RuntimeException("Response: Response body schema not supported (give JSON or Text)");
         }
-        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), responseBody, code);
+        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), responseBody, code, Collections.unmodifiableSet(bodyAttributes));
 
     }
 
