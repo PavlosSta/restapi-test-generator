@@ -7,7 +7,6 @@ import org.pavlos.restapispec.implementations.ParamSpecBuilder
 import org.pavlos.restapispec.implementations.RequestJSONSpecBuilder
 import org.pavlos.restapispec.implementations.RequestURLSpecBuilder
 import org.pavlos.restapispec.implementations.ResponseSpecBuilder
-import org.pavlos.restapispec.implementations.StatusSpecBuilder
 
 class ApiExtension {
 
@@ -33,7 +32,6 @@ class ApiExtension {
     private RequestJSONSpecBuilder requestJSONBuilder
     private RequestURLSpecBuilder requestURLBuilder
     private ResponseSpecBuilder responseBuilder
-    private StatusSpecBuilder statusBuilder
 
     private String whoseLabel = "API"
     private String whoCalls
@@ -59,18 +57,6 @@ class ApiExtension {
         configuration.call(this)
         apiBuilder.addEndpoint(endpointBuilder.build())
     }
-
-    /*
-    void endpoint(String path, String attribute, Closure configuration) {
-        endpointBuilder = new EndpointSpecBuilder()
-        endpointBuilder.setPath(path)
-        endpointBuilder.addAttribute(attribute)
-        whoseLabel = "Endpoint"
-        configuration.call(this)
-        apiBuilder.addEndpoint(endpointBuilder.build())
-    }
-
-     */
 
     void description(String description) {
         endpointBuilder.addDescription(description)
@@ -203,15 +189,9 @@ class ApiExtension {
 
     }
 
-    void withStatus(Integer code, Closure configuration) {
-        statusBuilder = new StatusSpecBuilder()
-        statusBuilder.setCode(code.toString())
-        configuration.call(this)
-        responseBuilder.addStatus(statusBuilder.build())
-    }
+    void withStatus(Integer code) {
+        responseBuilder.setCode(code)
 
-    void body(String body) {
-        statusBuilder.setBody(body)
     }
 
 }

@@ -78,8 +78,8 @@ class GroovyApiSpecBuilder implements Plugin<Project> {
                 javaGenerator.generateClient(new File(clientFile), new File(mockFile), clientPackage.replaceAll("/","."), clientName, mockPackage.replaceAll("/","."), mockName)
                 javaGenerator.generateTests(new File(testFile), clientPackage.replaceAll("/","."), clientName, testPackage.replaceAll("/","."), testName, apiExtension.serverPort)
 
-                System.out.println("RestAPI Client saved at: " + clientPath)
-                System.out.println("Client tests saved at:   " + testPath)
+                System.out.println("RestAPI Client saved at:      " + clientPath)
+                System.out.println("Client tests saved at:        " + testPath)
                 System.out.println("Mock Server tests saved at:   " + mockPath)
             }
         }

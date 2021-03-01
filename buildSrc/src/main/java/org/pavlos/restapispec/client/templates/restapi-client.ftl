@@ -378,7 +378,7 @@ public class ${clientName} {
             System.out.println("Sending " + request.method() + " to " + request.uri());
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
-            if (statusCode == 200 || statusCode == 201) {
+            if (statusCode > 199 && statusCode < 300) {
                 try {
                     bodyHeaders.put("headers", response.headers().map());
                     bodyHeaders.put("body", response.body());

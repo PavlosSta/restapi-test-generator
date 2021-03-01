@@ -7,7 +7,6 @@ import org.pavlos.restapispec.implementations.MethodSpecBuilder
 import org.pavlos.restapispec.implementations.ParamSpecBuilder
 import org.pavlos.restapispec.implementations.RequestJSONSpecBuilder
 import org.pavlos.restapispec.implementations.ResponseSpecBuilder
-import org.pavlos.restapispec.implementations.StatusSpecBuilder
 import org.pavlos.restapispec.interfaces.APISpec
 import org.pavlos.restapispec.interfaces.EndpointSpec
 import org.pavlos.restapispec.interfaces.HeaderSpec
@@ -15,7 +14,7 @@ import org.pavlos.restapispec.interfaces.MethodSpec
 import org.pavlos.restapispec.interfaces.ParameterSpec
 import org.pavlos.restapispec.interfaces.RequestSpec
 import org.pavlos.restapispec.interfaces.ResponseSpec
-import org.pavlos.restapispec.interfaces.StatusSpec
+
 import spock.lang.Specification
 
 class APITest extends Specification {
@@ -35,7 +34,6 @@ class APITest extends Specification {
     def "API builder works"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
-        def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
         def newRequestBuilder = new RequestJSONSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
@@ -50,8 +48,7 @@ class APITest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(true).build()
-        StatusSpec newStatus = newStatusBuilder.setCode("200").setBody("statusBody").build()
-        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).addResponseBodySchema("JSON").build()
+        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).setCode(200).addResponseBodySchema("JSON").build()
 
         MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 

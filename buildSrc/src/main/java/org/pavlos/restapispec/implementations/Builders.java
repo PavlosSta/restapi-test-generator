@@ -33,8 +33,4 @@ public class Builders {
     public static ResponseSpecBuilder newResponse() {
         return new ResponseSpecBuilder();
     }
-
-    public static StatusSpecBuilder newStatus() {
-        return new StatusSpecBuilder();
-    }
 }

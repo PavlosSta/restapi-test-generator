@@ -6,14 +6,13 @@ import org.pavlos.restapispec.implementations.MethodSpecBuilder
 import org.pavlos.restapispec.implementations.ParamSpecBuilder
 import org.pavlos.restapispec.implementations.RequestJSONSpecBuilder
 import org.pavlos.restapispec.implementations.ResponseSpecBuilder
-import org.pavlos.restapispec.implementations.StatusSpecBuilder
 import org.pavlos.restapispec.interfaces.EndpointSpec
 import org.pavlos.restapispec.interfaces.HeaderSpec
 import org.pavlos.restapispec.interfaces.MethodSpec
 import org.pavlos.restapispec.interfaces.ParameterSpec
 import org.pavlos.restapispec.interfaces.RequestSpec
 import org.pavlos.restapispec.interfaces.ResponseSpec
-import org.pavlos.restapispec.interfaces.StatusSpec
+
 import spock.lang.Specification
 
 class EndpointTest extends Specification {
@@ -21,7 +20,6 @@ class EndpointTest extends Specification {
     def "Endpoint builder works"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
-        def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
         def newRequestBuilder = new RequestJSONSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
@@ -35,8 +33,7 @@ class EndpointTest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(true).build()
-        StatusSpec newStatus = newStatusBuilder.setCode("200").setBody("statusBody").build()
-        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).addResponseBodySchema("JSON").build()
+        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).setCode(200).addResponseBodySchema("JSON").build()
 
         MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 
@@ -66,7 +63,6 @@ class EndpointTest extends Specification {
     def "Endpoint builder raises exception when missing path"() {
 
         def newHeaderBuilder = new HeaderSpecBuilder()
-        def newStatusBuilder = new StatusSpecBuilder()
         def newQueryParamBuilder = new ParamSpecBuilder()
         def newRequestBuilder = new RequestJSONSpecBuilder()
         def newResponseBuilder = new ResponseSpecBuilder()
@@ -80,8 +76,7 @@ class EndpointTest extends Specification {
         RequestSpec newRequest = newRequestBuilder.addHeader(newHeaderRequest).addQueryParam(newQueryParam).build()
 
         HeaderSpec newHeaderResponse = newHeaderBuilder.setName("headerResponseName").setMandatory(false).build()
-        StatusSpec newStatus = newStatusBuilder.setCode("statusCode").setBody("statusBody").build()
-        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).addStatus(newStatus).build()
+        ResponseSpec newResponse = newResponseBuilder.addHeader(newHeaderResponse).setCode(200).build()
 
         MethodSpec newMethod = newMethodBuilder.setType("GET").setRequest(newRequest).setResponse(newResponse).build()
 

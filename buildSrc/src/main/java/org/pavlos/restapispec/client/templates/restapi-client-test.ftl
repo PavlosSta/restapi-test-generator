@@ -92,7 +92,7 @@ class ${mockName} extends Specification {
                 </#if>
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
+                        .withStatus(${method.response.code})
                         <#list method.response.headers as responseHeader>
                         .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
@@ -200,7 +200,7 @@ class ${mockName} extends Specification {
                 </#if>
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
+                        .withStatus(${method.response.code})
                         <#list method.response.headers as responseHeader>
                         .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
@@ -307,7 +307,7 @@ class ${mockName} extends Specification {
                 </#if>
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
+                        .withStatus(${method.response.code})
                         <#list method.response.headers as responseHeader>
                         .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
@@ -414,7 +414,7 @@ class ${mockName} extends Specification {
                 </#if>
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
+                        .withStatus(${method.response.code})
                         <#list method.response.headers as responseHeader>
                         .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
@@ -497,7 +497,7 @@ class ${mockName} extends Specification {
                 </#if>
                 </#list>
                 .willReturn(aResponse()
-                        .withStatus(${method.response.status.code})
+                        .withStatus(${method.response.code})
                         <#list method.response.headers as responseHeader>
                         .withHeader("${responseHeader.name}", "headerValue")
                         </#list>
