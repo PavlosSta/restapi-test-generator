@@ -3,16 +3,14 @@ package org.pavlos.restapispec.implementations;
 import org.pavlos.restapispec.interfaces.HeaderSpec;
 import org.pavlos.restapispec.interfaces.ResponseSpec;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ResponseSpecBuilder {
 
     private final Set<HeaderSpec> headers = new LinkedHashSet<>();
     private String responseBody;
     private Integer code;
-    private final Set<String> bodyAttributes = new LinkedHashSet<>();
+    private final Map<String, String> bodyAttributes = new HashMap<>();
 
 
     public ResponseSpecBuilder addHeaders(Set<HeaderSpec> headers) {
@@ -35,8 +33,8 @@ public class ResponseSpecBuilder {
         return this;
     }
 
-    public ResponseSpecBuilder addBodyAttribute(String bodyAttribute) {
-        this.bodyAttributes.add(bodyAttribute);
+    public ResponseSpecBuilder addBodyAttribute(String bodyAttributeName, String bodyAttributeType) {
+        this.bodyAttributes.put(bodyAttributeName, bodyAttributeType);
         return this;
     }
 
@@ -51,7 +49,7 @@ public class ResponseSpecBuilder {
         if (!(responseBody.equals("JSON") || responseBody.equals("Text"))) {
             throw new RuntimeException("Response: Response body schema not supported (give JSON or Text)");
         }
-        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), responseBody, code, Collections.unmodifiableSet(bodyAttributes));
+        return new ResponseSpecImpl(Collections.unmodifiableSet(headers), responseBody, code, Collections.unmodifiableMap(bodyAttributes));
 
     }
 

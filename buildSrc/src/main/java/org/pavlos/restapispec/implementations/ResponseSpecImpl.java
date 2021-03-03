@@ -1,5 +1,6 @@
 package org.pavlos.restapispec.implementations;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.pavlos.restapispec.interfaces.HeaderSpec;
@@ -10,9 +11,9 @@ public class ResponseSpecImpl implements ResponseSpec {
     private final Set<HeaderSpec> headers;
     private final String responseBodySchema;
     private final Integer code;
-    private final Set<String> bodyAttributes;
+    private final Map<String, String> bodyAttributes;
 
-    ResponseSpecImpl(Set<HeaderSpec> headers, String responseBodySchema, Integer code, Set<String> bodyAttributes) {
+    ResponseSpecImpl(Set<HeaderSpec> headers, String responseBodySchema, Integer code, Map<String, String> bodyAttributes) {
         this.headers = headers;
         this.responseBodySchema = responseBodySchema;
         this.code = code;
@@ -31,7 +32,7 @@ public class ResponseSpecImpl implements ResponseSpec {
         return this.code;
     }
 
-    public Set<String> getBodyAttributes() {
+    public Map<String, String> getBodyAttributes() {
         return this.bodyAttributes;
     }
 
