@@ -1,5 +1,6 @@
 package org.pavlos.restapispec.interfaces;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ public interface ResponseSpec {
      *
      * @return a set with the Body Attributes of the Response
      */
-    Set<String> getBodyAttributes();
+    Map<String, String> getBodyAttributes();
 
 }
 
