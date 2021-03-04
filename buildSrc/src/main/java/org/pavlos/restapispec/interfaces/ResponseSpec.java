@@ -24,8 +24,7 @@ public interface ResponseSpec {
     Set<HeaderSpec> getHeaders();
 
     /**
-     *
-     * @return a set with the Body Attributes of the Response
+     * @return a map with the Body Attributes of the Response (Supported types: String, Number, JSON, Array, Boolean, null)
      */
     Map<String, String> getBodyAttributes();
 
