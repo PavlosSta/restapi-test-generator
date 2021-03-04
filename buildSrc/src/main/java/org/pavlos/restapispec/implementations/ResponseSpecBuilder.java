@@ -49,6 +49,9 @@ public class ResponseSpecBuilder {
         if (!(responseBody.equals("JSON") || responseBody.equals("Text"))) {
             throw new RuntimeException("Response: Response body schema not supported (give JSON or Text)");
         }
+        if (responseBody.equals("Text") && !(bodyAttributes.isEmpty())) {
+            throw new RuntimeException("Response: Body attributes supported only for JSON");
+        }
         return new ResponseSpecImpl(Collections.unmodifiableSet(headers), responseBody, code, Collections.unmodifiableMap(bodyAttributes));
 
     }
