@@ -1,0 +1,968 @@
+\chapter{Επαλήθευση Ορθής Λειτουργίας}
+\InitialCharacter{Σ}το κεφάλαιο αυτό παρουσιάζονται οι εφαρμογές σε δύο διαδικτυακά \en{RESTful APIs} 
+που επαληθεύουν την ορθή λειτουργία των εργαλείων που αναπτύχθηκαν στο πλαίσιο της παρούσας εργασίας.
+
+\section{Παρατηρητήριο τιμών}
+Η πρώτη προγραμματιστική διεπαφή τύπου \en{REST} που χρησιμοποιήθηκε για την επαλήθευση της εργασίας 
+είναι τμήμα μιας εφαρμογής παρατηρητηρίου τιμών.
+Ο κώδικας είναι διαθέσιμος στο διαδίκτυο σε \en{github repository}\footnote{\en{https://github.com/PavlosSta/SoftEng}}.
+
+Τα χαρακτηριστικά της διεπαφής είναι τα ακόλουθα:
+
+\begin{itemize}
+    \item \textbf{Διεύθυνση}
+    
+    Ως διεύθυνση βάσης χρησιμοποιείται το '\en{https://localhost:8765/observatory/api}'.
+
+    Οι πόροι του συστήματος δίνονται από τα τελικά σημεία στη μορφή \en{\{baseURL\}/\{path-to-resource\}}.
+
+    Έτσι για παράδειγμα το τελικό σημείο για τα προϊόντα είναι το \en{\{baseURL\}/products},
+    ενώ για το προϊόν με κωδικό 12 το \en{\{baseURL\}/products/12}.
+
+    \item \textbf{Διαπίστευση} 
+    
+    Το τελικό σημείο διαπίστευσης χρηστών έχει το μονοπάτι '\en{\{baseURL\}/login}'.
+
+    Η μοναδική μέθοδος που υποστηρίζει είναι η \en{POST}.
+
+    Δέχεται ως παραμέτρους σώματος το \en{username} και το \en{password}, 
+    ενώ σε περίπτωση επιτυχούς σύνδεσης επιστρέφει ένα \en{authentication token}.
+    Αυτό θα πρέπει να περιλαμβάνεται ως κεφαλίδα με όνομα '\en{X-OBSERVATORY-AUTH}'
+    σε όποια αίτηση απαιτείται πιστοποίηση.
+
+    \item \textbf{Αποσύνδεση} 
+    
+    Τπ τελικό σημείο αποσύνδεσης χρηστών έχει το μονοπάτι '\en{\{baseURL\}/logout}'.
+
+    Η μοναδική μέθοδος που υποστηρίζει είναι η \en{POST}.
+    
+    Θα πρέπει να έχει προηγηθεί διαπίστευση,
+    η οποία θα έχει επιστρέφει ένα \en{authentication token}.
+    Αυτό θα πρέπει να περιλαμβάνεται στην αίτηση ως κεφαλίδα ταυτοποίησης με όνομα '\en{X-OBSERVATORY-AUTH}'
+    και αν είναι έγκυρο,
+    η απάντηση θα είναι ένα \en{JSON} της μορφής '\en{\{ "message": "OK" \}}'.
+
+    \item \textbf{Προϊόντα}
+    
+    Το τελικό σημείο των προϊόντων έχει το μονοπάτι '\en{\{baseURL\}/products}'.
+
+    Σε αυτό υποστηρίζονται οι ακόλουθες μέθοδοι:
+
+    \begin{enumerate}
+        \item \underline{\textbf{\en{GET}}: Επιστρέφεται η λίστα των προϊόντων}
+        
+        Υποστηριζόμενες παράμετροι (ως μέρος του \en{URL query}):
+
+        \selectlanguage{english}
+        \begin{itemize}
+            \item start: Integer, default 0
+            \item count: Integer, default 20
+            \item status: String, default ACTIVE
+            \item sort: String, default id|DESC
+        \end{itemize}
+        \selectlanguage{greek}
+
+        Για παράδειγμα:
+        
+        \en{GET} \emph{\en{\{baseURL\}/products?start=0\&count=100\&sort=id|ASC\&status=ALL}}
+
+        Η απάντηση είναι ένα αρχείο \en{JSON} που περιλαμβάνει τις εξής παραμέτρους:
+
+        \selectlanguage{english}
+        \begin{itemize}
+            \item start: Integer
+            \item count: Integer
+            \item total: Integer
+            \item products: List<Product>
+        \end{itemize}
+        \selectlanguage{greek}
+
+        Οι τρεις πρώτες παράμετροι αφορούν τη σελίδοποίηση των αποτελεσμάτων,
+        ενώ η τελευταία περιλαμβάνει μία λίστα με τα προϊόντα της αντίστοιχης σελίδας.
+
+        Κάθε προϊόν είναι ένα αρχείο \en{JSON} με τις εξής παραμέτρους:
+        \selectlanguage{english}
+        \begin{itemize}
+            \item id: String
+            \item name: String
+            \item description: String
+            \item category: String
+            \item tags: List<String>
+            \item withdrawn: Boolean
+        \end{itemize}
+        \selectlanguage{greek}
+
+
+        \item \underline{\textbf{\en{POST}}: Δημιουργείται νέο προϊόν}
+        
+        Οι πληροφορίες που απαιτούνται για τη δημιουργία ενός προϊόντος 
+        διατυπώνονται ως παράμετροι σώματος στην αίτηση.
+        Αυτές είναι το \en{name}, το \en{description}, το \en{category} και τα \en{tags}.
+
+        Προαιρετική παράμετρος είναι το \en{withdrawn}.
+        
+        Η απάντηση στην αίτηση δημιουργίας ενός προϊόντος 
+        είναι η πλήρης κωδικοποίηση των δεδομένων του,
+        δηλαδή ένα αρχείο \en{JSON} με τις αντίστοιχες πληροφορίες.
+    \end{enumerate}
+
+    Επιπλέον υποστηρίζει προσδιοριστικό (\en{attribute}) για το \en{id} των προϊόντων,
+    με μονοπάτι της μορφής '\en{\{baseURL\}/products/\{id}\}'. 
+
+    Με το \en{id} υποστηρίζονται οι ακόλουθες μέθοδοι:
+
+    \begin{enumerate}
+        \item \underline{\textbf{\en{GET}}: Επιστρέφονται οι πληροφορίες του προϊόντος}
+        
+        Για παράδειγμα, \en{GET} \emph{\en{\{baseURL\}/products/2}}.
+
+        Το αποτέλεσμα της αίτησης είναι ένα αρχείο \en{JSON}
+        με τα δεδομένα του προϊόντος με το αντίστοιχο \en{id}.
+
+        Αυτά όπως και στην περίπτωση της μεθόδου \en{GET} χωρίς προσδιοριστικό \en{id}
+        είναι τα ακόλουθα:
+
+        \selectlanguage{english}
+        \begin{itemize}
+            \item id: String
+            \item name: String
+            \item description: String
+            \item category: String
+            \item tags: List<String>
+            \item withdrawn: Boolean
+        \end{itemize}
+        \selectlanguage{greek}
+
+        \item \underline{\textbf{\en{PUT}}: Ενημερώνονται οι πληροφορίες του προϊόντος}
+        
+        Η αίτηση πρέπει να περιλαμβάνει δεδομένα για όλα τα στοιχεία του προϊόντος, 
+        τα οποία αντικαθιστούν τα προηγούμενα (\en{Full Update}).
+
+        Τα δεδομένα αυτά περιλαμβάνονται στην αίτηση ως παράμετροι σώματος.
+
+        Η απάντηση είναι η πλήρης κωδικοποίηση των δεδομένων του προϊόντος,
+        δηλαδή ένα αρχείο \en{JSON} με τις αντίστοιχες πληροφορίες.
+
+        \item \underline{\textbf{\en{PATCH}}: Ενημερώνονται μερικώς οι πληροφορίες του προϊόντος}
+        
+        Σε αντίθεση με τη μέθοδο \en{PUT},
+        η \en{PATCH} επιτρέπει τη μερική επεξεργασία ενός προϊόντος (\en{Partial Update}).
+
+        Τα δεδομένα για τα στοιχεία εκείνα που θέλουμε να ενημερώσουμε
+        περιλαμβάνονται στην αίτηση ως παράμετροι σώματος.
+
+        Η απάντηση είναι η πλήρης κωδικοποίηση των δεδομένων του προϊόντος,
+        δηλαδή ένα αρχείο \en{JSON} με τις αντίστοιχες πληροφορίες.
+
+        \item \underline{\textbf{\en{DELETE}}: Διαγράφεται το προϊόν}
+        
+        Το προϊόν με το αντίστοιχο \en{id} 
+        αποκτά την τιμή \en{withdrawn=true} αν η αίτηση γίνεται από Εθελοντή,
+        αλλιώς διαγράφεται από τη βάση δεδομένων αν γίνεται από Διαχειριστή.
+
+        Το αποτέλεσμα είναι ένα αρχείο \en{JSON} της μορφής \en{\{ "message": "OK" \}}.
+    \end{enumerate}
+\end{itemize}
+    
+    Για λόγους συντομίας θα επικεντρωθούμε στα παραπάνω τελικά σημεία,
+    αγνοώντας τα καταστήματα και τις τιμές,
+    που έχουν όμοια λειτουργία με τα προϊόντα.
+
+    Ας δούμε πώς μπορούμε να δηλώσουμε τις παραπάνω προδιαγραφές της διεπαφής 
+    με σκοπό της παραγωγή σεναρίων ελέγχου.
+    
+    Καταρχάς, η διεύθυνσή του δίνεται ως η '\en{https://localhost:8765/observatory/api}',
+    επομένως δηλώνουμε την θύρα του διακομιστή και τη διεύθυνση βάσης με τις εξής εντολές:
+
+    \selectlanguage{english}
+    \begin{lstlisting}[deletekeywords={api}]
+    baseUrl '/observatory/api'
+    serverPort = 8765
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    Το πρώτο τελικό σημείο που έχουμε είναι αυτό της διαπίστευσης χρηστών.
+    Παρατηρούμε πως υποστηρίζει μόνο τη μέθοδο \en{POST},
+    για την οποία η αίτηση είναι τύπου \en{URL}
+    με κωδικοποιημένες τις παραμέτρους σώματος \en{username} και \en{password}.
+    Σε περίπτωση επιτυχούς σύνδεσης,
+    έχουμε μία απάντηση με κατάσταση με κωδικό 201 και σώμα '\en{Created}'.
+
+    Όλα τα παραπάνω γράφονται στον \en{Groovy Builder} με τον ακόλουθο τρόπο:
+
+    \selectlanguage{english}
+    \begin{lstlisting}
+    endpoint('/login') {
+    \end{lstlisting}
+    \begin{lstlisting}[deletekeywords={endpoint}]
+        label 'login endpoint'
+        description 'the endpoint for user login'
+        method('POST') {
+            request('URL') {
+                withBodyParameter('username', 'String')
+                withBodyParameter('password', 'String')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+            }
+        }
+    }
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    Με όμοιο τρόπο περιγράφεται και το τελικό σημείο της αποσύνδεσης,
+    το οποίο βέβαια αντί για \en{username} και \en{password} απαιτεί 
+    μία κεφαλίδα με όνομα '\en{X-OBSERVATORY-AUTH}'.
+
+    \selectlanguage{english}
+    \begin{lstlisting}
+    endpoint('/logout') {
+    \end{lstlisting}
+    \begin{lstlisting}[deletekeywords={endpoint}]
+        label 'logout endpoint'
+        description 'the endpoint for user logout'
+        method('POST') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+            }
+        }
+    }
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    Σχετικά με το τελικό σημείο των προϊόντων,
+    θα πρέπει να το δηλώσουμε μία φορά ως \en{endpoint} χωρίς προσδιοριστικό
+    και άλλη μία ως \en{endpoint} με \en{id}.
+    
+    Για την περίπτωση χωρίς αναγνωριστικό,
+    βλέπουμε ότι υποστηρίζονται οι μέθοδοι \en{GET} και \en{POST}.
+    Αυτές δέχονται \en{URL} αιτήσεις 
+    και οι απαντήσεις τους είναι σε μορφή \en{JSON}.
+
+    Λαμβάνοντας υπόψη τις παραμέτρους και τις κεφαλίδες,
+    προκύπτει ο ακόλουθος κώδικας για τον \en{Groovy Builder}:
+
+    \selectlanguage{english}
+    \begin{lstlisting}
+    endpoint('/products') {
+    \end{lstlisting}
+    \begin{lstlisting}[deletekeywords={endpoint,description}]
+        label 'products endpoint'
+        method('GET') {
+            request('URL') {
+                withQueryParameter('start', 'Integer', 0)
+                withQueryParameter('count', 'Integer', 20)
+                withQueryParameter('status', 'String', 'ACTIVE')
+                withQueryParameter('sort', 'String', 'id%7CDESC')
+            }
+            response('JSON') {
+                withStatus(200) {
+                    body 'OK'
+                }
+            }
+        }
+        method('POST') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'OK'
+                }
+            }
+        }
+    }
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    Στη συνέχεια έχουμε την περίπτωση ενός συγκεκριμένου προϊόντος με βάση το προσδιοριστικό \en{id} του.
+
+    Δηλώνοντας τη μεταβλητή '\en{id}' μαζί με το μονοπάτι του τελικού σημείου
+    και λαμβάνοντας υπόψη τις παραμέτρους και τις κεφαλίδες,
+    προκύπτει ο ακόλουθος κώδικας για \en{Groovy Builder}:
+
+    \selectlanguage{english}
+    \begin{lstlisting}
+    endpoint('/products', 'id') {
+    \end{lstlisting}
+    \begin{lstlisting}[deletekeywords={endpoint,description}]
+        label 'products endpoint'
+        method('GET') {
+            request('URL') {}
+            response('JSON') {
+                withStatus(200) {
+                    body 'OK'
+                }
+            }
+        }
+        method('PUT') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+            }
+        }
+        method('PATCH') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+            }
+        }
+        method('DELETE') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+            }
+            response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+            }
+        }
+    }
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    Εκτελώντας την εντολή \emph{\en{generate}} στο \en{Gradle},
+    έχοντας πρώτα ορίσει και τις επιθυμητές τοποθεσίες,
+    παράγονται τα εξής αρχεία:
+    
+    \begin{itemize}
+        \item \underline{\en{REST API Client}}
+        
+        Το πρώτο και βασικό αρχείο που παράγεται είναι ο πελάτης (\en{client}) της διεπαφής.
+        Αυτός πέρα από βοηθητικές διαδικασίες περιλαμβάνει για κάθε τελικό σημείο συναρτήσεις που υποστηρίζουν όλες τις μεθόδους του,
+        μαζί με παραμέτρους και κεφαλίδες εφόσον αυτές παρέχονται.
+        
+        Για παράδειγμα, 
+        η συνάρτηση που αντιστοιχεί στη μέθοδο \en{POST} του τελικού σημείου διαπίστευσης ('\en{login}') είναι η εξής:
+
+        \selectlanguage{english}
+        \begin{lstlisting}[language=java]
+public Map<String, Object> post_to_login_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+
+    if(queryParams.isEmpty()) {
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest(urlPrefix + "/login", "application/x-www-form-urlencoded", HttpRequest.BodyPublishers.ofString(input), headers),
+                ClientHelper::parseJsonObject
+        );
+    }
+    else {
+        String queryParamString = queryParamsToString(queryParams);
+        return sendRequestAndParseResponseBodyAsUTF8Text(
+                () -> newPostRequest(urlPrefix + "/login" + queryParamString, "application/x-www-form-urlencoded", HttpRequest.BodyPublishers.ofString(input), headers),
+                ClientHelper::parseJsonObject
+        );
+    }
+}
+\end{lstlisting}
+\selectlanguage{greek}
+
+
+Με παρόμοιο τρόπο δημιουργούνται οι υπόλοιπες μέθοδοι, 
+ενώ καθεμιά, ανάλογα τον τύπο της, αξιοποιεί τις παρακάτω βοηθητικές διαδικασίες:
+
+\selectlanguage{english}
+\begin{lstlisting}[language=java]
+private HttpRequest newPostRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
+
+    return newRequest("POST", url, contentType, bodyPublisher, headers);
+}
+
+private HttpRequest newGetRequest(String url, Map<String, String> headers) {
+
+    return newRequest("GET", url, "application/x-www-form-urlencoded", HttpRequest.BodyPublishers.noBody(), headers);
+}
+
+private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
+
+    return newRequest("PUT", url, contentType, bodyPublisher, headers);
+}
+
+private HttpRequest newPatchRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
+
+    return newRequest("PATCH", url, contentType, bodyPublisher, headers);
+}
+
+private HttpRequest newDeleteRequest(String url, Map<String, String> headers) {
+
+    return newRequest("DELETE", url, "application/x-www-form-urlencoded", HttpRequest.BodyPublishers.noBody(), headers);
+}
+
+\end{lstlisting}
+\selectlanguage{greek}
+
+Κάθε μέθοδος για να πραγματοποιήσει μια αίτηση χρησιμοποιεί την παρακάτω κοινή διαδικασία:
+
+\selectlanguage{english}
+\begin{lstlisting}[language=java]  
+private HttpRequest newRequest(String method, String url, String contentType,
+                                HttpRequest.BodyPublisher bodyPublisher, Map<String, String> headers) {
+
+    HttpRequest.Builder builder = HttpRequest.newBuilder();
+
+    builder.method(method, bodyPublisher)
+            .header(CONTENT_TYPE_HEADER, contentType);
+
+    for (Map.Entry<String,String> entry : headers.entrySet())
+        builder.header(entry.getKey(), entry.getValue());
+
+    return builder
+            .uri(URI.create(url))
+            .build();
+}
+\end{lstlisting}
+\selectlanguage{greek}
+
+Τέλος,
+η πραγματοποίηση της \en{HTTP} αίτησης 
+και η λήψη της απάντησης γίνονται από την ακόλουθη διαδικασία:
+
+\selectlanguage{english}
+\begin{lstlisting}[language=java]
+private Map<String, Object> sendRequestAndParseResponseBodyAsUTF8Text(Supplier<HttpRequest> requestSupplier,
+                                                                        Function<Reader, Map<String, Object>> bodyProcessor) {
+
+    HttpRequest request = requestSupplier.get();
+
+    Map<String, Object> bodyHeaders = new HashMap<>();
+
+    try {
+        System.out.println("Sending " + request.method() + " to " + request.uri());
+        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        int statusCode = response.statusCode();
+        if (statusCode == 200 || statusCode == 201) {
+            try {
+                if (bodyProcessor != null) {
+                    bodyHeaders.put("headers", response.headers().map());
+                    bodyHeaders.put("body", bodyProcessor.apply(new InputStreamReader(response.body(), StandardCharsets.UTF_8)));
+                    return bodyHeaders;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch(Exception e) {
+                throw new ResponseProcessingException(e.getMessage(), e);
+            }
+        }
+        else {
+            throw new ServerResponseException(statusCode, ClientHelper.readContents(response.body()));
+        }
+    }
+    catch(IOException | InterruptedException e) {
+        throw new ConnectionException(e.getMessage(), e);
+    }
+}  
+\end{lstlisting}
+\selectlanguage{greek} 
+
+Η παραπάνω διαδικασία υποστηρίζει αιτήσεις που έχουν μορφή \en{JSON}.
+Με όμοιο τρόπο παράγονται για \en{String} και για \en{Integer}.
+        
+        \item \underline{Σενάρια ελέγχου για τον παραγόμενο κώδικα}
+        
+        Μαζί με τον παραπάνω \en{REST API Client},
+        παράγονται και τα κατάλληλα σενάρια ελέγχου για αυτόν σε γλώσσα \en{Spock}.
+
+        Για παράδειγμα, για το τελικό σημείο διαπίστευσης και τη μέθοδο \en{POST} που υποστηρίζει,
+        δημιουργείται το παρακάτω σενάριο ελέγχου:
+\selectlanguage{english}
+\begin{lstlisting}[deletekeywords={api,body}]
+def "POST to login with headers and queryParams"() {
+    given:
+    String requestBody = "username=bodyParamValue&password=bodyParamValue"
+    ObjectMapper responseMapper = new ObjectMapper()
+    JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
+    wms.givenThat(
+            post(urlMatching("/observatory/api/login\\\\?.*"))
+            .withRequestBody(containing(requestBody))
+            .willReturn(aResponse()
+                    .withStatus(201)
+                    .withJsonBody(resultJSON)
+            )
+    )
+    Map<String, String> headers = new HashMap<>()
+    Map<String, List<String>> queryParams = new HashMap<>()
+
+    when:
+    Map<String, Object> result = caller.post_to_login_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+    then:
+    result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+}
+\end{lstlisting}
+\selectlanguage{greek} 
+
+Βλέπουμε ότι προσδιορίζεται ένας εικονικός διακομιστής (\en{Mock Server}),
+που λαμβάνει τις αιτήσεις του \en{REST API Client}
+με βάση μία κανονική έκφραση (\en{regular expression}) που ελέγχει τη διεύθυνση.
+
+Παράλληλα δημιουργούνται δοκιμαστικές αιτήσεις με βάση τις ιδιότητες της μεθόδου και του τελικού σημείου.
+Στο παράδειγμά μας οι παράμετροι σώματος '\en{username}' και '\en{password}' παίρνουν τυχαίες τιμές 
+και αποκτούν την κωδικοποιημένη μορφή \en{URL}.
+
+Ο εικονικός διακομιστής αναμένει αίτηση που περιλαμβάνει το περιεχόμενο που στέλνουμε
+και επιστρέφει μία απάντηση με κωδικό κατάστασης 201 και ένα τυχαίο αρχείο \en{JSON}.
+
+Ο τελευταίος έλεγχος αφορά την απάντηση που δέχεται ο \en{REST API Client} από τον εικονικό διακομιστή
+και μέσω κανονικής έκφρασης ελέγχει αν είναι μορφής \en{JSON}. 
+
+
+        \item \underline{Σενάρια ελέγχου για το \en{RESTful API}}
+        
+        Το τελευταίο αρχείο που παράγεται περιλαμβάνει σενάρια ελέγχου για τον '\en{RESTful API}',
+        αυτή τη φορά θεωρώντας πως έχουμε πραγματικό διακομιστή αντί για εικονικό.
+\selectlanguage{english}
+\begin{lstlisting}[deletekeywords={body}]
+def "POST to login with headers and queryParams"() {
+
+    given:
+    String requestBody = "username=bodyParamValue&password=bodyParamValue"
+    Map<String, String> headers = new HashMap<>()
+    Map<String, List<Object>> queryParams = new HashMap<>()
+
+    when:
+    Map<String, Object> result = caller.post_to_login_with_headers_and_queryParams(requestBody, headers, queryParams)
+    Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
+
+    then:
+    println("Body:")
+    println(result.get("body"))
+    println("Headers:")
+    println(resultHeaders)
+    result.toString().matches("[\\{\\[].*[\\}\\]]")
+}
+\end{lstlisting}
+\selectlanguage{greek} 
+
+Όπως βλέπουμε,
+παρότι λείπει ο εικονικός διακομιστής,
+δημιουργούμε μία αίτηση με βάση τις παραμέτρους και τις κεφαλίδες που υποστηρίζονται.
+
+Στα σενάρια ελέγχου για το \en{RESTful API} έχουμε επιπλέον την εκτύπωση του σώματος και των κεφαλίδων της απάντησης.
+Αυτό είναι χρήσιμες σε περιπτώσεις όπως αυτή του τελικού σημείου διαπίστευσης,
+μιας και ο χρήστης μπορεί εύκολα να αντικαταστήσει τις προκαθορισμένες τιμές με ένα λειτουργικό ζεύγος 
+\en{username} και \en{password} και να πάρει το \en{authentication token} είτε αυτό επιστρέφεται 
+μέσω του σώματος της απάντησης,
+είτε μέσω κάποιας κεφαλίδας της.
+
+Εκτελώντας το παραπάνω σενάριο ελέγχου,
+έχουμε την ακόλουθη έξοδο στην κονσόλα:
+
+\selectlanguage{english}
+\begin{lstlisting}[deletekeywords={api}]
+Sending POST to https://localhost:8765/observatory/api/login
+Body:
+[token:$2a$10$hwOh6PJZeV1Nl9HKmOwsdO7RLWPxwEgojuYINKvDWwAYOkWvK11Uu]
+Headers:
+[content-length:[75], content-type:[application/json], date:[Mon, 11 Jan 2021 10:13:41 GMT], vary:[Origin, Access-Control-Request-Method, Access-Control-Request-Headers]]
+\end{lstlisting}
+\selectlanguage{greek} 
+
+Επιπλέον παράγονται έλεγχοι για κάθε παράμετρο και κεφαλίδα που είναι υποχρεωτικές.
+Στην περίπτωσή μας και οι δύο παράμετροι σώματος της αίτησης (\en{username} και \en{password}) είναι υποχρεωτικές.
+Επομένως το ακόλουθο σενάριο ελέγχου πραγματοποιεί μία αίτηση χωρίς \en{username}
+και θεωρείται έγκυρο αν ο διακομιστής εγείρει εξαίρεση.
+
+\selectlanguage{english}
+\begin{lstlisting}
+def "POST to login without mandatory bodyParam: username"() {
+
+    given:
+    String requestBody = "password=bodyParamValue"
+    Map<String, String> headers = new HashMap<>()
+    Map<String, List<Object>> queryParams = new HashMap<>()
+
+    when:
+    caller.post_to_login_with_headers_and_queryParams(requestBody, headers, queryParams)
+
+    then:
+    thrown RuntimeException
+}
+\end{lstlisting}
+\selectlanguage{greek} 
+    \end{itemize}
+
+\section{Ψηφιακό μητρώο δικτυακών υποδομών}
+Η δεύτερη προγραμματιστική διεπαφή τύπου \en{REST} που χρησιμοποιήθηκε για την επαλήθευση της εργασίας
+είναι τμήμα ενός ψηφιακού μητρώου για της δικτυακές υποδομές μιας χώρας.
+Σκοπός του είναι η καταγραφή και η παρακολούθηση της κατάστασης
+του συνόλου των διαθέσιμων δικτυακών υποδομών της χώρας.
+
+Πιο συγκεκριμένα, η διεπαφή έχει τα εξής χαρακτηριστικά:
+
+\begin{itemize}
+    \item \textbf{Διεύθυνση}
+    
+    Ως διεύθυνση βάσης χρησιμοποιείται το '\en{https://localhost:44349/api}'.
+
+    Οι πόροι του συστήματος δίνονται από τα τελικά σημεία στη μορφή \en{\{baseURL\}/\{path-to-resource\}}.
+
+    Έτσι το τελικό σημείο των παρόχων είναι το \en{\{baseURL\}/NationalNetwork},
+    ενώ για τον πάροχο με κωδικό 3 το \en{\{baseURL\}/NationalNetwork/3}.
+
+    \item \textbf{Διαπίστευση} 
+    
+    Το τελικό σημείο διαπίστευσης χρηστών έχει το μονοπάτι '\en{\{baseURL\}/login}'.
+
+    Η μοναδική μέθοδος που υποστηρίζει είναι η \en{POST}.
+
+    Υπάρχουν δύο ειδών χρήστες στο σύστημα,
+    οι Διαχειριστές που έχουν δικαίωμα επεξεργασίας όλων των δεδομένων
+    και οι Πάροχοι που έχουν δικαίωμα επεξεργασίας μόνο των πληροφοριών των συνδέσεων.
+
+    Το τελικό σημείο της διαπίστευσης δέχεται ένα αρχείο \en{JSON} με το \en{username} και το \en{password}.
+    Σε περίπτωση επιτυχούς σύνδεσης επιστρέφει αρχείο \en{JSON} με το \en{id} του χρήστη,
+    το \en{username} του, τον ρόλο του και ένα \en{Bearer token}.
+    Αυτό θα πρέπει να περιλαμβάνεται ως κεφαλίδα ταυτοποίησης με όνομα '\en{Authorization}'
+    σε όποια αίτηση απαιτείται πιστοποίηση.
+
+    Η διάρκεια του \en{JSON Web Token} είναι 7 ημέρες.
+
+    \item \textbf{Πάροχοι}
+    
+    Το τελικό σημείο των παρόχων έχει το μονοπάτι '\en{\{baseURL\}/NationalNetwork}'.
+
+    Σε αυτό υποστηρίζονται οι ακόλουθες μέθοδοι:
+
+    \begin{enumerate}
+        \item \underline{\textbf{\en{GET}}: Επιστρέφεται η λίστα των παρόχων}
+        
+        Δικαίωμα προβολής των πληροφοριών των παρόχων έχει οποιοσδήποτε χρήστης,
+        χωρίς ανάγκη πιστοποίησης.
+
+        Η απάντηση είναι ένα αρχείο \en{JSON} που περιλαμβάνει μία λίστα με τα στοιχεία των παρόχων,
+        της οποίας κάθε καταχώρηση περιλαμβάνει τις εξής παραμέτρους:
+
+        \selectlanguage{english}
+        \begin{itemize}
+            \item id: Integer
+            \item name: String
+            \item location: String
+            \item created: String
+            \item email: String
+        \end{itemize}
+        \selectlanguage{greek}
+
+        \item \underline{\textbf{\en{POST}}: Δημιουργείται νέα καταχώρηση παρόχου}
+        
+        Οι πληροφορίες που απαιτούνται για τη δημιουργία ενός παρόχου 
+        διατυπώνονται ως παράμετροι σώματος στην αίτηση.
+        Αυτές είναι το \en{name}, το \en{location} και το \en{email}.
+        
+        Η απάντηση στην αίτηση δημιουργίας ενός προϊόντος 
+        είναι η πλήρης κωδικοποίηση των δεδομένων του,
+        δηλαδή ένα αρχείο \en{JSON} με τις αντίστοιχες πληροφορίες.
+
+    \end{enumerate}
+
+    Επιπλέον υποστηρίζει προσδιοριστικό (\en{attribute}) για το \en{id} των παρόχων,
+    με μονοπάτι της μορφής '\en{\{baseURL\}/NationalNetwork/\{id}\}'. 
+
+    Με το \en{id} υποστηρίζονται οι ακόλουθες μέθοδοι:
+
+    \begin{enumerate}
+        \item \underline{\textbf{\en{GET}}: Επιστρέφονται οι πληροφορίες του παρόχου}
+        
+        Για παράδειγμα, \en{GET} \emph{\en{\{baseURL\}/products/2}}.
+
+        Το αποτέλεσμα της αίτησης είναι ένα αρχείο \en{JSON}
+        με τα δεδομένα του παρόχου με το αντίστοιχο \en{id}.
+
+        Αυτά όπως και στην περίπτωση της μεθόδου \en{GET} χωρίς προσδιοριστικό \en{id}
+        είναι τα ακόλουθα:
+
+        \selectlanguage{english}
+        \begin{itemize}
+            \item id: Integer
+            \item name: String
+            \item location: String
+            \item created: String
+            \item email: String
+        \end{itemize}
+        \selectlanguage{greek}
+
+        \item \underline{\textbf{\en{PATCH}}: Ενημερώνονται μερικώς οι πληροφορίες του παρόχου}
+        
+        Η μέθοδος \en{PATCH} επιτρέπει τη μερική επεξεργασία ενός παρόχου (\en{Partial Update}).
+
+        Τα δεδομένα για τα στοιχεία εκείνα που θέλουμε να ενημερώσουμε
+        περιλαμβάνονται στην αίτηση ως παράμετροι σώματος.
+
+        Η απάντηση είναι η πλήρης κωδικοποίηση των δεδομένων του παρόχου,
+        δηλαδή ένα αρχείο \en{JSON} με τις αντίστοιχες πληροφορίες.
+
+        \item \underline{\textbf{\en{DELETE}}: Διαγράφεται ο πάροχος}
+        
+        Ο πάροχος με το αντίστοιχο \en{id} διαγράφεται από τη βάση δεδομένων,
+        εφόσον η αίτηση γίνεται από χρήστη με ρόλο Διαχειριστή.
+
+        Το αποτέλεσμα είναι ένα αρχείο \en{String} της μορφής \en{"success at deletion"}.
+    \end{enumerate}
+\end{itemize}
+
+Για λόγους συντομίας θα ασχοληθούμε μόνο με το τελικό σημείο των παρόχων.
+Όμοια με αυτό λειτουργούν τα τελικά σημεία των συνδέσεων και των χρηστών,
+ενώ η διαπίστευση δε διαφέρει σημαντικά από αυτήν του παρατηρητηρίου τιμών του πρώτου παραδείγματος.
+
+Η διεύθυνση της διεπαφής δίνεται ως η '\en{https://localhost:44349/api}',
+επομένως δηλώνουμε την θύρα του διακομιστή και τη διεύθυνση βάσης με τις εξής εντολές:
+
+\selectlanguage{english}
+\begin{lstlisting}[deletekeywords={api}]
+baseUrl '/api'
+serverPort = 44349
+\end{lstlisting}
+\selectlanguage{greek}
+
+Όπως και πριν,
+έτσι και τώρα θα δηλώσουμε μία φορά το τελικό σημείο χωρίς προσδιοριστικό 
+και μία με το \en{id}.
+
+Μία βασική διαφορά των δύο διεπαφών είναι ότι το ψηφιακό μητρώο δικτυακών υποδομών
+δέχεται αιτήσεις με τύπο περιεχομένου \en{JSON} αντί για \en{URL}.
+Αυτό όμως δεν είναι πρόβλημα ούτε απαιτεί κάποια σημαντική αλλαγή πέρα από τη δήλωση '\en{JSON}' 
+στην αίτηση κάθε μεθόδου.
+
+Έτσι, για παράδειγμα, 
+για να περιγράψουμε στον \en{Groovy Builder} το τελικό σημείο των παρόχων με και χωρίς προσδιοριστικό,
+γράφουμε τα εξής:
+
+\selectlanguage{english}
+\begin{lstlisting}
+endpoint('/NationalNetwork') {
+\end{lstlisting}
+\begin{lstlisting}[deletekeywords={endpoint}]
+    label 'providers networks'
+    description 'an endpoint for providers'
+    method('GET') {
+        request('JSON') {}
+        response('JSON') {
+            withStatus(200) {
+                body 'OK'
+            }
+        }
+    }
+    method('POST') {
+        request('JSON') {
+            withHeader('Authorization')
+            withBodyParameter('name', 'String')
+            withBodyParameter('location', 'String')
+            withBodyParameter('email', 'String')
+        }
+        response('JSON') {
+                withStatus(201) {
+                    body 'Created'
+                }
+        }
+    }
+}
+\end{lstlisting}
+\begin{lstlisting}
+endpoint('/NationalNetwork', 'id') {
+\end{lstlisting}
+\begin{lstlisting}[deletekeywords={endpoint}]
+    label 'providers networks with id'
+    description 'an endpoint for providers by id'
+    method('PATCH') {
+        request('JSON') {
+            withHeader('Authorization')
+            withBodyParameter('name', 'String')
+            withBodyParameter('location', 'String')
+            withBodyParameter('email', 'String')
+        }
+        response('JSON') {
+            withStatus(200) {
+                body 'OK'
+            }
+        }
+    }
+    method('DELETE') {
+        request('JSON') {
+            withHeader('Authorization')
+            withBodyParameter('name', 'String')
+            withBodyParameter('location', 'String')
+            withBodyParameter('email', 'String')
+        }
+        response('String') {
+            withStatus(201) {
+                body 'Created'
+            }
+        }
+    }
+}
+\end{lstlisting}
+\selectlanguage{greek}
+
+Με την εκτέλεση της εντολής \emph{\en{generate}} στον \en{Gradle},
+πάραγονται όπως και πριν τα παρακάτω τρία αρχεία:
+
+\begin{itemize}
+    \item \underline{\en{REST API Client}}
+    
+    Βλέπουμε ότι στον πελάτη που δημιουργείται, 
+    για κάθε μέθοδο της διεπαφής που δέχεται αιτήσεις τύπου \en{JSON},
+    αυτόματα αλλάζει το όρισμα του τύπου δεδομένων σε '\en{application/json}'.    
+
+    \selectlanguage{english}
+    \begin{lstlisting}[language=java]
+    public Map<String, Object> post_to_NationalNetwork_with_headers_and_queryParams(String input, Map<String, String> headers, Map<String, List<String>> queryParams) {
+
+        if(queryParams.isEmpty()) {
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/NationalNetwork", "application/json", HttpRequest.BodyPublishers.ofString(input), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+        else {
+        String queryParamString = queryParamsToString(queryParams);
+
+            return sendRequestAndParseResponseBodyAsUTF8Text(
+                    () -> newPostRequest(urlPrefix + "/NationalNetwork" + queryParamString, "application/json", HttpRequest.BodyPublishers.ofString(input), headers),
+                    ClientHelper::parseJsonObject
+            );
+        }
+    }
+    \end{lstlisting}
+    \selectlanguage{greek}
+
+    \item \underline{Σενάρια ελέγχου για τον παραγόμενο κώδικα}
+
+    Στα σενάρια ελέγχου που παράγονται και αφορούν τον κώδικα του \en{REST API Client}
+    αυτή τη φορά έχουμε τελικό σημείο διαπίστευσης που δέχεται τα δεδομένα σε μορφή \en{JSON}.
+    Δηλώνοντάς το αυτό στον \en{Groovy Builder},
+    το αντίστοιχο σενάριο ελέγχου είναι το εξής:
+
+    \selectlanguage{english}
+    \begin{lstlisting}[deletekeywords={api,body}]
+    def "POST to users_authenticate with headers and queryParams"() {
+
+        given:
+        String requestBody = new JSONObject()
+            .put("username", "bodyParamValue")
+            .put("password", "bodyParamValue")
+            .toString();
+        ObjectMapper responseMapper = new ObjectMapper()
+        JsonNode resultJSON = responseMapper.readTree("{\"value\":\"ok\"}")
+        wms.givenThat(
+                post(urlMatching("/api/users/authenticate\\\\?.*"))
+                .withRequestBody(containing(requestBody))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withJsonBody(resultJSON)
+                )
+        )
+        Map<String, String> headers = new HashMap<>()
+        Map<String, List<String>> queryParams = new HashMap<>()
+        
+        when:
+        Map<String, Object> result = caller.post_to_users_authenticate_with_headers_and_queryParams(requestBody, headers, queryParams)
+        
+        then:
+        result.get("body").toString().matches("[\\{\\[].*[\\}\\]]")
+    }
+\end{lstlisting}
+\selectlanguage{greek}
+
+    \item \underline{Σενάρια ελέγχου για το \en{RESTful API}}
+    
+    Όμοια με παραπάνω,
+    το σενάριο ελέγχου για την διαπίστευση των χρηστών προσαρμόζεται στα δεδομένα εισόδου 
+    και γίνεται το ακόλουθο:
+
+    \selectlanguage{english}
+    \begin{lstlisting}[deletekeywords={body}]
+    def "POST to users_authenticate with headers and queryParams"() {
+
+        given:
+        String requestBody = new JSONObject()
+            .put("username", "bodyParamValue")
+            .put("password", "bodyParamValue")
+            .toString();
+        Map<String, String> headers = new HashMap<>()
+        Map<String, List<Object>> queryParams = new HashMap<>()
+
+        when:
+        Map<String, Object> result = caller.post_to_users_authenticate_with_headers_and_queryParams(requestBody, headers, queryParams)
+        Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
+
+        then:
+        println("Body:")
+        println(result.get("body"))
+        println("Headers:")
+        println(resultHeaders)
+
+        result.toString().matches("[\\{\\[].*[\\}\\]]")
+    }
+\end{lstlisting}
+\selectlanguage{greek}
+
+    Αυτή τη φορά μπορούμε να τροποποιήσουμε το σενάριο ελέγχου 
+    αλλάζοντας τις τυχαίες τιμές των παραμέτρων \en{username} και \en{password} στο \en{JSON} αρχείο αίτησης
+    με ένα ζεύγος έγκυρων δεδομένων.
+    
+    Το \en{authentication token} που θα τυπωθεί στην κονσόλα μπορούμε να το αντιγράψουμε 
+    στην τιμή της αντίστοιχης κεφαλίδας πιστοποίησης των σεναρίων ελέγχου που την απαιτούν.
+    
+    Έτσι, για παράδειγμα, μπορούμε να αντικαταστήσουμε με αυτό το '\en{headerValue}' στο σενάριο ελέγχου της δημιουργίας 
+    νέου παρόχου μέσω μεθόθου \en{POST}, το οποίο παράγεται αυτόματα ως εξής:
+
+    \selectlanguage{english}
+    \begin{lstlisting}[deletekeywords={body}]
+def "POST to NationalNetwork with headers and queryParams"() {
+
+    given:
+    String requestBody = new JSONObject()
+        .put("name", "bodyParamValue")
+        .put("location", "bodyParamValue")
+        .put("email", "bodyParamValue")
+        .toString();
+    Map<String, String> headers = new HashMap<>()
+    headers.put("Authorization", 'headerValue')
+    Map<String, List<Object>> queryParams = new HashMap<>()
+
+    when:
+    Map<String, Object> result = caller.post_to_NationalNetwork_with_headers_and_queryParams(requestBody, headers, queryParams)
+    Map<String, Object> resultHeaders = result.get("headers") as Map<String, Object>
+
+    then:
+    println("Body:")
+    println(result.get("body"))
+    println("Headers:")
+    println(resultHeaders)
+
+    result.toString().matches("[\\{\\[].*[\\}\\]]")
+}
+\end{lstlisting}
+\selectlanguage{greek}
+    
+\end{itemize}

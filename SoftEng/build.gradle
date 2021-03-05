@@ -1,0 +1,190 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+
+    // Apply the groovy plugin to also add support for Groovy (needed for Spock)
+    id 'groovy'
+
+    id 'application'
+
+    id 'org.springframework.boot' version "2.3.4.RELEASE"
+
+    id 'eclipse'
+
+    id 'idea'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.3.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.3.4.RELEASE'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.3.4.RELEASE'
+    implementation 'mysql:mysql-connector-java:8.0.22'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.6'
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.6'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.6'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.7'
+    implementation 'org.projectlombok:lombok:1.18.4'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    testImplementation 'org.json:json:20201115'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.7'
+    testImplementation 'org.spockframework:spock-core:2.0-M4-groovy-3.0'
+    testImplementation 'com.github.saikos:softeng18b-rest-api-client:v1.3'
+    testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+
+}
+
+test {
+    systemProperties(System.getProperties())
+
+    useJUnitPlatform()
+    testLogging {
+        //noinspection GrUnresolvedAccess
+        events "passed", "skipped", "failed"
+    }
+}
+
+apply plugin: GroovyApiSpecBuilder
+
+api {
+    baseUrl '/observatory/api'
+    label 'my test api'
+
+    endpoint('/login') {
+        label 'login endpoint'
+        description 'the endpoint for user login'
+        method('POST') {
+            request('URL') {
+                withBodyParameter('username', 'String')
+                withBodyParameter('password', 'String')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+    }
+    endpoint('/products') {
+        label 'products endpoint'
+        method('GET') {
+            request('URL') {
+                withQueryParameter('start', 'Integer', 0)
+                withQueryParameter('count', 'Integer', 20)
+                withQueryParameter('status', 'String', 'ACTIVE')
+                withQueryParameter('sort', 'String', 'id%7CDESC')
+            }
+            response('JSON') {
+                withStatus(200)
+                withBodyAttribute('count', 'Number')
+                withBodyAttribute('start', 'Number')
+                withBodyAttribute('total', 'Number')
+                withBodyAttribute('products', 'List')
+
+            }
+        }
+        method('POST') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+    }
+    endpoint('/products/{type}/{id}') {
+        label 'products endpoint'
+        method('GET') {
+            request('URL') {}
+            response('JSON') {
+                withStatus(200)
+            }
+        }
+        method('PUT') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+        method('PATCH') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+                withBodyParameter('name', 'String')
+                withBodyParameter('description', 'String')
+                withBodyParameter('category', 'String')
+                withBodyParameter('tags', 'String')
+                withBodyParameter('withdrawn', 'boolean')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+        method('DELETE') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+    }
+    endpoint('/logout') {
+        label 'logout endpoint'
+        description 'the endpoint for user logout'
+        method('POST') {
+            request('URL') {
+                withHeader('X-OBSERVATORY-AUTH')
+            }
+            response('JSON') {
+                withStatus(201)
+            }
+        }
+    }
+
+    // Rest API Client
+    clientFolder = "/SoftEng/src/main/java/"
+    clientPackage = "hello/restapiclient"
+    clientName = "RestAPIClient"
+    serverPort = 8765
+
+    // Rest API Server Tests
+    testFolder = "/SoftEng/src/test/groovy/"
+    testPackage = "hello/restapitests"
+    testName = "TestServer"
+
+    // Rest API Client Tests with Mock Server
+    mockFolder = "/SoftEng/src/test/groovy/"
+    mockPackage = "hello/restapimocktests"
+    mockName = "MockServer"
+
+}
