@@ -1,0 +1,294 @@
+\chapter{Κώδικας \en{Rest API Specification}}
+
+\selectlanguage{english}
+
+Packages, imports and comments omitted.
+
+\section{\en{Interfaces}}
+
+\subsection{\en{API Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface APISpec {
+        String getBaseUrl();
+        String getLabel();
+        Set<EndpointSpec> getEndpoints();
+    }
+\end{lstlisting}
+
+\subsection{\en{Endpoint Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface EndpointSpec {
+        String getPath();
+        String getLabel();
+        String getDescription();
+        Set<String> getAttributes();
+        Set<MethodSpec> getMethods();
+    }    
+\end{lstlisting}
+
+\subsection{\en{Header Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface HeaderSpec {
+        String getName();
+        String getDefaultValueIfOptionalAndMissing();
+        boolean getMandatory();
+    }    
+\end{lstlisting}
+
+\subsection{\en{Method Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface MethodSpec {
+        enum MethodType {
+            GET,
+            PUT,
+            POST,
+            DELETE,
+            PATCH,
+            HEAD
+        }
+        MethodType getType();
+        RequestSpec getRequest();
+        ResponseSpec getResponse();
+    }
+\end{lstlisting}
+
+\subsection{\en{Parameter Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface ParameterSpec {
+        String getName();
+        String getType();
+        String getDefaultBodyIfOptionalAndMissing();
+        boolean getMandatory();
+    }
+\end{lstlisting}
+
+\subsection{\en{Request Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface RequestSpec {
+        Set<HeaderSpec> getHeaders();
+        Set<ParameterSpec> getQueryParams();
+        String getContentType();
+        Set<ParameterSpec> getBodyParams();
+    }
+\end{lstlisting}
+
+\subsection{\en{RequestJSON Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface RequestJSONSpec extends RequestSpec {
+        default String getContentType() {
+            return "application/json";
+        }
+    }    
+\end{lstlisting}
+
+\subsection{\en{RequestURL Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface RequestURLSpec extends RequestSpec {
+        default String getContentType() {
+            return "application/x-www-form-urlencoded";
+        }
+    }
+\end{lstlisting}
+
+\subsection{\en{Response Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface ResponseSpec {
+        String getResponseBodySchema();
+        Set<HeaderSpec> getHeaders();
+        StatusSpec getStatus();
+    }
+\end{lstlisting}
+
+\subsection{\en{Status Interface}}
+
+\begin{lstlisting}[language=Java]
+    public interface StatusSpec {
+        String getCode();
+        String getBody();
+    }
+\end{lstlisting}
+
+%% Implementations %%
+
+\section{\en{Implementations}}
+
+\subsection{\en{API Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class APISpecImpl implements APISpec {
+    private final String baseUrl;
+    private final String label;
+    private final Set<EndpointSpec> endpoints;
+
+    APISpecImpl(String baseUrl, String label,
+                Set<EndpointSpec> endpoints);
+
+    public String getBaseUrl();
+    public String getLabel();
+    public Set<EndpointSpec> getEndpoints();
+}
+\end{lstlisting}
+
+\subsection{\en{Endpoint Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class EndpointSpecImpl implements EndpointSpec {
+
+    private final String path;
+    private final String label;
+    private final String description;
+    private final Set<String> attributes;
+    private final Set<MethodSpec> methods;
+
+    EndpointSpecImpl(String path, String label, String description,
+                    Set<String> attributes, Set<MethodSpec> methods);
+
+    public String getPath();
+    public String getLabel();
+    public String getDescription();
+    public Set<String> getAttributes();
+    public Set<MethodSpec> getMethods();
+} 
+\end{lstlisting}
+
+\subsection{\en{Header Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class HeaderSpecImpl implements HeaderSpec {
+
+    private final String name;
+    private final String defaultValue;
+    private final boolean mandatory;
+
+    HeaderSpecImpl(String name, String defaultValue,
+                   boolean mandatory);
+
+    public String getName();
+    public boolean getMandatory();
+    public String getDefaultValueIfOptionalAndMissing();
+}  
+\end{lstlisting}
+
+\subsection{\en{Method Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class MethodSpecImpl implements MethodSpec {
+
+    private final MethodType type;
+    private final RequestSpec request;
+    private final ResponseSpec response;
+
+    MethodSpecImpl(MethodType type, RequestSpec request,
+                   ResponseSpec response);
+
+    public MethodType getType();
+    public RequestSpec getRequest();
+    public ResponseSpec getResponse();
+}
+\end{lstlisting}
+
+\subsection{\en{Parameter Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class ParameterSpecImpl implements ParameterSpec {
+
+    private final String name;
+    private final String defaultValue;
+    private final String type;
+    private final boolean mandatory;
+
+    ParameterSpecImpl(String name, String defaultValue,
+                      String type, boolean mandatory);
+
+    public String getName();
+    public String getType();
+    public String getDefaultBodyIfOptionalAndMissing();
+    public boolean getMandatory();
+}
+\end{lstlisting}
+
+\subsection{\en{RequestJSON Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class RequestJSONSpecImpl implements RequestJSONSpec {
+
+    private final Set<HeaderSpec> headers;
+    private final Set<ParameterSpec> queryParams;
+    private final Set<ParameterSpec> bodyParams;
+
+    RequestJSONSpecImpl(Set<HeaderSpec> headers,
+                        Set<ParameterSpec> queryParams,
+                        Set<ParameterSpec> bodyParams);
+
+    public Set<HeaderSpec> getHeaders();
+    public Set<ParameterSpec> getQueryParams();
+    public Set<ParameterSpec> getBodyParams();
+}  
+\end{lstlisting}
+
+\subsection{\en{RequestURL Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class RequestURLSpecImpl implements RequestURLSpec {
+
+    private final Set<HeaderSpec> headers;
+    private final Set<ParameterSpec> queryParams;
+    private final Set<ParameterSpec> bodyParams;
+
+    RequestURLSpecImpl(Set<HeaderSpec> headers,
+                       Set<ParameterSpec> queryParams,
+                       Set<ParameterSpec> bodyParams);
+
+    public Set<HeaderSpec> getHeaders();
+    public Set<ParameterSpec> getQueryParams();
+    public Set<ParameterSpec> getBodyParams();
+}
+\end{lstlisting}
+
+\subsection{\en{Response Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class ResponseSpecImpl implements ResponseSpec {
+
+    private final Set<HeaderSpec> headers;
+    private final StatusSpec status;
+    private final String responseBodySchema;
+
+    ResponseSpecImpl(Set<HeaderSpec> headers,
+                     StatusSpec status,
+                     String responseBodySchema);
+
+    public String getResponseBodySchema();
+    public Set<HeaderSpec> getHeaders();
+    public StatusSpec getStatus();
+}
+\end{lstlisting}
+
+\subsection{\en{Status Implementation}}
+
+\begin{lstlisting}[language=Java]
+public class StatusSpecImpl implements StatusSpec {
+
+    private final String code;
+    private final String body;
+
+    StatusSpecImpl(String code, String body);
+
+    public String getCode();
+    public String getBody();
+}
+\end{lstlisting}
+
+\section{\en{Builders}}
+\section{\en{Spock Tests}}
+
+\selectlanguage{greek}

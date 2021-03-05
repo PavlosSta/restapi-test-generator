@@ -34,8 +34,14 @@ public class ResponseSpecBuilder {
     }
 
     public ResponseSpecBuilder addBodyAttribute(String bodyAttributeName, String bodyAttributeType) {
-        this.bodyAttributes.put(bodyAttributeName, bodyAttributeType);
-        return this;
+        if (bodyAttributeType.equals("String") || bodyAttributeType.equals("Number") || bodyAttributeType.equals("Object") ||
+                bodyAttributeType.equals("List") || bodyAttributeType.equals("Boolean") || bodyAttributeType.equals("null")) {
+            this.bodyAttributes.put(bodyAttributeName, bodyAttributeType);
+            return this;
+        }
+        else {
+            throw new RuntimeException("Response: Body attribute type not supported for JSON");
+        }
     }
 
     public ResponseSpec build() {

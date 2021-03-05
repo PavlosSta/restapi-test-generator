@@ -1,0 +1,88 @@
+\documentclass[modern,hyperref,histinit,noindex,plain,newlogo]{ntua-thesis}
+
+\title{Αυτόματη Παραγωγή Σεναρίων Ελέγχου \break για Προγραμματιστικές Διεπαφές \break τύπου \en{REST} (\en{RESTful APIs})}
+
+\toutis{του}
+\authorNameCapitalGR{ΠΑΥΛΟΥ Α. ΣΤΑΘΟΠΟΥΛΟΥ}
+\authorNameGR{Παύλος Σταθόπουλος}
+ 
+\supervisor{Νικόλαος Σ. Παπασπύρου}
+\supervisorTitle{Καθηγητής ΣΗΜΜΥ, ΕΜΠ}
+%\supervisorK{Κώστας Σαΐδης}
+%\supervisorKTitle{Ακαδημαϊκός Υπότροφος Τμ. Πληροφορικής και Τηλεπικοινωνιών, ΕΚΠΑ}
+\supervisorMaleFemale{Επιβλέποντες}
+
+\thesisPlaceDate{Αθήνα, Φεβρουάριος 2021}
+%  \ackPlaceDate{Αθήνα, Δεκέμβριος 2020}
+\examinationDate{8η Φεβρουαρίου 2021}
+\declarationDate{22 Ιανουαρίου 2021}
+\copyrightYear{2021}
+
+\firstExaminer{Γεώργιος Γκούμας}
+\firstExaminerTitle{Αναπληρωτής Καθηγητής}
+
+\secondExaminer{Βασίλειος Βεσκούκης}
+\secondExaminerTitle{Αναπληρωτής Καθηγητής}
+
+\chaptercolor{gray!50!brown}
+\appendixcolor{brown!60!orange}
+\hyperlinkcolor{blue}
+\titlecolor{white}
+\titlebackgroundcolor{gray!60!brown}  
+
+\hyphenation{ο-ποί-α}
+
+\begin{document}
+
+\maketitle
+
+\beginfrontmatter
+	
+\include{front_matter/abstract}
+
+%	\thesisDedication{αφιέρωση}
+%	\include{front_matter/acknowledgements}
+
+\tableofcontents
+
+% Κατάλογος Σχημάτων
+\listoffigures
+% Κατάλογος Εικόνων
+%	\listofillustrations
+% Κατάλογος Πινάκων
+%	\listoftables
+
+% Πρόλογος
+%	\include{front_matter/preface}
+	
+\beginmainmatter
+
+
+% Εισαγωγή
+\include{body_matter/intro}
+
+% Μέρη/Κεφάλαια
+
+\include{body_matter/chap2} % Αυτόματος Έλεγχος Προγραμματιστικών Διεπαφών Διαδικτύου
+\include{body_matter/chap3} % Σχεδιασμός
+\include{body_matter/chap4} % Υλοποίηση
+\include{body_matter/chap5} % Παραδείγματα Χρήσης
+\include{body_matter/chap6} % Related Work
+\include{body_matter/chap7} % Συμπεράσματα Και Μελλοντικές Επεκτάσεις
+
+% Παραρτήματα
+%\appendices
+%\include{back_matter/appA} % Κώδικας Rest API Specification
+%\include{back_matter/appB} % Κώδικας Code Generator
+%\include{back_matter/appC} % Κώδικας Groovy Builder
+
+% Βιβλιογραφία - Αναφορές
+\bibliography{references}
+
+% Συντομογραφίες - Αρκτικόλεξα - Ακρωνύμια
+%\includeabbreviations{back_matter/abbreviations}
+
+% Γλωσσάριο
+%\includeglossary{back_matter/glossary}
+
+\end{document}

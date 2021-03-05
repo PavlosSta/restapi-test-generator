@@ -1,0 +1,44 @@
+# Download and install mysql
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+
+# Create user
+$ sudo mysql --password
+$ <Enter>
+> create database medicine;
+> create user 'elli'@'%' identified by 'Orpheus2019';
+> grant all on medicine.* to 'elli'@'%';
+> exit;
+
+# Go to src/main/sql
+$ sudo mysql --password
+$ <Enter>
+> use medicine;
+> source Database.sql;
+> exit;
+
+#Our tests
+$ ./gradlew clean test -DIGNORE_SSL_ERRORS=true
+
+
+# Build with tests
+$ ./gradlew build -DIGNORE_SSL_ERRORS=true
+
+#Build without tests
+$ ./gradlew build -x test
+
+# Robotic-Saidis Tests
+# Go to src/main/sql
+$ sudo mysql --password
+$ <Enter>
+> use medicine;
+> source Database_test.sql;
+> exit;
+
+#Go to rest api client directory 
+$ ./gradlew test --tests gr.ntua.ece.softeng18b.client.ObservatoryAPIFunctionalTest -Dusername=admin -Dpassword=admin123 -Dprotocol=https -DIGNORE_SSL_ERRORS=true -Dhost=localhost -Dport=8765 -Dtest.json=test-data.json
+
+# Everytime the application need to be run just type the following
+# Make sure sourceCompatibility and targetCompatibility in the file "build.gradle"
+# match your version of java.
+$ ./gradlew bootRun

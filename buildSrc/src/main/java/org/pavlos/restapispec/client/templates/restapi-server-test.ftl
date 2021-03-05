@@ -10,6 +10,7 @@ import ${clientPackage}.${clientName}
 import org.json.JSONObject
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -71,10 +72,21 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
+        def json = JsonOutput.toJson(result.get("body"))
         def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
-        jsonSlurper.parseText(result.get("body").toString())
+        def jsonResult = jsonSlurper.parseText(json)
 
         noExceptionThrown()
+
+        jsonResult instanceof Map
+
+        <#list method.response.bodyAttributes as key,value>
+        <#if value == "null">
+        jsonResult.key == null
+        <#else>
+        jsonResult.${key} instanceof ${value}
+        </#if>
+        </#list>
         <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
         </#if>
@@ -212,10 +224,17 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
+        def json = JsonOutput.toJson(result.get("body"))
         def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
-        jsonSlurper.parseText(result.get("body").toString())
+        def jsonResult = jsonSlurper.parseText(json)
 
         noExceptionThrown()
+
+        jsonResult instanceof Map
+
+        <#list method.response.bodyAttributes as key,value>
+        jsonResult.${key} instanceof ${value}
+        </#list>
         <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
         </#if>
@@ -449,10 +468,17 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
+        def json = JsonOutput.toJson(result.get("body"))
         def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
-        jsonSlurper.parseText(result.get("body").toString())
+        def jsonResult = jsonSlurper.parseText(json)
 
         noExceptionThrown()
+
+        jsonResult instanceof Map
+
+        <#list method.response.bodyAttributes as key,value>
+        jsonResult.${key} instanceof ${value}
+        </#list>
         <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
         </#if>
@@ -686,10 +712,17 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
+        def json = JsonOutput.toJson(result.get("body"))
         def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
-        jsonSlurper.parseText(result.get("body").toString())
+        def jsonResult = jsonSlurper.parseText(json)
 
         noExceptionThrown()
+
+        jsonResult instanceof Map
+
+        <#list method.response.bodyAttributes as key,value>
+        jsonResult.${key} instanceof ${value}
+        </#list>
         <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
         </#if>
@@ -903,10 +936,17 @@ class ${testName} extends Specification {
         println(resultHeaders)
 
         <#if method.response.responseBodySchema == "JSON">
+        def json = JsonOutput.toJson(result.get("body"))
         def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX);
-        jsonSlurper.parseText(result.get("body").toString())
+        def jsonResult = jsonSlurper.parseText(json)
 
         noExceptionThrown()
+
+        jsonResult instanceof Map
+
+        <#list method.response.bodyAttributes as key,value>
+        jsonResult.${key} instanceof ${value}
+        </#list>
         <#elseif method.response.responseBodySchema == "Text">
         result.get("body").toString().matches("\\w+")
         </#if>
